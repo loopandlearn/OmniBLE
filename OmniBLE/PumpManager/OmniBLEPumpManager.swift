@@ -888,6 +888,7 @@ extension OmniBLEPumpManager {
                     self.podComms.pairAndSetupPod(timeZone: .currentFixed, insulinType: insulinType, messageLogger: self)
                     { (result) in
 
+                        // Have new podState, reset all the per pod pump manager state
                         self.resetPerPodPumpManagerState()
 
                         // Calls completion
@@ -899,6 +900,9 @@ extension OmniBLEPumpManager {
             })
         } else {
             self.log.default("Pod already paired. Continuing.")
+
+            // Resuming the pod setup, try to ensure pod comms will work right away
+            self.resumingPodSetup()
 
             self.podComms.runSession(withName: "Prime pod") { (result) in
                 // Calls completion
@@ -959,6 +963,10 @@ extension OmniBLEPumpManager {
         self.podComms.runSession(withName: "Insert cannula") { (result) in
             switch result {
             case .success(let session):
+                if self.state.podState?.setupProgress.cannulaInsertionSuccessfullyStarted == true {
+                    // Resuming the pod setup, try to ensure pod comms will work right away
+                    self.resumingPodSetup()
+                }
                 do {
                     if self.state.podState?.setupProgress.needsInitialBasalSchedule == true {
                         let scheduleOffset = timeZone.scheduleOffset(forDate: Date())
@@ -1011,6 +1019,33 @@ extension OmniBLEPumpManager {
         #endif
     }
 
+    // Called when resuming a pod setup operation which sometimes can fail on the first pod command in various situations.
+    // Attempting a getStatus and sleeping a couple of seconds on errors greatly improves the odds for first pod command success.
+    public func resumingPodSetup() {
+        let sleepTime:UInt32 = 2
+
+        if !isConnected {
+            self.log.debug("### Pod setup resume pod not connected, sleeping %d seconds", sleepTime)
+            sleep(sleepTime)
+        }
+
+        podComms.runSession(withName: "Resuming pod setup") { (result) in
+            switch result {
+            case .success(let session):
+                let status = try? session.getStatus()
+                if status == nil {
+                    self.log.debug("### Pod setup resume getStatus failed, sleeping %d seconds", sleepTime)
+                    sleep(sleepTime)
+                }
+            case .failure(let error):
+                self.log.debug("### Pod setup resume session failure, sleeping %d seconds: %@", sleepTime, error.localizedDescription)
+                sleep(sleepTime)
+            }
+        }
+    }
+
+    // MARK: - Pump Commands
+
     public func getPodStatus(completion: ((_ result: PumpManagerResult<StatusResponse>) -> Void)? = nil) {
         guard state.hasActivePod else {
             completion?(.failure(PumpManagerError.configuration(OmniBLEPumpManagerError.noPodPaired)))
@@ -1037,8 +1072,6 @@ extension OmniBLEPumpManager {
             }
         }
     }
-
-    // MARK: - Pump Commands
 
     public func acknowledgePodAlerts(_ alertsToAcknowledge: AlertSet, completion: @escaping (_ alerts: [AlertSlot: PodAlert]?) -> Void) {
         guard self.hasActivePod else {
@@ -1068,23 +1101,29 @@ extension OmniBLEPumpManager {
 
     public func setTime(completion: @escaping (OmniBLEPumpManagerError?) -> Void) {
 
-        guard state.hasActivePod else {
-            completion(OmniBLEPumpManagerError.noPodPaired)
+        let timeZone = TimeZone.currentFixed
+        guard let podState = state.podState, podState.fault == nil else {
+            // With no non-faulted pod just update our pump manager
+            // state with the current timezone and return success
+            // instead of an inappropriate "No pod paired" error.
+            self.setState { (state) in
+                state.timeZone = timeZone
+            }
+            completion(nil)
             return
         }
 
-        guard state.podState?.setupProgress == .completed else {
+        guard podState.isSetupComplete else {
             // A cancel delivery command before pod setup is complete will fault the pod
             completion(.state(PodCommsError.setupNotComplete))
             return
         }
 
-        guard state.podState?.unfinalizedBolus?.isFinished() != false else {
+        guard podState.unfinalizedBolus?.isFinished() != false else {
             completion(.state(PodCommsError.unfinalizedBolus))
             return
         }
 
-        let timeZone = TimeZone.currentFixed
         self.podComms.runSession(withName: "Set time zone") { (result) in
             switch result {
             case .success(let session):
@@ -1119,7 +1158,7 @@ extension OmniBLEPumpManager {
             }
 
             guard state.podState?.unfinalizedBolus?.isFinished() != false else {
-                return .failure(.deviceState(PodCommsError.unfinalizedBolus))
+                return .failure(PumpManagerError.deviceState(PodCommsError.unfinalizedBolus))
             }
 
             return .success(true)

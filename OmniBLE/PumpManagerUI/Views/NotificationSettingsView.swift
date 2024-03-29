@@ -42,7 +42,7 @@ struct NotificationSettingsView: View {
 
             if let allowedDates = allowedScheduledReminderDates {
                 RoundedCard(
-                    footer: LocalizedString("This is a reminder that you scheduled when you paired your current Pod.", comment: "Footer text for scheduled reminder area"))
+                    footer: LocalizedString("This is a reminder that you scheduled for your current Pod.", comment: "Footer text for scheduled reminder area"))
                 {
                     Text(LocalizedString("Scheduled Reminder", comment: "Title of scheduled reminder card on NotificationSettingsView"))
                     Divider()
@@ -66,20 +66,16 @@ struct NotificationSettingsView: View {
     
     private func scheduledReminderRow(scheduledDate: Date?, allowedDates: [Date]) -> some View {
         Group {
-            if let scheduledDate = scheduledDate, scheduledDate <= Date() {
-                scheduledReminderRowContents(disclosure: false)
-            } else {
-                NavigationLink(
-                    destination: ScheduledExpirationReminderEditView(
-                        scheduledExpirationReminderDate: scheduledDate,
-                        allowedDates: allowedDates,
-                        dateFormatter: dateFormatter,
-                        onSave: onSaveScheduledExpirationReminder,
-                        onFinish: { scheduleReminderDateEditViewIsShown = false }),
-                    isActive: $scheduleReminderDateEditViewIsShown)
-                {
-                    scheduledReminderRowContents(disclosure: true)
-                }
+            NavigationLink(
+                destination: ScheduledExpirationReminderEditView(
+                    scheduledExpirationReminderDate: scheduledDate,
+                    allowedDates: allowedDates,
+                    dateFormatter: dateFormatter,
+                    onSave: onSaveScheduledExpirationReminder,
+                    onFinish: { scheduleReminderDateEditViewIsShown = false }),
+                isActive: $scheduleReminderDateEditViewIsShown)
+            {
+                scheduledReminderRowContents(disclosure: true)
             }
         }
     }

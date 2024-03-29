@@ -129,6 +129,7 @@ class InsertCannulaViewModel: ObservableObject, Identifiable {
     }
 
     @Published var state: InsertCannulaViewModelState = .ready
+
     public var stateNeedsDeliberateUserAcceptance : Bool {
         switch state {
         case .ready:
@@ -143,16 +144,19 @@ class InsertCannulaViewModel: ObservableObject, Identifiable {
     var didRequestDeactivation: (() -> Void)?
     
     var cannulaInserter: CannulaInserter
-    
+
+    var autoRetryAttempted: Bool
+
     init(cannulaInserter: CannulaInserter) {
         self.cannulaInserter = cannulaInserter
+        self.autoRetryAttempted = false
 
         // If resuming, don't wait for the button action
         if cannulaInserter.cannulaInsertionSuccessfullyStarted {
             insertCannula()
         }
     }
-    
+
     private func checkCannulaInsertionFinished() {
         state = .checkingInsertion
         cannulaInserter.checkCannulaInsertionFinished() { (error) in
@@ -168,6 +172,7 @@ class InsertCannulaViewModel: ObservableObject, Identifiable {
     
     private func insertCannula() {
         state = .startingInsertion
+
         cannulaInserter.insertCannula { (result) in
             DispatchQueue.main.async {
                 switch(result) {
@@ -182,7 +187,19 @@ class InsertCannulaViewModel: ObservableObject, Identifiable {
                         self.state = .finished
                     }
                 case .failure(let error):
-                    self.state = .error(error)
+                    if self.autoRetryAttempted {
+                        self.autoRetryAttempted = false // allow for an auto retry on the next user attempt
+                        self.state = .error(error)
+                    } else {
+                        self.autoRetryAttempted = true
+                        let autoRetryPauseTime = TimeInterval(seconds: 3)
+                        print("### insertCannula encountered error \(error.localizedDescription), retrying after \(autoRetryPauseTime) seconds")
+                        DispatchQueue.global(qos: .utility).async {
+                            Thread.sleep(forTimeInterval: autoRetryPauseTime)
+
+                            self.insertCannula()
+                        }
+                    }
                 }
             }
         }
