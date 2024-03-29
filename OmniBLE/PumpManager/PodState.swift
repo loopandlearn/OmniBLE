@@ -1,6 +1,6 @@
 //
 //  PodState.swift
-//  OmnipodKit
+//  OmniBLE
 //
 //  Based on OmniKit/PumpManager/PodState.swift
 //  Created by Pete Schwamb on 10/13/17.
@@ -62,8 +62,11 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var bleIdentifier: String
     
     public var activatedAt: Date?
-    public var expiresAt: Date?  // set based on StatusResponse timeActive and can change with Pod clock drift and/or system time change
+    public var expiresAt: Date? // set based on timeActive and can change with Pod clock drift and/or system time change
     public var activeTime: TimeInterval? // Useful after pod deactivated or faulted.
+
+    public var podTime: TimeInterval // pod time from the last response, always whole minute values
+    public var podTimeUpdated: Date? // time that the podTime value was last updated
 
     public var setupUnitsDelivered: Double?
 
@@ -72,7 +75,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public let lotNo: UInt32
     public let lotSeq: UInt32
     public let productId: UInt8
-    var activeAlertSlots: AlertSet
+    public var activeAlertSlots: AlertSet
     public var lastInsulinMeasurements: PodInsulinMeasurements?
 
     public var unacknowledgedCommand: PendingCommand?
@@ -104,16 +107,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public var configuredAlerts: [AlertSlot: PodAlert]
     public var insulinType: InsulinType
 
-    public var activeAlerts: [AlertSlot: PodAlert] {
-        var active = [AlertSlot: PodAlert]()
-        for slot in activeAlertSlots {
-            if let alert = configuredAlerts[slot] {
-                active[slot] = alert
-            }
-        }
-        return active
-    }
-
     // Allow a grace period while the unacknowledged command is first being sent.
     public var needsCommsRecovery: Bool {
         if let unacknowledgedCommand = unacknowledgedCommand, !unacknowledgedCommand.isInFlight {
@@ -123,6 +116,7 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     }
 
     var lastDeliveryStatusReceived: DeliveryStatus? // this variable is not persistent across app restarts
+
 
     public init(address: UInt32, ltk: Data, firmwareVersion: String, bleFirmwareVersion: String, lotNo: UInt32, lotSeq: UInt32, productId: UInt8,
         messageTransportState: MessageTransportState? = nil, bleIdentifier: String, insulinType: InsulinType, initialDeliveryStatus: DeliveryStatus? = nil)
@@ -142,9 +136,10 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         self.messageTransportState = messageTransportState ?? MessageTransportState(ck: nil, noncePrefix: nil)
         self.primeFinishTime = nil
         self.setupProgress = .addressAssigned
-        self.configuredAlerts = [.slot7: .waitingForPairingReminder]
+        self.configuredAlerts = [.slot7Expired: .waitingForPairingReminder]
         self.bleIdentifier = bleIdentifier
         self.insulinType = insulinType
+        self.podTime = 0
         self.lastDeliveryStatusReceived = initialDeliveryStatus // can be non-nil when testing
     }
     
@@ -180,18 +175,30 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     public mutating func advanceToNextNonce() {
         // Dash nonce is a fixed value and is never advanced
     }
-    
+
     public var currentNonce: UInt32 {
-        let fixedNonceValue: UInt32 = 0x494E532E // Dash uses a fixed value for pod nonce
-        return fixedNonceValue // not clear if the actual value even matters
+        let fixedNonceValue: UInt32 = 0x494E532E // Dash pods require this particular fixed value
+        return fixedNonceValue
     }
-    
+
     public mutating func resyncNonce(syncWord: UInt16, sentNonce: UInt32, messageSequenceNum: Int) {
-        assert(false) // XXX ?should never be called for Dash?
+        print("resyncNonce expectedly called!") // Should never be called for Dash!
     }
-    
+
+    // Saves the current pod timeActive and will initialize the activatedAtComputed at
+    // pod startup and updates the expiresAt value to account for pod clock differences.
     private mutating func updatePodTimes(timeActive: TimeInterval) -> Date {
         let now = Date()
+
+        guard timeActive >= self.podTime else {
+            // The pod active time went backwards and thus we have an apparent reset fault.
+            // Don't update any times or displayed expiresAt time will expectedly jump.
+            return now
+        }
+
+        self.podTime = timeActive
+        self.podTimeUpdated = now
+
         let activatedAtComputed = now - timeActive
         if activatedAt == nil {
             self.activatedAt = activatedAtComputed
@@ -203,7 +210,6 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             // The computed expiresAt time is earlier than or more than a minute later than the current expiresAt time,
             // so use the computed expiresAt time instead to handle Pod clock drift and/or system time changes issues.
             // The more than a minute later test prevents oscillation of expiresAt based on the timing of the responses.
-            // TODO: A significant deviation expiresAt from activatedAt + nominalPodLife should generate a critical alert
             self.expiresAt = expiresAtComputed
         }
         return now
@@ -381,6 +387,16 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             }
         }
 
+        if let podTime = rawValue["podTime"] as? TimeInterval,
+            let podTimeUpdated = rawValue["podTimeUpdated"] as? Date
+        {
+            self.podTime = podTime
+            self.podTimeUpdated = podTimeUpdated
+        } else {
+            self.podTime = 0
+            self.podTimeUpdated = Date()
+        }
+
         if let setupUnitsDelivered = rawValue["setupUnitsDelivered"] as? Double {
             self.setupUnitsDelivered = setupUnitsDelivered
         }
@@ -480,12 +496,12 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         } else {
             // Assume migration, and set up with alerts that are normally configured
             self.configuredAlerts = [
-                .slot2: .shutdownImminent(0),
-                .slot3: .expirationReminder(0),
-                .slot4: .lowReservoir(0),
-                .slot5: .podSuspendedReminder(active: false, suspendTime: 0),
-                .slot6: .suspendTimeExpired(suspendTime: 0),
-                .slot7: .expired(alertTime: 0, duration: 0)
+                .slot2ShutdownImminent: .shutdownImminent(offset: 0, absAlertTime: 0),
+                .slot3ExpirationReminder: .expirationReminder(offset: 0, absAlertTime: 0),
+                .slot4LowReservoir: .lowReservoir(units: 0),
+                .slot5SuspendedReminder: .podSuspendedReminder(active: false, offset: 0, suspendTime: 0),
+                .slot6SuspendTimeExpired: .suspendTimeExpired(offset: 0, suspendTime: 0),
+                .slot7Expired: .expired(offset: 0, absAlertTime: 0, duration: 0)
             ]
         }
         
@@ -529,6 +545,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
         rawValue["primeFinishTime"] = primeFinishTime
         rawValue["activatedAt"] = activatedAt
         rawValue["expiresAt"] = expiresAt
+        rawValue["podTime"] = podTime
+        rawValue["podTimeUpdated"] = podTimeUpdated
         rawValue["setupUnitsDelivered"] = setupUnitsDelivered
         rawValue["activeTime"] = activeTime
 
@@ -550,6 +568,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* bleIdentifier: \(bleIdentifier)",
             "* activatedAt: \(String(reflecting: activatedAt))",
             "* expiresAt: \(String(reflecting: expiresAt))",
+            "* podTime: \(podTime.timeIntervalStr)",
+            "* podTimeUpdated: \(String(reflecting: podTimeUpdated))",
             "* setupUnitsDelivered: \(String(reflecting: setupUnitsDelivered))",
             "* firmwareVersion: \(firmwareVersion)",
             "* bleFirmwareVersion: \(bleFirmwareVersion)",
@@ -562,16 +582,14 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             "* unfinalizedSuspend: \(String(describing: unfinalizedSuspend))",
             "* unfinalizedResume: \(String(describing: unfinalizedResume))",
             "* finalizedDoses: \(String(describing: finalizedDoses))",
-            "* activeAlerts: \(String(describing: activeAlerts))",
+            "* activeAlertsSlots: \(alertSetString(alertSet: activeAlertSlots))",
             "* messageTransportState: \(String(describing: messageTransportState))",
             "* setupProgress: \(setupProgress)",
             "* primeFinishTime: \(String(describing: primeFinishTime))",
-            "* configuredAlerts: \(String(describing: configuredAlerts))",
+            "* configuredAlerts: \(configuredAlertsString(configuredAlerts: configuredAlerts))",
             "* insulinType: \(String(describing: insulinType))",
-            "* pdmRef: \(String(describing: fault?.pdmRef))",
-            "",
-            fault != nil ? String(reflecting: fault!) : "fault: nil",
-            "",
+            "* pdmRef: " + (fault?.pdmRef == nil ? "nil" : String(describing: fault!.pdmRef!)),
+            "* Fault: " + (fault == nil ? "nil" : String(describing: fault!)),
         ].joined(separator: "\n")
     }
 }

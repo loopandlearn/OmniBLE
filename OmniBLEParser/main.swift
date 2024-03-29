@@ -48,26 +48,37 @@ func ~=<T: RegularExpressionMatchable>(pattern: Regex, matchable: T) -> Bool {
 
 func printDecoded(timeStr: String, hexString: String)
 {
-    if let data = Data(hexadecimalString: hexString) {
-        do {
-            let message = try Message(encodedData: data, checkCRC: false)
-            let omnipodMessage = message.messageBlocks[0].blockType
-            let type: String
-            if omnipodMessage == .statusResponse || omnipodMessage == .podInfoResponse || omnipodMessage == .versionResponse || omnipodMessage == .errorResponse {
-                type = "RESPONSE: "
-            } else {
-                type = "COMMAND:  "
-            }
-            if printFullMessage {
-                // print the complete message with the address and seq
-                print("\(type)\(timeStr) \(message)")
-            } else {
-                // skip printing the address and seq for each message
-                print("\(type)\(timeStr) \(message.messageBlocks)")
-            }
-        } catch let error {
-            print("Could not parse \(hexString): \(error)")
+
+    guard let data = Data(hexadecimalString: hexString), data.count >= 10 else {
+        print("Bad hex string: \(hexString)")
+        return
+    }
+    do {
+        // The block type is right after the 4-byte address and the B9 and BLEN bytes
+        guard let blockType = MessageBlockType(rawValue: data[6]) else {
+            throw MessageBlockError.unknownBlockType(rawVal: data[6])
         }
+        let type: String
+        let checkCRC: Bool
+        switch blockType {
+        case .statusResponse, .podInfoResponse, .versionResponse, .errorResponse:
+            type = "RESPONSE: "
+            // Don't currently understand how to check the CRC16 the DASH pods generate
+            checkCRC = false
+        default:
+            type = "COMMAND:  "
+            checkCRC = true
+        }
+        let message = try Message(encodedData: data, checkCRC: checkCRC)
+        if printFullMessage {
+            // print the complete message with the address and seq
+            print("\(type)\(timeStr) \(message)")
+        } else {
+            // skip printing the address and seq for each message
+            print("\(type)\(timeStr) \(message.messageBlocks)")
+        }
+    } catch let error {
+        print("Could not parse \(hexString): \(error)")
     }
 }
 
@@ -91,7 +102,7 @@ func parseXcodeLogLine(_ line: String) {
     let hexString = components[components.count - 1]
 
     let date = components[0]
-    let time = components[1].padding(toLength: 15, withPad: " ", startingAt: 0)  // skip the -0000 portion
+    let time = components[1].padding(toLength: 15, withPad: " ", startingAt: 0)  // skip the -0800 portion
     let timeStr = printDate ? date + " " + time : time
 
     printDecoded(timeStr: timeStr, hexString: hexString)
@@ -136,10 +147,23 @@ func parseIAPSLogLine(_ line: String) {
     printDecoded(timeStr: timeStr, hexString: hexString)
 }
 
+// 2020-11-04 13:38:34.256  1336  6945 I PodComm pod command: 08202EAB08030E01070319
+// 2020-11-04 13:38:34.979  1336  1378 V PodComm response (hex) 08202EAB0C0A1D9800EB80A400042FFF8320
+func parseDashPDMLogLine(_ line: String) {
+    let components = line.components(separatedBy: .whitespaces)
+    let hexString = components[components.count - 1]
+
+    let date = components[0]
+    let time = components[1]
+    let timeStr = printDate ? date + " " + time : time
+
+    printDecoded(timeStr: timeStr, hexString: hexString)
+}
+
 func usage() {
     print("Usage: [-q] file...")
     print("Set the Xcode Arguments Passed on Launch using Product->Scheme->Edit Scheme...")
-    print("to specify the full path to Loop Report, Xcode, sim or iAPS log file(s) to parse.\n")
+    print("to specify the full path to Loop Report, Xcode log, RPi pod sim log, iAPS log, or DASH PDM log file(s) to parse.\n")
     exit(1)
 }
 
@@ -188,6 +212,13 @@ for arg in CommandLine.arguments[1...] {
                 if !line.contains(" FreeAPS") {
                     parseIAPSLogLine(line)
                 }
+
+            case Regex("I PodComm pod command: "):
+                // 2020-11-04 13:38:34.256  1336  6945 I PodComm pod command: 08202EAB08030E01070319
+                parseDashPDMLogLine(line)
+            case Regex("V PodComm response \\(hex\\) "):
+                // 2020-11-04 13:38:34.979  1336  1378 V PodComm response (hex) 08202EAB0C0A1D9800EB80A400042FFF8320
+                parseDashPDMLogLine(line)
 
             default:
                 break

@@ -1,5 +1,5 @@
 //
-//  DashSettingsViewModel.swift
+//  OmniBLESettingsViewModel.swift
 //  OmniBLE
 //
 //  Created by Pete Schwamb on 3/8/20.
@@ -39,6 +39,8 @@ class OmniBLESettingsViewModel: ObservableObject {
     @Published var expiresAt: Date?
 
     @Published var beepPreference: BeepPreference
+
+    @Published var silencePodPreference: SilencePodPreference
 
     @Published var podConnected: Bool
 
@@ -136,7 +138,7 @@ class OmniBLESettingsViewModel: ObservableObject {
 
     var recoveryText: String? {
         if case .fault = podCommState {
-            return LocalizedString("Insulin delivery stopped. Change Pod now.", comment: "The action string on pod status page when pod faulted")
+            return LocalizedString("⚠️ Insulin delivery stopped. Change Pod now.", comment: "The action string on pod status page when pod faulted")
         } else if podOk && isPodDataStale {
             return LocalizedString("Make sure your phone and pod are close to each other. If communication issues persist, move to a new area.", comment: "The action string on pod status page when pod data is stale")
         } else if let serviceTimeRemaining = pumpManager.podServiceTimeRemaining, serviceTimeRemaining <= Pod.serviceDuration - Pod.nominalPodLife {
@@ -233,6 +235,7 @@ class OmniBLESettingsViewModel: ObservableObject {
         lowReservoirAlertValue = Int(self.pumpManager.state.lowReservoirReminderValue)
         podCommState = self.pumpManager.podCommState
         beepPreference = self.pumpManager.beepPreference
+        silencePodPreference = self.pumpManager.silencePod ? .enabled : .disabled
         podConnected = self.pumpManager.isConnected
         insulinType = self.pumpManager.insulinType
         podDetails = self.pumpManager.podDetails
@@ -262,7 +265,7 @@ class OmniBLESettingsViewModel: ObservableObject {
     }
     
     func stopUsingOmnipodDashTapped() {
-        self.pumpManager.notifyDelegateOfDeactivation {
+        pumpManager.notifyDelegateOfDeactivation {
             DispatchQueue.main.async {
                 self.didFinish?()
             }
@@ -321,8 +324,52 @@ class OmniBLESettingsViewModel: ObservableObject {
         }
     }
 
+    func readPodStatus(_ completion: @escaping (_ result: PumpManagerResult<DetailedStatus>) -> Void) {
+        pumpManager.getDetailedStatus() { (result) in
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
+    }
+
+    func readPulseLog(_ completion: @escaping (_ result: Result<String, Error>) -> Void) {
+        pumpManager.readPulseLog() { (result) in
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
+    }
+
+    func readPulseLogPlus(_ completion: @escaping (_ result: Result<String, Error>) -> Void) {
+        pumpManager.readPulseLogPlus() { (result) in
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
+    }
+
+    func readActivationTime(_ completion: @escaping (_ result: Result<String, Error>) -> Void) {
+        pumpManager.readActivationTime() { (result) in
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
+    }
+
+    func readTriggeredAlerts(_ completion: @escaping (_ result: Result<String, Error>) -> Void) {
+        pumpManager.readTriggeredAlerts() { (result) in
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
+    }
+
     func playTestBeeps(_ completion: @escaping (Error?) -> Void) {
         pumpManager.playTestBeeps(completion: completion)
+    }
+
+    func pumpManagerDetails(_ completion: @escaping (_ result: String) -> Void) {
+        completion(pumpManager.debugDescription)
     }
 
     func setConfirmationBeeps(_ preference: BeepPreference, _ completion: @escaping (_ error: LocalizedError?) -> Void) {
@@ -330,6 +377,17 @@ class OmniBLESettingsViewModel: ObservableObject {
             DispatchQueue.main.async {
                 if error == nil {
                     self.beepPreference = preference
+                }
+                completion(error)
+            }
+        }
+    }
+
+    func setSilencePod(_ silencePodPreference: SilencePodPreference, _ completion: @escaping (_ error: LocalizedError?) -> Void) {
+        pumpManager.setSilencePod(silencePod: silencePodPreference == .enabled) { error in
+            DispatchQueue.main.async {
+                if error == nil {
+                    self.silencePodPreference = silencePodPreference
                 }
                 completion(error)
             }
@@ -349,6 +407,10 @@ class OmniBLESettingsViewModel: ObservableObject {
         default:
             return true
         }
+    }
+    
+    var noPod: Bool {
+        return podCommState == .noPod
     }
 
     var podError: String? {
