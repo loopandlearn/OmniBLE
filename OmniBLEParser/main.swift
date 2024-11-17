@@ -9,9 +9,12 @@
 
 import Foundation
 
-// These options can be forced off by using the -q option argument
+// The following default values can all be forced to false or to true using the -q and -v command line options respectively
 fileprivate var printDate: Bool = true // whether to print the date (when available) along with the time (when available)
-fileprivate var printFullMessage: Bool = true // whether to print full message decode including the address and seq
+fileprivate var printUnacknowledgedMessageLines: Bool = true // whether to print "Unacknowledged message" lines
+fileprivate var printAddressAndSeq: Bool = false // whether to print full message decode including the pod address and seq #
+fileprivate var printPodConnectionLines: Bool = false // whether to print "connection Pod" lines
+
 
 //from NSHipster - http://nshipster.com/swift-literal-convertible/
 struct Regex {
@@ -46,10 +49,20 @@ func ~=<T: RegularExpressionMatchable>(pattern: Regex, matchable: T) -> Bool {
     return matchable.match(regex: pattern)
 }
 
-func printDecoded(timeStr: String, hexString: String)
+extension String {
+    func subString(location: Int, length: Int? = nil) -> String {
+      let start = min(max(0, location), self.count)
+      let limitedLength = min(self.count - start, length ?? Int.max)
+      let from = index(startIndex, offsetBy: start)
+      let to = index(startIndex, offsetBy: start + limitedLength)
+      return String(self[from..<to])
+    }
+}
+
+func printDecoded(dateStr: String, timeStr: String, hexStr: String)
 {
-    guard let data = Data(hexadecimalString: hexString), data.count >= 10 else {
-        print("Bad hex string: \(hexString)")
+    guard let data = Data(hexadecimalString: hexStr), data.count >= 10 else {
+        print("Bad hex string: \(hexStr)")
         return
     }
     do {
@@ -69,15 +82,23 @@ func printDecoded(timeStr: String, hexString: String)
             checkCRC = true
         }
         let message = try Message(encodedData: data, checkCRC: checkCRC)
-        if printFullMessage {
+        var dateTimeStr: String
+        if printDate && !dateStr.isEmpty {
+            dateTimeStr = dateStr + " " + timeStr + " "
+        } else if !timeStr.isEmpty {
+            dateTimeStr = timeStr + " "
+        } else {
+            dateTimeStr = ""
+        }
+        if printAddressAndSeq {
             // print the complete message with the address and seq
-            print("\(type)\(timeStr) \(message)")
+            print("\(type)\(dateTimeStr)\(message)")
         } else {
             // skip printing the address and seq for each message
-            print("\(type)\(timeStr) \(message.messageBlocks)")
+            print("\(type)\(dateTimeStr)\(message.messageBlocks)")
         }
     } catch let error {
-        print("Could not parse \(hexString): \(error)")
+        print("Could not parse \(hexStr): \(error)")
     }
 }
 
@@ -87,11 +108,7 @@ func parseLoopReportLine(_ line: String) {
     let components = line.components(separatedBy: .whitespaces)
     let hexString = components[components.count - 1]
 
-    let date = components[1]
-    let time = components[2]
-    let timeStr = printDate ? date + " " + time : time
-
-    printDecoded(timeStr: timeStr, hexString: hexString)
+    printDecoded(dateStr: components[1], timeStr: components[2], hexStr: hexString)
 }
 
 // 2023-02-02 15:23:13.094289-0800 Loop[60606:22880823] [PodMessageTransport] Send(Hex): 1776c2c63c030e010000a0
@@ -100,11 +117,9 @@ func parseLoopXcodeLine(_ line: String) {
     let components = line.components(separatedBy: .whitespaces)
     let hexString = components[components.count - 1]
 
-    let date = components[0]
-    let time = components[1].padding(toLength: 15, withPad: " ", startingAt: 0)  // skip the -0800 portion
-    let timeStr = printDate ? date + " " + time : time
+    let time = components[1].subString(location: 0, length: 15) // use the 15 detailed time chars w/o TZ (e.g., "15:23:13.497849")
 
-    printDecoded(timeStr: timeStr, hexString: hexString)
+    printDecoded(dateStr: components[0], timeStr: time, hexStr: hexString)
 }
 
 // N.B. Simulator output typically has a space after the hex string!
@@ -122,13 +137,20 @@ func parseSimulatorLogLine(_ line: String) {
     hexString = components[hexStringIndex]
 
     let c0 = components[0]
-    // start at 5 for printDate or shorter "INFO[7699]" format
-    let offset = printDate || c0.count <= 16 ? 5 : 16
-    let startIndex = c0.index(c0.startIndex, offsetBy: offset)
-    let endIndex = c0.index(c0.startIndex, offsetBy: c0.count - 2)
-    let timeStr = String(c0[startIndex...endIndex])
+    let date: String
+    let time: String
 
-    printDecoded(timeStr: timeStr, hexString: hexString)
+    if c0.count <= 16 {
+        // seconds only format, e.g., "INFO[7699]"
+        date = ""
+        time = c0.subString(location: 5, length: c0.count - 6) // six less for the "INFO[]" chars
+    } else {
+        // full time format, e.g., "INFO[2023-09-04T18:17:06-07:00]"
+        date = c0.subString(location: 5, length: 10)
+        time = c0.subString(location: 16, length: 8) // the time w/o TZ (e.g., "18:17:06")
+    }
+
+    printDecoded(dateStr: date, timeStr: time, hexStr: hexString)
 }
 
 
@@ -141,25 +163,24 @@ func parseSimulatorLogLine(_ line: String) {
 func parseFreeAPSLogOrXcodeLine(_ line: String) {
     let components = line.components(separatedBy: .whitespaces)
     let hexString = components[components.count - 1]
+    let date, time: String
 
     if components.count > 9 {
-        // have a timestamp
-        let date = components[0].prefix(10)
-        let time: String
-        if components.count == 12 {
-            // iAPS or Trio log file with date and time joined with a "T", e.g., 2024-05-25T00:26:05-0700
-            let dateAndTimeComponents = components[0].components(separatedBy: "T")
-            time = dateAndTimeComponents[1].padding(toLength: 8, withPad: " ", startingAt: 0) // skip the -0700 portion
+        // have a timestamp like "2024-05-08T00:03:57-0700" or "2024-05-25" "14:16:54.933281-0700"
+        date = components[0].subString(location: 0, length: 10) // the first 10 chars are the date (e.g,. "2024-05-25")
+        if components[0].contains("T") {
+            // iAPS or Trio log file with date and time joined with a "T", e.g., "2024-05-25T00:26:05-0700"
+            time = components[0].subString(location: 11, length: 8) // the 8 time chars w/o TZ (e.g., "00:26:05")
         } else {
-            // Xcode log file with separate date and time, e.g., 2024-05-25 14:16:53.571361-0700
-            time = components[1].padding(toLength: 15, withPad: " ", startingAt: 11) // skip the -0700 portion
+            // Xcode log file with separate date and time, e.g., "2024-05-25" "14:16:53.571361-0700"
+            time = components[1].subString(location: 0, length: 15)  // the 15 detailed time chars w/o TZ (e.g., "14:16:53.571361")
         }
-        let timeStr = printDate ? date + " " + time : time
-        printDecoded(timeStr: timeStr, hexString: hexString)
     } else {
         // no timestamp
-        printDecoded(timeStr: "", hexString: hexString)
+        date = ""
+        time = ""
     }
+    printDecoded(dateStr: date, timeStr: time, hexStr: hexString)
 }
 
 // 2020-11-04 13:38:34.256  1336  6945 I PodComm pod command: 08202EAB08030E01070319
@@ -168,15 +189,87 @@ func parseDashPDMLogLine(_ line: String) {
     let components = line.components(separatedBy: .whitespaces)
     let hexString = components[components.count - 1]
 
-    let date = components[0]
-    let time = components[1]
-    let timeStr = printDate ? date + " " + time : time
+    printDecoded(dateStr: components[0], timeStr: components[1], hexStr: hexString)
+}
 
-    printDecoded(timeStr: timeStr, hexString: hexString)
+// Disconnect and connect messages
+//
+// Loop Report
+// * 2024-07-09 23:10:17 +0000 Omnipod-Dash 170C4026 connection Pod disconnected 80635530-69E1-E701-9C57-190CC608CE6F Optional(Error Domain=CBErrorDomain Code=7 "The specified device has disconnected from us." UserInfo={NSLocalizedDescription=The specified device has disconnected from us.})
+// iAPS or Trio log file
+// 2024-05-25T00:05:22-0700 [DeviceManager] DeviceDataManager.swift - deviceManager(_:logEventForDeviceIdentifier:type:message:completion:) - 576 - DEV: Device message: Pod connected C8AA0FAE-7BF3-D682-38D7-DD7314F0F128
+//
+// Loop xcode log
+// 2024-05-25 14:04:19.799014-0700 Loop[2042:132457] [PersistentDeviceLog] connection (17FC3D73) Pod disconnected 86779FC4-EB9B-6ED6-6A38-C345BE12FDB6 nil
+// iAPS or Trio xcode log
+// 2024-05-25 14:22:47.988314-0700 FreeAPS[2973:2299227] [DeviceManager] DeviceDataManager.swift - deviceManager(_:logEventForDeviceIdentifier:type:message:completion:) - 566 DEV: Device message: Pod connected F74B4012-5849-3E00-792E-66726A675CED
+//
+// Unacknowledged messages
+// Old style
+// * 2024-07-09 23:25:25 +0000 Omnipod-Dash 170C4026 error Unacknowledged message. seq:10, error = ...
+// Newer styles
+// * 2024-07-09 23:25:25 +0000 Omnipod-Dash 170C4026 error Unacknowledged message sending command seq:11, error = ...
+// * 2024-07-09 23:25:25 +0000 Omnipod-Dash 170C4026 error Unacknowledged message reading response for sent command seq:12, error = ...
+func printPodInfoLine(_ line: String) {
+    let components = line.components(separatedBy: .whitespaces)
+    var endIndex = components.endIndex - 1
+    var startIndex = components[0] == "*" ? 1 : 0   // skip any leading "*"
+
+    let date, time: String
+    if components[startIndex].contains("T") {
+        // iAPS or Trio log file with date and time with TZ joined with a 'T', e.g., "2024-05-25T00:26:05-0700"
+        date = components[startIndex].subString(location: 0, length: 10) // the first 10 chars are date (e.g., "2024-05-25")
+        time = components[startIndex].subString(location: 11, length: 8) // the 8 time chars w/o TZ (e.g., "00:26:05)
+        startIndex += 1
+    } else if components[startIndex + 1].contains(".") {
+        // Xcode log file with separate date and precise time with TZ, e.g., "2024-05-25" "14:16:53.571361-0700"
+        date = components[startIndex]
+        time = components[1].subString(location: 0, length: 15)  // the 15 detailed time chars w/o TZ (e.g., "14:16:53.571361")
+        startIndex += 2
+    } else if components[startIndex + 2].hasPrefix("+") {
+        // Loop log file with separate date, time & timezone, e.g., "2023-04-05" "06:07:08" "+0000"
+        date = components[startIndex]
+        time = components[startIndex + 1]
+        startIndex += 3
+    } else {
+        // Xcode log file with no timestamp
+        date = ""
+        time = ""
+    }
+
+    // Trim the fat to simplify the output depending on whether it's a connection or unacknowledged message
+    for i in startIndex...endIndex {
+        // For disconnected & connected messages, only keep 2 words
+        if components[i].contains("disconnected") || components[i].contains("connected") && i > 1 {
+            startIndex = i - 1 // "Pod"
+            endIndex = i // "disconnected" or "connected"
+            break
+        }
+        if components[i].contains("Unacknowledged") {
+            startIndex = i // strip earlier cruft
+            break
+        }
+    }
+
+    var podInfoLine = "          " // aligns with "RESPONSE: " or "COMMAND:  " prefixes
+    if printDate && !date.isEmpty {
+        podInfoLine += date + " "
+    }
+    if !time.isEmpty {
+        podInfoLine += time + " "
+    }
+
+    for i in startIndex...endIndex {
+        podInfoLine += components[i]
+        if i < endIndex {
+            podInfoLine += " "
+        }
+    }
+    print(podInfoLine)
 }
 
 func usage() {
-    print("Usage: [-q] file...")
+    print("Usage: [-qv] file...")
     print("Set the Xcode Arguments Passed on Launch using Product->Scheme->Edit Scheme...")
     print("to specify the full path to Loop Report, Xcode log, pod simulator log, iAPS log, Trio log or DASH PDM log file(s) to parse.\n")
     exit(1)
@@ -189,7 +282,17 @@ if CommandLine.argc <= 1 {
 for arg in CommandLine.arguments[1...] {
     if arg == "-q" {
         printDate = false
-        printFullMessage = false
+        printUnacknowledgedMessageLines = false
+        printAddressAndSeq = false
+        printPodConnectionLines = false
+        continue
+    } else if arg == "-v" {
+        printDate = true
+        printUnacknowledgedMessageLines = true
+        printAddressAndSeq = true
+        printPodConnectionLines = true
+        continue
+    } else if arg == "" || arg == "--" {
         continue
     } else if arg.starts(with: "-") {
         // no other arguments curently supported
@@ -235,6 +338,27 @@ for arg in CommandLine.arguments[1...] {
             // 2020-11-04 21:35:52.575  1336  6945 V PodComm response (hex) 08202EAB340A1D18018D2000000BA3FF81D9
             case Regex("I PodComm pod command: "), Regex("V PodComm response \\(hex\\) "):
                 parseDashPDMLogLine(line)
+
+            // Loop
+            // * 2024-07-09 23:10:17 +0000 Omnipod-Dash 170C4026 connection Pod disconnected 80635530-69E1-E701-9C57-190CC608CE6F Optional(Error Domain=CBErrorDomain Code=7 "The specified device has disconnected from us." UserInfo={NSLocalizedDescription=The specified device has disconnected from us.})
+            // * 2024-07-09 23:10:21 +0000 Omnipod-Dash 170C4026 connection Pod connected 80635530-69E1-E701-9C57-190CC608CE6F
+            // iAPS or Trio
+            // 2024-05-25T00:05:21-0700 [DeviceManager] DeviceDataManager.swift - deviceManager(_:logEventForDeviceIdentifier:type:message:completion:) - 576 - DEV: Device message: Pod disconnected C8AA0FAE-7BF3-D682-38D7-DD7314F0F128 Optional(Error Domain=CBErrorDomain Code=7 "The specified device has disconnected from us." UserInfo={NSLocalizedDescription=The specified device has disconnected from us.})
+            // 2024-05-25T00:05:22-0700 [DeviceManager] DeviceDataManager.swift - deviceManager(_:logEventForDeviceIdentifier:type:message:completion:) - 576 - DEV: Device message: Pod connected C8AA0FAE-7BF3-D682-38D7-DD7314F0F128
+            case Regex(" Pod disconnected "), Regex(" Pod connected "):
+                if printPodConnectionLines {
+                    printPodInfoLine(line)
+                }
+
+            // Older style unacknowledged message error
+            // * 2024-07-09 23:25:25 +0000 Omnipod-Dash 170C4026 error Unacknowledged message. seq:10, error = ...
+            // Newer style unacknowledged message errors
+            // * 2024-07-09 23:25:25 +0000 Omnipod-Dash 170C4026 error Unacknowledged message sending command seq:11, error = ...
+            // * 2024-07-09 23:25:25 +0000 Omnipod-Dash 170C4026 error Unacknowledged message reading response for sent command seq:12, error = ...
+            case Regex(" Unacknowledged message"):
+                if printUnacknowledgedMessageLines {
+                    printPodInfoLine(line)
+                }
 
             default:
                 break
