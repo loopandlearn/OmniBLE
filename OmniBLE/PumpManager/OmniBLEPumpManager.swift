@@ -2422,12 +2422,10 @@ extension OmniBLEPumpManager: PumpManager {
 
 extension OmniBLEPumpManager: MessageLogger {
     func didSend(_ message: Data) {
-        log.default("didSend: %{public}@", message.hexadecimalString)
         self.logDeviceCommunication(message.hexadecimalString, type: .send)
     }
 
     func didReceive(_ message: Data) {
-        log.default("didReceive: %{public}@", message.hexadecimalString)
         self.logDeviceCommunication(message.hexadecimalString, type: .receive)
     }
 
