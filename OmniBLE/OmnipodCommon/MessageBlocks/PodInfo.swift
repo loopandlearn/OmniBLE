@@ -22,7 +22,7 @@ public enum PodInfoResponseSubType: UInt8, Equatable {
     case detailedStatus              = 0x02 // Returns detailed pod status, returned for most calls after a pod fault
     case pulseLogPlus                = 0x03 // Returns up to the last 60 pulse log entries plus additional info
     case activationTime              = 0x05 // Returns pod activation time and possible fault code & fault time
-    case noSeqStatusResponse         = 0x07 // DASH only, returns the normal status response w/o incrementing msg seq #
+    case noSeqStatus                 = 0x07 // DASH only, returns the normal status response w/o incrementing msg seq #
     case pulseLogRecent              = 0x50 // Returns the last 50 pulse log entries
     case pulseLogPrevious            = 0x51 // Like 0x50, but returns up to the previous 50 entries before the last 50
     
@@ -38,7 +38,7 @@ public enum PodInfoResponseSubType: UInt8, Equatable {
             return PodInfoPulseLogPlus.self
         case .activationTime:
             return PodInfoActivationTime.self
-        case .noSeqStatusResponse:
+        case .noSeqStatus:  // returns a normal StatusResponse, but using a seq # that not incremented from the last response
             return StatusResponse.self as! PodInfo.Type
         case .pulseLogRecent:
             return PodInfoPulseLogRecent.self
