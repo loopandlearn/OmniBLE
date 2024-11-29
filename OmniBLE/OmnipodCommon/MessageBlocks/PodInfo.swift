@@ -28,7 +28,7 @@ public enum PodInfoResponseSubType: UInt8, Equatable {
     
     public var podInfoType: PodInfo.Type {
         switch self {
-        case .normal:
+        case .normal, .noSeqStatus:         // noSeqStatus won't increment the message seq # from the last response
             return StatusResponse.self as! PodInfo.Type
         case .triggeredAlerts:
             return PodInfoTriggeredAlerts.self
@@ -38,8 +38,6 @@ public enum PodInfoResponseSubType: UInt8, Equatable {
             return PodInfoPulseLogPlus.self
         case .activationTime:
             return PodInfoActivationTime.self
-        case .noSeqStatus:  // returns a normal StatusResponse, but using a seq # that not incremented from the last response
-            return StatusResponse.self as! PodInfo.Type
         case .pulseLogRecent:
             return PodInfoPulseLogRecent.self
         case .pulseLogPrevious:
