@@ -54,15 +54,15 @@ public struct Pod {
     public static let reservoirCapacity: Double = 200
 
     // Supported basal rates
-    // Eros minimum scheduled basal rate is 0.05 U/H while for Dash supports 0 U/H.
-    // Would need to have this value based on productID to be able to share this file with Eros.
+    // Eros minimum scheduled basal rate is 0.05 U/H while Dash supports 0 U/H.
     public static let supportedBasalRates: [Double] = (0...600).map { Double($0) / Double(pulsesPerUnit) }
 
     // Supported temp basal rates
+    // Both Eros and Dash support a minimum temp basal rate of 0 U/H.
     public static let supportedTempBasalRates: [Double] = (0...600).map { Double($0) / Double(pulsesPerUnit) }
 
-    // The internal basal rate used for non-Eros pods
-    // Would need to have this value based on productID to be able to share this file with Eros.
+    // The internal basal rate used for zero basal rates
+    // Eros uses 0.0 while Dash uses a near zero rate
     public static let zeroBasalRate: Double = nearZeroBasalRate
 
     // Maximum number of basal schedule entries supported
