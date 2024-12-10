@@ -298,10 +298,17 @@ public class PodCommsSession {
 //        if blocksToSend.contains(where: { $0 as? NonceResyncableMessageBlock != nil }) {
 //            podState.advanceToNextNonce()
 //        }
-        
-        let messageNumber = transport.messageNumber
 
         var sentNonce: UInt32?
+        var messageNumber = transport.messageNumber
+        if let getStatusCommand = messageBlocks[0] as? GetStatusCommand,
+            getStatusCommand.podInfoType == .noSeqStatus
+        {
+            // For the special type 7 DASH noSeqStatus getStatus command,
+            // back up the Omnipod msg # here to its previous value so that
+            // this message will have same msg # the last received response.
+            messageNumber = messageNumber == 0 ? 0b1111 : messageNumber - 1
+        }
 
         while (triesRemaining > 0) {
             triesRemaining -= 1
@@ -880,8 +887,10 @@ public class PodCommsSession {
     }
 
     // Throws PodCommsError
-    public func getStatus(beepBlock: MessageBlock? = nil) throws -> StatusResponse {
-        let statusResponse: StatusResponse = try send([GetStatusCommand()], beepBlock: beepBlock)
+    public func getStatus(noSeqGetStatus: Bool = false, beepBlock: MessageBlock? = nil) throws -> StatusResponse {
+        // For noSeqSetStatus, use an alternative DASH noSeqStatus (type 7) request instead of a normal (type 0) request
+        let statusType: PodInfoResponseSubType = noSeqGetStatus ? .noSeqStatus : .normal
+        let statusResponse: StatusResponse = try send([GetStatusCommand(podInfoType: statusType)], beepBlock: beepBlock)
 
         if podState.unacknowledgedCommand != nil {
             recoverUnacknowledgedCommand(using: statusResponse)

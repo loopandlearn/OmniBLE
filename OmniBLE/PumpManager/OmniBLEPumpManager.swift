@@ -1038,7 +1038,7 @@ extension OmniBLEPumpManager {
         podComms.runSession(withName: "Resuming pod setup") { (result) in
             switch result {
             case .success(let session):
-                let status = try? session.getStatus()
+                let status = try? session.getStatus(noSeqGetStatus: true)
                 if status == nil {
                     self.log.debug("### Pod setup resume getStatus failed, sleeping %d seconds", sleepTime)
                     sleep(sleepTime)
@@ -1062,7 +1062,7 @@ extension OmniBLEPumpManager {
             do {
                 switch result {
                 case .success(let session):
-                    let status = try session.getStatus()
+                    let status = try session.getStatus(noSeqGetStatus: true)
                     session.dosesForStorage({ (doses) -> Bool in
                         self.store(doses: doses, in: session)
                     })
@@ -2441,7 +2441,7 @@ extension OmniBLEPumpManager: PodCommsDelegate {
         podComms.runSession(withName: "Post-connect status fetch") { result in
             switch result {
             case .success(let session):
-                let _ = try? session.getStatus()
+                let _ = try? session.getStatus(noSeqGetStatus: true)
                 self.silenceAcknowledgedAlerts()
                 session.dosesForStorage() { (doses) -> Bool in
                     return self.store(doses: doses, in: session)
