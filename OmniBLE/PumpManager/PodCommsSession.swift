@@ -275,16 +275,23 @@ public class PodCommsSession {
     ///     - PodCommsError.unexpectedResponse
     ///     - PodCommsError.rejectedMessage
     ///     - PodCommsError.nonceResyncFailed
+    ///     - PodCommsError.unacknowledgedMessage
     ///     - PodCommsError.commsError.MessageError
     ///     - PodCommsError.commsError.PeripheralManagerError
     ///     - PodCommsError.commsError.PodProtocolError
+    ///     - MessageError
     func send<T: MessageBlock>(_ messageBlocks: [MessageBlock], beepBlock: MessageBlock? = nil, expectFollowOnMessage: Bool = false) throws -> T {
         
         var triesRemaining = 2  // Retries only happen for nonce resync
         var blocksToSend = messageBlocks
-        
-        // If a beep block was specified & pod isn't faulted, append the beep block to emit the confirmation beep
-        if let beepBlock = beepBlock, podState.isFaulted == false {
+
+        // If a beep block was specified & the pod isn't faulted AND there isn't an unacknowledged
+        // command for a getStatus command, append the beep block to emit the confirmation beep.
+        // Since a beep command changes lastProgrammingMessageSeqNum, we need skip appending a beep
+        // block while still trying to resolve an unacknowldged delivery command with getStatus calls.
+        if let beepBlock = beepBlock, podState.isFaulted == false &&
+            !(podState.unacknowledgedCommand != nil && blocksToSend[0].blockType == .getStatus)
+        {
             blocksToSend += [beepBlock]
         }
 
@@ -428,6 +435,12 @@ public class PodCommsSession {
     // specified to first acknowledge and clear all possible pending pod alerts and pod alert configurations.
     @discardableResult
     func configureAlerts(_ alerts: [PodAlert], acknowledgeAll: Bool = false, beepBlock: MessageBlock? = nil) throws -> StatusResponse {
+
+        guard podState.unacknowledgedCommand == nil || podState.setupProgress != .completed else {
+            log.info("Fail configure alerts with unacknowledged command and incomplete pod setup")
+            throw PodCommsError.unacknowledgedCommandPending
+        }
+
         let configurations = alerts.map { $0.configuration }
         let configureAlerts = ConfigureAlertsCommand(nonce: podState.currentNonce, configurations: configurations)
         let blocksToSend: [MessageBlock]
@@ -452,7 +465,12 @@ public class PodCommsSession {
             log.info("Skip beep config with faulted pod")
             return .failure(PodCommsError.podFault(fault: fault))
         }
-        
+
+        guard podState.unacknowledgedCommand == nil || podState.setupProgress != .completed else {
+            log.info("Fail beep config with unacknowledged command and incomplete pod setup")
+            return .failure(PodCommsError.unacknowledgedCommandPending)
+        }
+
         let beepConfigCommand = BeepConfigCommand(beepType: beepType, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
         do {
             let statusResponse: StatusResponse = try send([beepConfigCommand])
@@ -731,7 +749,6 @@ public class PodCommsSession {
     }
 
     // Cancels any suspend related alerts, called when setting a basal schedule with active suspend alerts
-    @discardableResult
     private func cancelSuspendAlerts() throws -> StatusResponse {
 
         do {
@@ -853,7 +870,6 @@ public class PodCommsSession {
     
     // use cancelDelivery with .none to get status as well as to validate & advance the nonce
     // Throws PodCommsError
-    @discardableResult
     public func cancelNone(beepBlock: MessageBlock? = nil) throws -> StatusResponse {
         var statusResponse: StatusResponse
 
@@ -871,7 +887,6 @@ public class PodCommsSession {
     }
 
     // Throws PodCommsError
-    @discardableResult
     public func getStatus(noSeqGetStatus: Bool = false, beepBlock: MessageBlock? = nil) throws -> StatusResponse {
         // For noSeqSetStatus, use an alternative DASH noSeqStatus (type 7) request instead of a normal (type 0) request
         let statusType: PodInfoResponseSubType = noSeqGetStatus ? .noSeqStatus : .normal
@@ -883,8 +898,7 @@ public class PodCommsSession {
         podState.updateFromStatusResponse(statusResponse, at: currentDate)
         return statusResponse
     }
-    
-    @discardableResult
+
     public func getDetailedStatus(beepBlock: MessageBlock? = nil) throws -> DetailedStatus {
         let infoResponse: PodInfoResponse = try send([GetStatusCommand(podInfoType: .detailedStatus)], beepBlock: beepBlock)
         
@@ -904,14 +918,13 @@ public class PodCommsSession {
         return detailedStatus
     }
 
-    @discardableResult
     public func readPodInfo(podInfoResponseSubType: PodInfoResponseSubType, beepBlock: MessageBlock? = nil) throws -> PodInfoResponse {
         let podInfoCommand = GetStatusCommand(podInfoType: podInfoResponseSubType)
         let podInfoResponse: PodInfoResponse = try send([podInfoCommand], beepBlock: beepBlock)
         return podInfoResponse
     }
 
-    // Reconnected to the pod, and we know program was successful
+    // Reconnected to the pod, and we know program was successful based on lastProgrammingMessageSeqNum
     private func unacknowledgedCommandWasReceived(pendingCommand: PendingCommand, podStatus: StatusResponse) {
         switch pendingCommand {
         case .program(let program, _, let commandDate, _):
@@ -928,7 +941,6 @@ public class PodCommsSession {
                 }
             }
         case .stopProgram(let stopProgram, _, let commandDate, _):
-
             if stopProgram.contains(.bolus), let bolus = podState.unfinalizedBolus, !bolus.isFinished(at: commandDate) {
                 podState.unfinalizedBolus?.cancel(at: commandDate, withRemaining: podStatus.bolusNotDelivered)
             }
@@ -942,6 +954,60 @@ public class PodCommsSession {
         }
     }
 
+    // Reconnected to the pod and we didn't match lastProgrammingMessageSeqNum which indicates
+    // that the command was not received. Now verify the pendingCommand against the current pod
+    // delivery status to decide whether the delivery related command might have been received or not.
+    // Returns true if the command was received based on the pod delivery status and podState was updated.
+    private func checkCommandAgainstStatus(pendingCommand: PendingCommand, podStatus: StatusResponse) -> Bool {
+        let deliveryStatus = podStatus.deliveryStatus
+        var podStatusMatched = false
+        switch pendingCommand {
+        case .program(let program, _, let commandDate, _):
+            if let dose = program.unfinalizedDose(at: commandDate, withCertainty: .certain, insulinType: podState.insulinType) {
+                switch dose.doseType {
+                case .bolus:
+                    if deliveryStatus.bolusing {
+                        podState.unfinalizedBolus = dose
+                        podStatusMatched = true
+                    }
+                case .tempBasal:
+                    if deliveryStatus.tempBasalRunning {
+                        podState.unfinalizedTempBasal = dose
+                        podStatusMatched = true
+                    }
+                case .resume:
+                    if !deliveryStatus.suspended {
+                        podState.suspendState = .resumed(commandDate)
+                        podStatusMatched = true
+                    }
+                default:
+                    break
+                }
+            }
+        case .stopProgram(let stopProgram, _, let commandDate, _):
+            if stopProgram.contains(.bolus), let bolus = podState.unfinalizedBolus, !bolus.isFinished(at: commandDate) {
+                if !deliveryStatus.bolusing {
+                    podState.unfinalizedBolus?.cancel(at: commandDate, withRemaining: podStatus.bolusNotDelivered)
+                    podStatusMatched = true
+                }
+            }
+            if stopProgram.contains(.tempBasal), let tempBasal = podState.unfinalizedTempBasal, !tempBasal.isFinished(at: commandDate) {
+                if !deliveryStatus.tempBasalRunning {
+                    podState.unfinalizedTempBasal?.cancel(at: commandDate)
+                    podStatusMatched = true
+                }
+            }
+            if stopProgram.contains(.basal) {
+                if !deliveryStatus.suspended {
+                    podState.finalizedDoses.append(UnfinalizedDose(suspendStartTime: commandDate, scheduledCertainty: .certain))
+                    podState.suspendState = .suspended(commandDate)
+                    podStatusMatched = true
+                }
+            }
+        }
+        return podStatusMatched
+    }
+
     public func recoverUnacknowledgedCommand(using status: StatusResponse) {
         if let pendingCommand = podState.unacknowledgedCommand {
             self.log.default("Recovering from unacknowledged command %{public}@, status = %{public}@", String(describing: pendingCommand), String(describing: status))
@@ -949,6 +1015,8 @@ public class PodCommsSession {
             if status.lastProgrammingMessageSeqNum == pendingCommand.sequence {
                 self.log.default("Unacknowledged command was received by pump")
                 unacknowledgedCommandWasReceived(pendingCommand: pendingCommand, podStatus: status)
+            } else if checkCommandAgainstStatus(pendingCommand: pendingCommand, podStatus: status) {
+                self.log.default("Accepted unacknowledged command was received based on pod delivery status of ${public}@", String(describing: status.deliveryStatus))
             } else {
                 self.log.default("Unacknowledged command was not received by pump")
             }
@@ -1003,6 +1071,12 @@ public class PodCommsSession {
     }
     
     public func acknowledgeAlerts(alerts: AlertSet, beepBlock: MessageBlock? = nil) throws -> AlertSet {
+
+        guard podState.unacknowledgedCommand == nil || podState.setupProgress != .completed else {
+            log.info("Fail acknowledge alerts with unacknowledged command and pod setup complete")
+            throw PodCommsError.unacknowledgedCommandPending
+        }
+
         let cmd = AcknowledgeAlertCommand(nonce: podState.currentNonce, alerts: alerts)
         let status: StatusResponse = try send([cmd], beepBlock: beepBlock)
         podState.updateFromStatusResponse(status, at: currentDate)
