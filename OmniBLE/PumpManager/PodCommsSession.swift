@@ -430,15 +430,47 @@ public class PodCommsSession {
         podState.finalizedDoses.append(UnfinalizedDose(resumeStartTime: currentDate, scheduledCertainty: .certain, insulinType: podState.insulinType))
     }
 
+    //
+    // Attempts to resolve any unacknowledged command by using a GetStatusCommand.
+    // podState.unacknowledgeCommand is guaranteed to be nil upon successful return.
+    // Throws PodCommsError.unacknowledgedCommandPending if unsuccessful for any reason.
+    //
+    private func resolveUnacknowledgedCommand(function: String = #function) throws {
+
+        guard podState.unacknowledgedCommand != nil else {
+            return // no unacknowledged command to resolve
+        }
+
+        let statusResponse: StatusResponse
+        do {
+            // Send a GetStatusCommand to try to resolve the unacknowleged command.
+            statusResponse = try send([GetStatusCommand()])
+        } catch let error {
+            log.info("GetStatus failed with %{public}@ trying to resolve unacknowledged command in %{public}@", String(describing: error), function)
+            throw PodCommsError.unacknowledgedCommandPending
+        }
+
+        // Success -- now use the statusResponse to resolve the unacknowledged command & update the podState
+        recoverUnacknowledgedCommand(using: statusResponse)
+        podState.updateFromStatusResponse(statusResponse, at: currentDate)
+
+        // recoverUnacknowledgedCommand() should have resolved the unacknowledged command, but check to be sure.
+        guard podState.unacknowledgedCommand == nil else {
+            log.error("failed to resolve the unacknowledged command with GetStatus in %{public}@!", function)
+            throw PodCommsError.unacknowledgedCommandPending
+        }
+
+        log.info("resolved the unacknowledged command in %{public}@", function)
+    }
+
     // Configures the given pod alert(s) and registers the newly configured alert slot(s).
     // When re-configuring all the pod alerts for a silence pod toggle, the optional acknowledgeAll can be
     // specified to first acknowledge and clear all possible pending pod alerts and pod alert configurations.
     @discardableResult
     func configureAlerts(_ alerts: [PodAlert], acknowledgeAll: Bool = false, beepBlock: MessageBlock? = nil) throws -> StatusResponse {
 
-        guard podState.unacknowledgedCommand == nil || podState.setupProgress != .completed else {
-            log.info("Fail configure alerts with unacknowledged command and incomplete pod setup")
-            throw PodCommsError.unacknowledgedCommandPending
+        if podState.unacknowledgedCommand != nil {
+            try resolveUnacknowledgedCommand()
         }
 
         let configurations = alerts.map { $0.configuration }
@@ -466,9 +498,12 @@ public class PodCommsSession {
             return .failure(PodCommsError.podFault(fault: fault))
         }
 
-        guard podState.unacknowledgedCommand == nil || podState.setupProgress != .completed else {
-            log.info("Fail beep config with unacknowledged command and incomplete pod setup")
-            return .failure(PodCommsError.unacknowledgedCommandPending)
+        if podState.unacknowledgedCommand != nil {
+            do {
+                try resolveUnacknowledgedCommand()
+            } catch let error {
+                return .failure(error)
+            }
         }
 
         let beepConfigCommand = BeepConfigCommand(beepType: beepType, tempBasalCompletionBeep: tempBasalCompletionBeep, bolusCompletionBeep: bolusCompletionBeep)
@@ -561,8 +596,12 @@ public class PodCommsSession {
     
     public func bolus(units: Double, automatic: Bool = false, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0, extendedUnits: Double = 0.0, extendedDuration: TimeInterval = 0) -> DeliveryCommandResult {
 
-        guard podState.unacknowledgedCommand == nil else {
-            return DeliveryCommandResult.certainFailure(error: .unacknowledgedCommandPending)
+        if podState.unacknowledgedCommand != nil {
+            do {
+                try resolveUnacknowledgedCommand()
+            } catch {
+                return DeliveryCommandResult.certainFailure(error: .unacknowledgedCommandPending)
+            }
         }
 
         let timeBetweenPulses = TimeInterval(seconds: Pod.secondsPerBolusPulse)
@@ -608,8 +647,12 @@ public class PodCommsSession {
     
     public func setTempBasal(rate: Double, duration: TimeInterval, isHighTemp: Bool, automatic: Bool, acknowledgementBeep: Bool = false, completionBeep: Bool = false, programReminderInterval: TimeInterval = 0) -> DeliveryCommandResult {
 
-        guard podState.unacknowledgedCommand == nil else {
-            return DeliveryCommandResult.certainFailure(error: .unacknowledgedCommandPending)
+        if podState.unacknowledgedCommand != nil {
+            do {
+                try resolveUnacknowledgedCommand()
+            } catch {
+                return DeliveryCommandResult.certainFailure(error: .unacknowledgedCommandPending)
+            }
         }
 
         let tempBasalCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, tempBasalRate: rate, duration: duration)
@@ -682,8 +725,12 @@ public class PodCommsSession {
     // The configured alerts will set up as silent pod alerts if silent is true.
     public func suspendDelivery(suspendReminder: TimeInterval? = nil, silent: Bool, beepBlock: MessageBlock? = nil) -> CancelDeliveryResult {
 
-        guard podState.unacknowledgedCommand == nil else {
-            return .certainFailure(error: .unacknowledgedCommandPending)
+        if podState.unacknowledgedCommand != nil {
+            do {
+                try resolveUnacknowledgedCommand()
+            } catch {
+                return .certainFailure(error: .unacknowledgedCommandPending)
+            }
         }
 
         guard podState.setupProgress == .completed else {
@@ -766,8 +813,12 @@ public class PodCommsSession {
     // N.B., Using the built-in cancel delivery command beepType method when cancelling all insulin delivery will emit 3 different sets of cancel beeps!!!
     public func cancelDelivery(deliveryType: CancelDeliveryCommand.DeliveryType, beepType: BeepType = .noBeepCancel, beepBlock: MessageBlock? = nil) -> CancelDeliveryResult {
 
-        guard podState.unacknowledgedCommand == nil else {
-            return .certainFailure(error: .unacknowledgedCommandPending)
+        if podState.unacknowledgedCommand != nil {
+            do {
+                try resolveUnacknowledgedCommand()
+            } catch {
+                return .certainFailure(error: .unacknowledgedCommandPending)
+            }
         }
 
         guard podState.setupProgress == .completed else {
@@ -796,8 +847,9 @@ public class PodCommsSession {
     }
 
     public func setTime(timeZone: TimeZone, basalSchedule: BasalSchedule, date: Date, acknowledgementBeep: Bool = false) throws -> StatusResponse {
-        guard podState.unacknowledgedCommand == nil else {
-            throw PodCommsError.unacknowledgedCommandPending
+
+        if podState.unacknowledgedCommand != nil {
+            try resolveUnacknowledgedCommand()
         }
 
         let result = cancelDelivery(deliveryType: .all)
@@ -815,8 +867,8 @@ public class PodCommsSession {
     
     public func setBasalSchedule(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool = false, programReminderInterval: TimeInterval = 0) throws -> StatusResponse {
 
-        guard podState.unacknowledgedCommand == nil else {
-            throw PodCommsError.unacknowledgedCommandPending
+        if podState.unacknowledgedCommand != nil {
+            try resolveUnacknowledgedCommand()
         }
 
         let basalScheduleCommand = SetInsulinScheduleCommand(nonce: podState.currentNonce, basalSchedule: schedule, scheduleOffset: scheduleOffset)
@@ -856,11 +908,10 @@ public class PodCommsSession {
     
     public func resumeBasal(schedule: BasalSchedule, scheduleOffset: TimeInterval, acknowledgementBeep: Bool = false, programReminderInterval: TimeInterval = 0) throws -> StatusResponse {
 
-        guard podState.unacknowledgedCommand == nil else {
-            throw PodCommsError.unacknowledgedCommandPending
+        if podState.unacknowledgedCommand != nil {
+            try resolveUnacknowledgedCommand()
         }
 
-        
         let status = try setBasalSchedule(schedule: schedule, scheduleOffset: scheduleOffset, acknowledgementBeep: acknowledgementBeep, programReminderInterval: programReminderInterval)
 
         podState.suspendState = .resumed(currentDate)
@@ -1072,9 +1123,8 @@ public class PodCommsSession {
     
     public func acknowledgeAlerts(alerts: AlertSet, beepBlock: MessageBlock? = nil) throws -> AlertSet {
 
-        guard podState.unacknowledgedCommand == nil || podState.setupProgress != .completed else {
-            log.info("Fail acknowledge alerts with unacknowledged command and pod setup complete")
-            throw PodCommsError.unacknowledgedCommandPending
+        if podState.unacknowledgedCommand != nil {
+            try resolveUnacknowledgedCommand()
         }
 
         let cmd = AcknowledgeAlertCommand(nonce: podState.currentNonce, alerts: alerts)
