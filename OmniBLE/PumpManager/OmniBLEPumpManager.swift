@@ -1050,26 +1050,20 @@ extension OmniBLEPumpManager {
         }
     }
 
-    // Will execute a getStatus command if the pod is not connected, the last delivery statusreceived is invalid,
-    // or there is an unacknowledged command. If the getStatus fails, returns its error that can be passed on the
-    // higher level instead of having to return a potentially inappropriate error when using uncertain pod status.
-    // Returns nil if comms looks OK or a getStatus was successful executed or the getStatus error on failure.
+    // If the last delivery status received is invalid or there is an unacknowledged command, execute a getStatus command
+    // for the current PodCommsSession. If the getStatus fails, return its error to be passed on to the higher level.
+    // Return nil if comms looks OK or the getStatus was successful.
     private func tryToValidateComms(session: PodCommsSession) -> LocalizedError? {
 
-        // If we're connected, have a valid delivery status, and there is not an unacknowledged command, we're all good to go
-        if isConnected && self.state.podState?.lastDeliveryStatusReceived != nil && self.state.podState?.unacknowledgedCommand == nil {
+        // Since we're already connected for this session, if we have a delivery status and no unacknowledged command, return nil
+        if self.state.podState?.lastDeliveryStatusReceived != nil && self.state.podState?.unacknowledgedCommand == nil {
             return nil
         }
 
         // Attempt to do a getStatus to try to resolve any outstanding comms issues
         do {
             let _ = try session.getStatus()
-            // Paranoid debug testing as the successful getStatus should have set the last delivery status and handled any unacknowledged command.
-            if self.state.podState?.lastDeliveryStatusReceived == nil || self.state.podState?.unacknowledgedCommand != nil {
-                self.log.error("### tryToValidateComms getStatus successful, but still have no last delivery status or an unacknowledged command!")
-            } else {
-                self.log.debug("### tryToValidateComms getStatus resolved all pending comms issues")
-            }
+            self.log.debug("### tryToValidateComms getStatus resolved all pending comms issues")
             return nil
         } catch let error {
             self.log.debug("### tryToValidateComms getStatus failed, returning: %@", error.localizedDescription)
