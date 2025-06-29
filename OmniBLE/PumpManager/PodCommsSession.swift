@@ -242,11 +242,14 @@ public class PodCommsSession {
             } else {
                 podState.activeTime = fault.faultEventTimeSinceActivation
             }
-            handleCancelDosing(deliveryType: .all, bolusNotDelivered: fault.bolusNotDelivered)
             let derivedStatusResponse = StatusResponse(detailedStatus: fault)
             if podState.unacknowledgedCommand != nil {
+                // Process the pending unacknowledgeCommnd to handle any pending doses matters for an unacknowledged
+                // command before calling handleCancelDosing() to deal with the final dosing adjustments from pod fault.
+                // N.B., recoverUnacknowledgedCommand() skips using bolusNotDelivered for a stopProgram with a faulted pod.
                 recoverUnacknowledgedCommand(using: derivedStatusResponse)
             }
+            handleCancelDosing(deliveryType: .all, bolusNotDelivered: derivedStatusResponse.bolusNotDelivered)
             podState.updateFromStatusResponse(derivedStatusResponse, at: currentDate)
         }
         log.error("Pod Fault: %@", String(describing: fault))
@@ -338,6 +341,11 @@ public class PodCommsSession {
 
 
             if let fault = response.fault {
+                if podState.unacknowledgedCommand != nil && blocksToSend[0].blockType != .getStatus {
+                    // Clear the unacknowledgedCommand for this attempted non-getStatus command since
+                    // it was for this send and thus it was actually acknowledged -- with a pod fault.
+                    podState.unacknowledgedCommand = nil
+                }
                 try throwPodFault(fault: fault) // always throws
             }
 
@@ -981,7 +989,9 @@ public class PodCommsSession {
             }
         case .stopProgram(let stopProgram, _, let commandDate, _):
             if stopProgram.contains(.bolus), let bolus = podState.unfinalizedBolus, !bolus.isFinished(at: commandDate) {
-                podState.unfinalizedBolus?.cancel(at: commandDate, withRemaining: podStatus.bolusNotDelivered)
+                // If the pod is faulted, don't use bolusNotDelivered as this will be handled in handlePodFault()
+                let bolusNotDelivered = podState.isFaulted ? 0 : podStatus.bolusNotDelivered
+                podState.unfinalizedBolus?.cancel(at: commandDate, withRemaining: bolusNotDelivered)
             }
             if stopProgram.contains(.tempBasal), let tempBasal = podState.unfinalizedTempBasal, !tempBasal.isFinished(at: commandDate) {
                 podState.unfinalizedTempBasal?.cancel(at: commandDate)
@@ -1026,7 +1036,9 @@ public class PodCommsSession {
         case .stopProgram(let stopProgram, _, let commandDate, _):
             if stopProgram.contains(.bolus), let bolus = podState.unfinalizedBolus, !bolus.isFinished(at: commandDate) {
                 if !deliveryStatus.bolusing {
-                    podState.unfinalizedBolus?.cancel(at: commandDate, withRemaining: podStatus.bolusNotDelivered)
+                    // If the pod is faulted, don't use bolusNotDelivered as this will be handled in handlePodFault()
+                    let bolusNotDelivered = podState.isFaulted ? 0 : podStatus.bolusNotDelivered
+                    podState.unfinalizedBolus?.cancel(at: commandDate, withRemaining: bolusNotDelivered)
                     podStatusMatched = true
                 }
             }
