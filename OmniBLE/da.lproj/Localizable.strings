@@ -426,6 +426,9 @@ Title for insulin type selection screen */
 /* description label for last status date pod details row */
 "Last Status" = "Sidste status";
 
+/* Description text on manual temp basal action sheet */
+"Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled." = "Loop justerer ikke automatisk din insulindosering, før den midlertidige basalrate er afsluttet eller annulleret.";
+
 /* Label text for step 2 of pair pod instructions */
 "Listen for 2 beeps." = "Lyt efter 2 bip.";
 

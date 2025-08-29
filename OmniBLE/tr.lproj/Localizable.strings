@@ -429,6 +429,9 @@ Title for insulin type selection screen */
 /* Label text for step 2 of pair pod instructions */
 "Listen for 2 beeps." = "2 bip sesini dinleyin.";
 
+/* Description text on manual temp basal action sheet */
+"Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled." = "Loop, geçici bazal oran bitene veya iptal edilene kadar insülin iletiminizi otomatik olarak ayarlamaz.";
+
 /* description label for lot number pod details row */
 "Lot Number" = "Parti Numarası";
 

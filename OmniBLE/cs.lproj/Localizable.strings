@@ -155,6 +155,9 @@ Title for insulin type selection screen */
 /* description label for last status date pod details row */
 "Last Status" = "Poslední stav";
 
+/* Description text on manual temp basal action sheet */
+"Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled." = "Loop automaticky neupraví výdej inzulínu, dokud nastavení dočasné bazální dávky neskončí nebo nebude zrušeno.";
+
 /* description label for lot number pod details row */
 "Lot Number" = "Číslo šarže";
 
