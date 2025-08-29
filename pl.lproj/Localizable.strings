@@ -4,7 +4,7 @@
 /* Pod state when activation not completed in the time allowed */
 "Activation time exceeded" = "Przekroczono czas aktywacji";
 
-/* Description for auto-off */
+/* Description for auto-off alert */
 "Auto-off" = "Automatyczne wyłączanie";
 
 /* Pod state when basal initialized */
@@ -22,12 +22,6 @@
 /* Description for Empty reservoir pod fault */
 "Empty reservoir" = "Pusty zbiorniczek";
 
-/* Description for expiration advisory */
-"Expiration advisory" = "Ostrzeżenie o wygaśnięciu";
-
-/* Description for expiration alert */
-"Expiration alert" = "Alert o upływie terminu ważności";
-
 /* Delivery status when extended bolus is running */
 "Extended bolus running" = "Trwa podawanie bolusa przedłużonego";
 
@@ -37,7 +31,7 @@
 /* Pod state when fault event has occurred */
 "Fault event occurred" = "Wystąpiła usterka";
 
-/* Description for finish setup reminder */
+/* Description for finish setup reminder alert */
 "Finish setup reminder" = "Przypomnienie o zakończeniu konfiguracji";
 
 /* Pod initialized */
@@ -55,11 +49,9 @@
 /* Description for MessageError invalidCrc */
 "Invalid CRC" = "Nieprawidłowy CRC";
 
-/* Pod state when running with fifty or less units */
+/* Format string for description for low reservoir alert
+Pod state when running with fifty or less units */
 "Low reservoir" = "Niski poziom w zbiorniczku";
-
-/* Format string for description for low reservoir advisory (1: reminder units) */
-"Low reservoir advisory (%1$gU)" = "Ostrzeżenie o niskim poziomie w zbiorniczku (%1$gU)";
 
 /* Pod memory initialized */
 "Memory initialized" = "Zainicjowano pamięć";
@@ -88,14 +80,15 @@
 /* Description for MessageError parsingError. (1: decription of error), (2: hexadecimal data starting at offset) */
 "Parsing Error: %1$@ in (%2$@)" = "Błąd analizy: %1$@ w (%2$@)";
 
-/* Description for Pod expired pod fault */
+/* Description for Pod expired pod fault
+Description for pod expired alert */
 "Pod expired" = "Termin ważności POD'a upłynął";
 
-/* Description for pod suspended reminder */
+/* Description for pod suspended reminder alert */
 "Pod suspended reminder" = "Przypomnienie o zawieszeniu POD'a";
 
 /* Delivery status when pod is priming
-   Pod status when priming */
+Pod status when priming */
 "Priming" = "Napełnianie";
 
 /* Pod state when priming completed */
@@ -107,10 +100,10 @@
 /* Delivery status when scheduled basal is running */
 "Scheduled basal" = "Zaplanowana dawka podstawowa";
 
-/* Description for shutdown imminent */
+/* Description for shutdown imminent alert */
 "Shutdown imminent" = "Zbliża się zamknięcie";
 
-/* Description for suspend time expired */
+/* Description for suspend time expired alert */
 "Suspend time expired" = "Upłynął czas zawieszenia";
 
 /* Delivery status when insulin delivery is suspended */
@@ -137,6 +130,6 @@
 /* Format string for description of MessageError validationFailed. (1: description of validation failure) */
 "Validation failed: %1$@" = "Weryfikacja nie powiodła się: %1$@";
 
-/* Description waiting for pairing reminder */
+/* Description waiting for pairing reminder alert */
 "Waiting for pairing reminder" = "Poczekaj na przypomnienie o parowaniu";
 
