@@ -66,10 +66,10 @@ Pod state when activation not completed in the time allowed */
 "All Pod alerts use no beeps and confirmation reminder beeps are suppressed. The Pod will only beep for fatal Pod faults and when playing test beeps.\n\n⚠️Warning - If your phone is out of range of the pod while this feature is enabled, you will not receive any in-app notifications; and the pod will not beep to alert you." = "Toutes les alertes du Pod n'utilisent aucun bip et les bips de rappel de confirmation sont désactivés. Le Pod émettra un bip uniquement en cas de défaut fatal du Pod et lors des bips de test.\n\n⚠️Avertissement - Si votre téléphone est hors de portée du Pod pendant que cette fonctionnalité est activée, vous ne recevrez aucune notification dans l'application ; et le Pod ne bipera pas pour vous alerter.";
 
 /* Alert title for cancel pairing modal */
-"Are you sure you want to cancel Pod setup?" = "Voulez-vous vraiment annuler la configuration du Pod ?";
+"Are you sure you want to cancel Pod setup?" = "Voulez-vous vraiment annuler la configuration du Pod?";
 
 /* No comment provided by engineer. */
-"Are you sure you want to skip Omnipod Onboarding?" = "Voulez-vous vraiment sauter l'intégration Omnipod ?";
+"Are you sure you want to skip Omnipod Onboarding?" = "Voulez-vous vraiment sauter l'intégration Omnipod?";
 
 /* Message for Omnipod DASH PumpManager deletion action sheet */
 "Are you sure you want to stop using Omnipod DASH?" = "Voulez-vous vraiment arrêter d'utiliser Omnipod DASH?";
@@ -952,7 +952,7 @@ navigation title for Silnce Pod */
 "Silenced" = "Silencieux";
 
 /* No comment provided by engineer. */
-"Skip Omnipod Onboarding?" = "Ignorer la phase d'intégration d'Omnipod ?";
+"Skip Omnipod Onboarding?" = "Ignorer la phase d'intégration d'Omnipod?";
 
 /* Insert cannula slider button accessibility label while ready to pair */
 "Slide Button to insert Cannula" = "Faites glisser pour insérer la canule";
@@ -1034,7 +1034,7 @@ Alert content title for suspendInProgress pod alert */
 "The reminders above will not sound on your device when it is in Silent or Do Not Disturb mode. There are other critical Pod alerts that will sound on your device even when set to Silent or Do Not Disturb mode.\n\nThe Pod will also use audible beeps for all Pod reminders and alerts except when the Pod is Silenced." = "Les rappels ci-dessus ne retentiront pas sur votre appareil lorsqu'il est en mode Silencieux ou Ne pas déranger. D'autres alertes Pod critiques retentiront sur votre appareil même lorsqu'il est réglé sur Silencieux ou Ne pas déranger.\n\nLe Pod émettra également des bips sonores pour tous les rappels et alertes Pod, sauf lorsque le Pod est en mode silencieux.";
 
 /* Message for pod sync time action sheet */
-"The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?" = "L'heure de votre pompe est différente de l'heure actuelle. Voulez vous mettre à jour l'heure de votre pompe avec l'heure actuelle ?";
+"The time on your pump is different from the current time. Do you want to update the time on your pump to the current time?" = "L'heure de votre pompe est différente de l'heure actuelle. Voulez vous mettre à jour l'heure de votre pompe avec l'heure actuelle?";
 
 /* Alert content body for timeOffsetChangeDetected pod alert */
 "The time on your pump is different from the current time. You can review the pump time and and sync to current time in settings." = "L'heure de votre pompe est différente de l'heure actuelle. Vous pouvez vérifier l'heure de la pompe et la synchroniser avec l'heure actuelle dans les paramètres.";

@@ -304,9 +304,6 @@ Title for insulin type selection screen */
 /* description label for last status date pod details row */
 "Last Status" = "Posledný stav";
 
-/* Description text on manual temp basal action sheet */
-"Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled." = "Loop nebude automaticky upravovať podávanie inzulínu, kým dočasná bazálna dávka nebude ukončená alebo zrušená.";
-
 /* description label for lot number pod details row */
 "Lot Number" = "Číslo šarže";
 
@@ -802,4 +799,7 @@ recoverySuggestion for BluetoothManagerError.bluetoothNotAvailable(.resetting) *
 
 /* bodyText for PodSetupView */
 "You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Teraz začnete s procesom konfigurácie pripomienok, naplnením podu inzulínom, jeho spárovaním s vašim zariadením a umiestnením podu na telo.";
+
+/* Description text on manual temp basal action sheet */
+"Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled." = "Loop nebude automaticky upravovať podávanie inzulínu, kým dočasná bazálna dávka nebude ukončená alebo zrušená.";
 

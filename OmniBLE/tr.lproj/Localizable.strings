@@ -429,9 +429,6 @@ Title for insulin type selection screen */
 /* Label text for step 2 of pair pod instructions */
 "Listen for 2 beeps." = "2 bip sesini dinleyin.";
 
-/* Description text on manual temp basal action sheet */
-"Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled." = "Loop, geçici bazal oran bitene veya iptal edilene kadar insülin iletiminizi otomatik olarak ayarlamaz.";
-
 /* description label for lot number pod details row */
 "Lot Number" = "Parti Numarası";
 
@@ -1053,6 +1050,9 @@ recoverySuggestion for BluetoothManagerError.bluetoothNotAvailable(.resetting) *
 
 /* bodyText for PodSetupView */
 "You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Şimdi hatırlatıcılarınızı yapılandırma, Pod'unuzu insülinle doldurma, cihazınızla eşleştirme ve vücudunuza yerleştirme işlemlerine başlayacaksınız.";
+
+/* Description text on manual temp basal action sheet */
+"Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled." = "Loop, geçici bazal oran bitene veya iptal edilene kadar insülin iletiminizi otomatik olarak ayarlamaz.";
 
 /* Alert message body for confirm pod attachment */
 "Your Pod may still be delivering Insulin.\nRemove it from your body, then tap “Continue.“" = "Pod'unuz hala İnsülin veriyor olabilir.\nVücudunuzdan çıkarın ve ardından \"Devam\"a dokunun.";
