@@ -429,9 +429,6 @@ Title for insulin type selection screen */
 /* Label text for step 2 of pair pod instructions */
 "Listen for 2 beeps." = "Lyt efter 2 bip.";
 
-/* Description text on manual temp basal action sheet */
-"Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled." = "Loop justerer ikke automatisk din insulindosering, før den midlertidige basalrate er afsluttet eller annulleret.";
-
 /* description label for lot number pod details row */
 "Lot Number" = "Partinummer";
 
@@ -1053,6 +1050,9 @@ recoverySuggestion for BluetoothManagerError.bluetoothNotAvailable(.resetting) *
 
 /* bodyText for PodSetupView */
 "You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Du skal nu begynde at konfigurere dine påmindelser, fylde din Pod med insulin, parre den med din enhed og placere den på din krop.";
+
+/* Description text on manual temp basal action sheet */
+"Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled." = "Loop justerer ikke automatisk din insulindosering, før den midlertidige basalrate er afsluttet eller annulleret.";
 
 /* Alert message body for confirm pod attachment */
 "Your Pod may still be delivering Insulin.\nRemove it from your body, then tap “Continue.“" = "Din Pod leverer muligvis stadig insulin.\nFjern den fra din krop og tryk derefter på \"Fortsæt\".";

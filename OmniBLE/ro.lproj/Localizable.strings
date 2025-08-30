@@ -426,9 +426,6 @@ Title for insulin type selection screen */
 /* description label for last status date pod details row */
 "Last Status" = "Ultima stare";
 
-/* Description text on manual temp basal action sheet */
-"Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled." = "Loop nu va ajusta automat administrarea de insulină până când rata bazală temporară nu se termină sau nu este anulată.";
-
 /* Label text for step 2 of pair pod instructions */
 "Listen for 2 beeps." = "Ascultați 2 semnale sonore.";
 
@@ -1053,6 +1050,9 @@ recoverySuggestion for BluetoothManagerError.bluetoothNotAvailable(.resetting) *
 
 /* bodyText for PodSetupView */
 "You will now begin the process of configuring your reminders, filling your Pod with insulin, pairing to your device and placing it on your body." = "Veți începe acum procesul de configurare a memento-urilor, umplerea Pod-ului cu insulină, asocierea cu dispozitivul dumneavoastră și amplasarea acestuia pe corp.";
+
+/* Description text on manual temp basal action sheet */
+"Your insulin delivery will not be automatically adjusted until the temporary basal rate finishes or is canceled." = "Loop nu va ajusta automat administrarea de insulină până când rata bazală temporară nu se termină sau nu este anulată.";
 
 /* Alert message body for confirm pod attachment */
 "Your Pod may still be delivering Insulin.\nRemove it from your body, then tap “Continue.“" = "Este posibil ca Podul dvs. să administreze în continuare insulină.\nScoateți-l din corpul dumneavoastră, apoi atingeți \"Continuați\".";
