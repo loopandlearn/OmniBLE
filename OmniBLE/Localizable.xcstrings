@@ -10136,6 +10136,12 @@
     "Firmware Version" : {
       "comment" : "description label for firmware version pod details row",
       "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verze firmwaru"
+          }
+        },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
