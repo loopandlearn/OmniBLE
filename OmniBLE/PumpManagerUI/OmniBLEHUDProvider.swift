@@ -50,6 +50,9 @@ internal class OmniBLEHUDProvider: NSObject, HUDProvider {
         self.allowedInsulinTypes = allowedInsulinTypes
         super.init()
         self.pumpManager.addPodStateObserver(self, queue: .main)
+
+        // Needed setup if pod keep alives might be used
+        podKeepAliveSetup(refresh: refresh)
     }
 
     public func createHUDView() -> BaseHUDView? {
@@ -125,6 +128,58 @@ internal class OmniBLEHUDProvider: NSObject, HUDProvider {
             
         reservoirView.update(level: pumpManager.reservoirLevel, at: lastStatusDate, reservoirLevelHighlightState: reservoirLevelHighlightState)
     }
+
+    // Called when the podState has been updated.
+    // Looks for changes in podState?.podTimeUpdated
+    // as key to tell if a new response was received and
+    // manage a timer based pod keep alive when in the foreground.
+    private func gotUpdatedPodState(podState: PodState?) {
+        guard let podTimeUpdated = podState?.podTimeUpdated,
+            podTimeUpdated != Storage.shared.lastUpdateTime.value
+        else {
+            return // No new status return with this podState update
+        }
+        Storage.shared.lastUpdateTime.value = podTimeUpdated // save the pod time updated value
+
+        let podKeepAliveType = Storage.shared.podKeepAliveType.value
+        let inBackground = Storage.shared.inBackground.value
+        if podKeepAliveType == .disabled {
+            return // all done for now
+        }
+
+        // If podKeepAliveType is .rileyLink, only bail if running in the background so that we
+        // can have longer than 2 minute pod alive status requests while running in the foreground.
+        if inBackground && podKeepAliveType == .rileyLink {
+            print("@@@ Skipping timer refresh while in background using rileyLink")
+            return
+        }
+
+        var nowStr: String {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm:ss"
+            let str = dateFormatter.string(from: Date())
+            return str
+        }
+
+        // Have a new status response and pod keep alives are enabled (typically for iPhone 16's with InPlay pods),
+        // so create a new update Timer to potentially trigger a later pod keep alive refresh after updateTimerInterval.
+
+        // The following code implementing a timer to trigger a refresh
+        // after refreshTimerInterval seconds has past since the last response.
+        // This code will be run with podKeepAliveType == .whenOpen or silentTune
+        // or when podKeepAliveType and we are not running in the background.
+
+        // Cancel the current refreshTimer and create a new one.
+        refreshTimer?.invalidate()
+        let refreshTimerInterval = Storage.shared.refreshTimerInterval.value
+        refreshTimer = Timer(timeInterval: refreshTimerInterval, repeats: false) { [self] _ in
+            print("@@@ refreshTimer expired, doing refresh at \(nowStr)")
+            self.refresh()
+        }
+
+        print("@@@ refreshTimer created for \(nowStr) + \(refreshTimerInterval.timeIntervalStr)")
+        RunLoop.main.add(refreshTimer!, forMode: .default)
+    }
 }
 
 extension OmniBLEHUDProvider: PodStateObserver {
@@ -134,5 +189,6 @@ extension OmniBLEHUDProvider: PodStateObserver {
 
     func podStateDidUpdate(_ state: PodState?) {
         updateReservoirView()
+        gotUpdatedPodState(podState: state)
     }
 }

@@ -1,0 +1,1232 @@
+//
+//  PodKeepAliveView.swift
+//  OmniBLE
+//
+//  Created by Joe Moran on 9/3/25.
+//  Copyright © 2025 Joe Moran. All rights reserved.
+//
+//  Adapted from LoopFollow
+
+import SwiftUI
+import Combine
+import Foundation
+
+
+struct PodKeepAliveView: View {
+    @ObservedObject var viewModel: PodKeepAliveViewModel = PodKeepAliveViewModel()
+
+    //@State private var timer: Timer?
+    @State private var forceRefresh = false
+
+    @ObservedObject var bleManager = BLEManager.shared
+
+    var title: String
+
+    var body: some View {
+        List {
+            refreshTypeSection
+
+            if viewModel.podKeepAliveType.isBluetooth {
+                selectedDeviceSection
+                availableDevicesSection
+            }
+        }
+        .onAppear {
+            //startTimer()
+            self.forceRefresh.toggle()
+        }
+        #if NOTDEF
+        .onDisappear {
+            stopTimer()
+        }
+        #endif
+        .insetGroupedListStyle()
+        .navigationBarTitle(Text(title), displayMode: .automatic)
+    }
+
+    // MARK: - Subviews / Computed Properties
+
+    private var refreshTypeSection: some View {
+        Section {
+            Picker("Pod Keep Alive Type", selection: $viewModel.podKeepAliveType) {
+                ForEach(PodKeepAliveType.allCases, id: \.self) { type in
+                    Text(type.rawValue).tag(type)
+                }
+            }
+            .pickerStyle(MenuPickerStyle())
+
+            VStack(alignment: .leading, spacing: 4) {
+
+                switch viewModel.podKeepAliveType {
+                case .disabled:
+                    Text("Pod keep alives disabled.")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+
+                case .whenOpen:
+                    Text("Pod keep alives will be sent when app is open.")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+
+                case .silentTune:
+                    Text("A silent tune will play in the background, keeping the app active. May be interrupted by other apps. Allows for pod keep alives when app is background, but consumes more iPhone battery.")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+
+                case .rileyLink:
+                    Text("Requires a RileyLink-compatible device within Bluetooth range. Allows pod keep alives when app is in background and uses less iPhone battery than the silent tune method.")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var selectedDeviceSection: some View {
+        if let storedDevice = bleManager.getSelectedDevice() {
+            Section(header: Text("Selected Device")) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(storedDevice.name ?? "Unknown Device")
+                        .font(.headline)
+
+                    deviceConnectionStatus(for: storedDevice)
+
+                    #if NOTDEF
+                    /// RSSI not getting updates for RL's and bg delay not used for pod keep alives
+                    if storedDevice.rssi != 0 {
+                        Text("RSSI: \(storedDevice.rssi) dBm")
+                            .foregroundColor(.secondary)
+                            .font(.footnote)
+                    }
+                    if let offset = BLEManager.shared.expectedSensorFetchOffsetString(for: storedDevice) {
+                        Text("Expected bg delay: \(offset)")
+                            .foregroundColor(.secondary)
+                            .font(.footnote)
+                    }
+                    #endif
+
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            bleManager.disconnect()
+                        }) {
+                            Text("Disconnect")
+                                .foregroundColor(.blue)
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
+                        Spacer()
+                    }
+                }
+                .padding(.vertical, 8)
+            }
+            .id(forceRefresh)
+        }
+    }
+
+    private func formattedTimeString(from seconds: TimeInterval) -> String {
+        if seconds < 60 {
+            return "\(Int(seconds)) seconds"
+        } else {
+            let minutes = Int(seconds / 60)
+            let seconds = Int(seconds.truncatingRemainder(dividingBy: 60))
+            return "\(minutes):\(String(format: "%02d", seconds)) minutes"
+        }
+    }
+
+    private var availableDevicesSection: some View {
+        Section(header: scanningStatusHeader) {
+            BLEDeviceSelectionView(
+                bleManager: bleManager,
+                selectedFilter: viewModel.podKeepAliveType,
+                onSelectDevice: { device in
+                    bleManager.connect(device: device)
+                }
+            )
+        }
+    }
+
+    private var scanningStatusHeader: some View {
+        Text("\(Storage.shared.selectedBLEDevice.value != nil ? "Additional" : "Scanning for") \(viewModel.podKeepAliveType.rawValue)...")
+            .font(.subheadline)
+            .foregroundColor(.secondary)
+    }
+
+    private func deviceConnectionStatus(for device: BLEDevice) -> some View {
+        let expectedConnectionTime: TimeInterval = bleManager.expectedHeartbeatInterval() ?? 300
+        let now = Date()
+        let timeSinceLastConnection = device.isConnected ? 0 : now.timeIntervalSince(device.lastConnected ?? now)
+
+        if device.isConnected {
+            return Text("Connected")
+                .foregroundColor(.green)
+        } else if let lastConnected = device.lastConnected {
+            let timeRatio = timeSinceLastConnection / expectedConnectionTime
+            let timeString = formattedTimeString(from: timeSinceLastConnection)
+
+            if timeRatio < 1.0 {
+                return Text("Disconnected for \(timeString)")
+                    .foregroundColor(.green)
+            } else if timeRatio <= 1.15 {
+                return Text("Disconnected for \(timeString)")
+                    .foregroundColor(.orange)
+            } else if timeRatio <= 3.0 {
+                return Text("Disconnected for \(timeString)")
+                    .foregroundColor(.red)
+            } else {
+                return Text("Last connection: \(lastConnected)")
+                    .foregroundColor(.red)
+            }
+        } else {
+            return Text("Reconnecting...")
+                .foregroundColor(.orange)
+        }
+    }
+
+    #if NOTDEF
+    private func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
+            self.forceRefresh.toggle()
+        }
+    }
+
+    private func stopTimer() {
+        timer?.invalidate()
+        timer = nil
+    }
+    #endif
+}
+
+
+class PodKeepAliveViewModel: ObservableObject {
+    @Published var podKeepAliveType: PodKeepAliveType
+    
+    private var storage = Storage.shared
+    private var cancellables = Set<AnyCancellable>()
+    
+    private var isInitialSetup = true // Tracks whether the value is being set initially
+    
+    init() {
+        podKeepAliveType = storage.podKeepAliveType.value
+        setupBindings()
+    }
+
+    private func setupBindings() {
+        $podKeepAliveType
+            .dropFirst() // Ignore the initial emission during setup
+            .sink { [weak self] newValue in
+                guard let self = self else { return }
+                self.handlePodKeepAliveTypeChange(oldValue: self.storage.podKeepAliveType.value, newValue: newValue)
+
+                // Persist the change
+                self.storage.podKeepAliveType.value = newValue
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func handlePodKeepAliveTypeChange(oldValue: PodKeepAliveType, newValue: PodKeepAliveType) {
+        print("@@@ Pod keep alive type changed from \(oldValue.rawValue) to \(newValue.rawValue)")
+
+        // Shouldn't be needed as this should only occur while app is in foreground
+        //if oldValue == .silentTune {
+        //    BackgroundTask.shared.stopBackgroundTask()  // stop playing silent tune
+        //}
+
+        BLEManager.shared.disconnect()
+    }
+}
+
+
+enum PodKeepAliveType: String, Codable, CaseIterable {
+    case disabled = "Disabled"
+    case whenOpen = "When Open"
+    case silentTune = "Silent Tune"
+    case rileyLink = "RileyLink"
+
+    /// Indicates if the device type uses Bluetooth
+    var isBluetooth: Bool {
+        switch self {
+        case .rileyLink:
+            return true
+        case .disabled, .whenOpen, .silentTune:
+            return false
+        }
+    }
+
+    var heartBeatInterval: TimeInterval? {
+        switch self {
+        case .rileyLink:
+            return 60
+        default:
+            return nil
+        }
+    }
+
+    var estimatedDelayBasedOnHeartbeat: Bool {
+        switch self {
+        case .rileyLink:
+            return true
+        default:
+            return false
+        }
+    }
+
+    /// Determines if a BLEDevice matches the specific device type
+    func matches(_ device: BLEDevice) -> Bool {
+        switch self {
+        case .rileyLink:
+            let rileyUUIDString = "0235733b-99c5-4197-b856-69219c2a3845"
+            if let services = device.advertisedServices {
+                return services.map { $0.lowercased() }
+                    .contains(rileyUUIDString.lowercased())
+            }
+            return false
+
+        case .disabled, .whenOpen, .silentTune:
+            return false
+        }
+    }
+}
+
+
+class Storage {
+    var bgUpdateDelay = StorageValue<Int>(key: "bgUpdateDelay", defaultValue: 10)
+    var lastUpdateTime = StorageValue<Date>(key: "lastUpdateTime", defaultValue: .distantPast)
+    var podKeepAliveType = StorageValue<PodKeepAliveType>(key: "podKeepAliveType", defaultValue: .disabled)
+    var selectedBLEDevice = StorageValue<BLEDevice?>(key: "selectedBLEDevice", defaultValue: nil)
+    var sensorScheduleOffset = StorageValue<Double?>(key: "sensorScheduleOffset", defaultValue: nil)
+    var inBackground = StorageValue<Bool>(key: "inBackground", defaultValue: false)
+
+    // Seconds after last update to force another when pod keep alives are enabled.
+    // Should be 60N + some-pad, < 180 (pod disconnect interval), > 60 (RL heartbeat interval)
+    var refreshTimerInterval = StorageValue<TimeInterval>(key: "refreshTimerInterval", defaultValue: (60 * 2) + 30)
+
+    static let shared = Storage()
+    private init() {}
+}
+
+
+class StorageValue<T: Codable & Equatable>: ObservableObject {
+    let key: String
+
+    @Published var value: T {
+        didSet {
+            guard value != oldValue else { return }
+
+            if let encodedData = try? JSONEncoder().encode(value) {
+                StorageValue.defaults.set(encodedData, forKey: key)
+            }
+        }
+    }
+
+    var exists: Bool {
+        return StorageValue.defaults.object(forKey: key) != nil
+    }
+
+    private static var defaults: UserDefaults {
+        return UserDefaults.standard
+    }
+
+    init(key: String, defaultValue: T) {
+        self.key = key
+
+        if let data = StorageValue.defaults.data(forKey: key),
+           let decodedValue = try? JSONDecoder().decode(T.self, from: data)
+        {
+            value = decodedValue
+        } else {
+            value = defaultValue
+        }
+    }
+
+    func remove() {
+        StorageValue.defaults.removeObject(forKey: key)
+    }
+}
+
+
+import AVFoundation
+
+class BackgroundTask {
+    // MARK: - Vars
+
+    static let shared = BackgroundTask()
+
+    var player = AVAudioPlayer()
+
+    init() {}
+
+    // MARK: - Methods
+
+    func startBackgroundTask() {
+        Storage.shared.inBackground.value = true
+        if Storage.shared.podKeepAliveType.value == .silentTune {
+            print("@@@ Starting silent audio")
+            NotificationCenter.default.addObserver(self, selector: #selector(interruptedAudio), name: AVAudioSession.interruptionNotification, object: AVAudioSession.sharedInstance())
+            playAudio()
+        }
+    }
+
+    func stopBackgroundTask() {
+        Storage.shared.inBackground.value = false
+        if Storage.shared.podKeepAliveType.value == .silentTune {
+            print("@@@ Stopping silent audio")
+            NotificationCenter.default.removeObserver(self, name: AVAudioSession.interruptionNotification, object: nil)
+            player.stop()
+        }
+    }
+
+    @objc fileprivate func interruptedAudio(_ notification: Notification) {
+        print("@@@ interruptedAudio: silent audio interrupted")
+        if notification.name == AVAudioSession.interruptionNotification, notification.userInfo != nil {
+            let info = notification.userInfo!
+            var intValue = 0
+            (info[AVAudioSessionInterruptionTypeKey]! as AnyObject).getValue(&intValue)
+            if intValue == 1 {
+                playAudio()
+            }
+        }
+    }
+
+    fileprivate func playAudio() {
+        let forResource = "blank"
+        let ofType = "wav"
+        do {
+            let bundle = Bundle(for: OmniBLEHUDProvider.self).path(forResource: forResource, ofType: ofType)
+            guard let bundle = bundle else {
+                print("@@@ playAudio: failed to find bundle for \(forResource).\(ofType)")
+                return
+            }
+            let alertSound = URL(fileURLWithPath: bundle)
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: .mixWithOthers)
+            try AVAudioSession.sharedInstance().setActive(true)
+            try player = AVAudioPlayer(contentsOf: alertSound)
+            // Play audio forever by setting num of loops to -1
+            player.numberOfLoops = -1
+            player.volume = 0.01
+            player.prepareToPlay()
+            player.play()
+            print("@@@ playAudio: silent audio playing")
+        } catch {
+            print("@@@ playAudio: error: \(error)")
+        }
+    }
+}
+
+
+import CoreBluetooth
+
+class BLEManager: NSObject, ObservableObject {
+
+    static let shared = BLEManager()
+
+    @Published private(set) var devices: [BLEDevice] = []
+
+    private var centralManager: CBCentralManager!
+    private var activeDevice: BluetoothDevice?
+
+    override init() {
+        super.init()
+
+        centralManager = CBCentralManager(
+            delegate: self,
+            queue: .main
+        )
+        if let device = Storage.shared.selectedBLEDevice.value {
+            print("@@@ BLEManager: have selected BLE device \(device.name ?? "") \(device.id.uuidString)")
+            devices.append(device)
+            findAndUpdateDevice(with: device.id.uuidString) { device in
+                device.rssi = 0
+            }
+            connect(device: device)
+        }
+    }
+
+    func getSelectedDevice() -> BLEDevice? {
+        return devices.first { $0.id == Storage.shared.selectedBLEDevice.value?.id }
+    }
+
+    func startScanning() {
+        guard centralManager.state == .poweredOn else {
+            print("@@@ Not powered on, cannot start scan.")
+            return
+        }
+        centralManager.scanForPeripherals(withServices: nil, options: nil)
+
+        cleanupOldDevices()
+    }
+
+    func disconnect() {
+        if let device = activeDevice {
+            device.disconnect()
+            activeDevice = nil
+            device.lastHeartbeatTime = nil
+        }
+        Storage.shared.selectedBLEDevice.value = nil
+    }
+
+    func connect(device: BLEDevice) {
+        print("@@@ attempting connect with device \(device.name ?? "") \(device.id.uuidString)")
+        disconnect()
+
+        if let matchedType = PodKeepAliveType.allCases.first(where: { $0.matches(device) }) {
+            Storage.shared.podKeepAliveType.value = matchedType
+            Storage.shared.selectedBLEDevice.value = device
+
+            findAndUpdateDevice(with: device.id.uuidString) { device in
+                device.isConnected = false
+                device.lastConnected = nil
+            }
+
+            switch matchedType {
+            case .rileyLink:
+                activeDevice = RileyLinkHeartbeatBluetoothDevice(address: device.id.uuidString, name: device.name, bluetoothDeviceDelegate: self)
+                activeDevice?.connect()
+#if NOTDEF
+            case .dexcom:
+                activeDevice = DexcomHeartbeatBluetoothDevice(address: device.id.uuidString, name: device.name, bluetoothDeviceDelegate: self)
+                activeDevice?.connect()
+            case .omnipodDash:
+                activeDevice = OmnipodDashHeartbeatBluetoothTransmitter(address: device.id.uuidString, name: device.name, bluetoothDeviceDelegate: self)
+                activeDevice?.connect()
+#endif
+            case .silentTune, .whenOpen, .disabled:
+                return
+            }
+        } else {
+            print("@@@ No matching PodKeepAliveType found for this device.")
+        }
+    }
+
+    func stopScanning() {
+        centralManager.stopScan()
+    }
+
+    func expectedHeartbeatInterval() -> TimeInterval? {
+        guard let device = activeDevice else {
+            return nil
+        }
+
+        return device.expectedHeartbeatInterval()
+    }
+
+    private func addOrUpdateDevice(_ device: BLEDevice) {
+        if let idx = devices.firstIndex(where: { $0.id == device.id }) {
+            //Lots of non-RL rssi changes and RL rssi values don't seem to get updated...
+            //print("@@@ Updating BLE device: \(device.name ?? "") \(device.id) rssi=\(device.rssi)")
+            var updatedDevice = devices[idx]
+            updatedDevice.rssi = device.rssi
+            updatedDevice.lastSeen = Date()
+            devices[idx] = updatedDevice
+        } else {
+            //if let deviceName = device.name {
+            //    print("@@@ Adding BLE device: \(deviceName) \(device.id))")
+            //}
+            var newDevice = device
+            newDevice.lastSeen = Date()
+            devices.append(newDevice)
+        }
+
+        devices = devices
+    }
+
+    private func cleanupOldDevices() {
+        let expirationDate = Date().addingTimeInterval(-600) // 10 minutes ago
+
+        // Get the selected device's ID (if any)
+        let selectedDeviceID = Storage.shared.selectedBLEDevice.value?.id
+
+        // Filter devices, keeping those seen within the last 10 minutes or the selected device
+        devices = devices.filter { $0.lastSeen > expirationDate || $0.id == selectedDeviceID }
+    }
+}
+
+// MARK: - CBCentralManagerDelegate
+
+extension BLEManager: CBCentralManagerDelegate {
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        switch central.state {
+        case .poweredOn:
+            print("@@@ Central poweredOn")
+        default:
+            print("@@@ Central state = \(central.state.rawValue), not powered on.")
+        }
+    }
+
+    func centralManager(_: CBCentralManager,
+                        didDiscover peripheral: CBPeripheral,
+                        advertisementData: [String: Any],
+                        rssi RSSI: NSNumber)
+    {
+        let uuid = peripheral.identifier
+        let services = (advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID])?
+            .map { $0.uuidString }
+
+        let device = BLEDevice(
+            id: uuid,
+            name: peripheral.name,
+            rssi: RSSI.intValue,
+            advertisedServices: services,
+            lastSeen: Date()
+        )
+
+        addOrUpdateDevice(device)
+    }
+
+    func findAndUpdateDevice(with deviceAddress: String, update: (inout BLEDevice) -> Void) {
+        if let idx = devices.firstIndex(where: { $0.id.uuidString == deviceAddress }) {
+            var device = devices[idx]
+            update(&device)
+            devices[idx] = device
+
+            devices = devices
+        } else {
+            print("@@@ Device not found in devices array for update")
+        }
+    }
+}
+
+extension BLEManager: BluetoothDeviceDelegate {
+    func didConnectTo(bluetoothDevice: BluetoothDevice) {
+        print("@@@ Connected to: \(bluetoothDevice.deviceName ?? "Unknown")")
+
+        findAndUpdateDevice(with: bluetoothDevice.deviceAddress) { device in
+            device.isConnected = true
+            device.lastConnected = Date()
+        }
+    }
+
+    func didDisconnectFrom(bluetoothDevice: BluetoothDevice) {
+        print("@@@ Disconnect from: \(bluetoothDevice.deviceName ?? "Unknown")")
+
+        findAndUpdateDevice(with: bluetoothDevice.deviceAddress) { device in
+            device.isConnected = false
+            device.lastConnected = Date()
+        }
+    }
+
+    func heartBeat() {
+        guard let device = activeDevice else {
+            return
+        }
+
+        let now = Date()
+        guard let expectedInterval = device.expectedHeartbeatInterval() else {
+            print("@@@ HeartBeat triggered")
+            device.lastHeartbeatTime = now
+            // TaskScheduler.shared.checkTasksNow()
+            return
+        }
+
+        let marginPercentage = 0.15 // 15% margin
+        let margin = expectedInterval * marginPercentage
+        let threshold = expectedInterval + margin
+
+        if let last = device.lastHeartbeatTime {
+            let elapsedTime = now.timeIntervalSince(last)
+            if elapsedTime > threshold {
+                let delay = elapsedTime - expectedInterval
+                print("@@@ HeartBeat triggered (Delayed by \(String(format: "%.1f", delay)) seconds)")
+            }
+        } else {
+            print("@@@ HeartBeat triggered (First heartbeat)")
+        }
+
+        device.lastHeartbeatTime = now
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm:ss"
+
+        let lastUpdateTime = Storage.shared.lastUpdateTime.value
+        let refreshTimerInterval = Storage.shared.refreshTimerInterval.value
+        let refreshTargetTime = lastUpdateTime.addingTimeInterval(refreshTimerInterval)
+        print("@@@ HeartBeat next refresh target time of \(dateFormatter.string(from: lastUpdateTime)) + \(refreshTimerInterval.timeIntervalStr) = \(dateFormatter.string(from: refreshTargetTime))")
+
+        let nextExpectedHeartbeatTime = now.addingTimeInterval(expectedInterval)
+        let nextExpectedHeartbeatTimeStr = dateFormatter.string(from: nextExpectedHeartbeatTime)
+        print("@@@ HeartBeat next heartbeat expected at \(dateFormatter.string(from: now)) + \(expectedInterval.timeIntervalStr) = \(nextExpectedHeartbeatTimeStr)")
+
+        let pad: TimeInterval = .seconds(5)
+        if refreshTargetTime < nextExpectedHeartbeatTime - pad {
+            print("@@@ HeartBeat refreshTargetTime within \(pad.timeIntervalStr) of nextExpectedHeartbeatTime (\(nextExpectedHeartbeatTimeStr))")
+            if let refresh = refreshFunc {
+                if Storage.shared.inBackground.value == false {
+                    print("@@@ HeartBeat skipping heartbeat refresh while in foreground")
+                } else {
+                    print("@@@ HeartBeat calling heartbeat refresh while in background")
+                    refresh()
+                }
+            }
+        }
+    }
+}
+
+
+protocol BluetoothDeviceDelegate: AnyObject {
+    func didConnectTo(bluetoothDevice: BluetoothDevice)
+
+    func didDisconnectFrom(bluetoothDevice: BluetoothDevice)
+
+    func heartBeat()
+}
+
+class BluetoothDevice: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate {
+    weak var bluetoothDeviceDelegate: BluetoothDeviceDelegate?
+    private(set) var deviceAddress: String
+    private(set) var deviceName: String?
+    private let CBUUID_Advertisement: String?
+    private let servicesCBUUIDs: [CBUUID]?
+    private let CBUUID_ReceiveCharacteristic: String
+    private var centralManager: CBCentralManager?
+    private var peripheral: CBPeripheral?
+    private var timeStampLastStatusUpdate: Date
+    private var receiveCharacteristic: CBCharacteristic?
+    private let maxTimeToWaitForPeripheralResponse = 5.0
+    private var connectTimeOutTimer: Timer?
+    var lastHeartbeatTime: Date?
+
+    init(address: String, name: String?, CBUUID_Advertisement: String?, servicesCBUUIDs: [CBUUID]?, CBUUID_ReceiveCharacteristic: String, bluetoothDeviceDelegate: BluetoothDeviceDelegate) {
+        lastHeartbeatTime = nil
+        deviceAddress = address
+        deviceName = name
+
+        self.servicesCBUUIDs = servicesCBUUIDs
+        self.CBUUID_Advertisement = CBUUID_Advertisement
+        self.CBUUID_ReceiveCharacteristic = CBUUID_ReceiveCharacteristic
+
+        timeStampLastStatusUpdate = Date()
+
+        self.bluetoothDeviceDelegate = bluetoothDeviceDelegate
+
+        super.init()
+
+        initialize()
+    }
+
+    deinit {
+        disconnect()
+    }
+
+    func connect() {
+        if let centralManager = centralManager, !retrievePeripherals(centralManager) {
+            _ = startScanning()
+        }
+    }
+
+    func disconnect() {
+        if let peripheral = peripheral {
+            if let centralManager = centralManager {
+                centralManager.cancelPeripheralConnection(peripheral)
+            }
+        }
+    }
+
+    func disconnectAndForget() {
+        disconnect()
+
+        peripheral = nil
+        deviceName = nil
+        // deviceAddress = nil
+    }
+
+    func stopScanning() {
+        centralManager?.stopScan()
+    }
+
+    func isScanning() -> Bool {
+        if let centralManager = centralManager {
+            return centralManager.isScanning
+        }
+        return false
+    }
+
+    func startScanning() -> BluetoothDevice.startScanningResult {
+        print("@@@ Start Scanning")
+
+        var returnValue = BluetoothDevice.startScanningResult.unknown
+
+        if let peripheral = peripheral {
+            switch peripheral.state {
+            case .connected:
+                return .alreadyConnected
+            case .connecting:
+                if Date() > Date(timeInterval: maxTimeToWaitForPeripheralResponse, since: timeStampLastStatusUpdate) {
+                    disconnect()
+                }
+                return .connecting
+            default: ()
+            }
+        }
+
+        var services: [CBUUID]?
+        if let CBUUID_Advertisement = CBUUID_Advertisement {
+            services = [CBUUID(string: CBUUID_Advertisement)]
+        }
+
+        if let centralManager = centralManager {
+            if centralManager.isScanning {
+                return .alreadyScanning
+            }
+            switch centralManager.state {
+            case .poweredOn:
+                centralManager.scanForPeripherals(withServices: services, options: nil)
+                returnValue = .success
+            case .poweredOff:
+                return .poweredOff
+            case .unknown:
+                return .unknown
+            case .unauthorized:
+                return .unauthorized
+            default:
+                return returnValue
+            }
+        } else {
+            returnValue = .other(reason: "centralManager is nil, can not start scanning")
+        }
+
+        return returnValue
+    }
+
+    func readValueForCharacteristic(for characteristic: CBCharacteristic) {
+        peripheral?.readValue(for: characteristic)
+    }
+
+    func setNotifyValue(_ enabled: Bool, for characteristic: CBCharacteristic) {
+        if let peripheral = peripheral {
+            peripheral.setNotifyValue(enabled, for: characteristic)
+        }
+    }
+
+    fileprivate func stopScanAndconnect(to peripheral: CBPeripheral) {
+        print("@@@ Stop Scan And Connect")
+
+        centralManager?.stopScan()
+        deviceAddress = peripheral.identifier.uuidString
+        deviceName = peripheral.name
+        peripheral.delegate = self
+        self.peripheral = peripheral
+
+        if peripheral.state == .disconnected {
+            connectTimeOutTimer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(stopConnectAndRestartScanning), userInfo: nil, repeats: false)
+            centralManager?.connect(peripheral, options: nil)
+        } else {
+            if let newCentralManager = centralManager {
+                centralManager(newCentralManager, didConnect: peripheral)
+            }
+        }
+    }
+
+    @objc fileprivate func stopConnectAndRestartScanning() {
+        disconnectAndForget()
+        _ = startScanning()
+    }
+
+    func cancelConnectionTimer() {
+        if let connectTimeOutTimer = connectTimeOutTimer {
+            connectTimeOutTimer.invalidate()
+            self.connectTimeOutTimer = nil
+        }
+    }
+
+    fileprivate func retrievePeripherals(_ central: CBCentralManager) -> Bool {
+        if let uuid = UUID(uuidString: deviceAddress) {
+            // trace("    uuid is not nil", log: log, category: ConstantsLog.categoryBlueToothTransmitter, type: .info)
+            let peripheralArr = central.retrievePeripherals(withIdentifiers: [uuid])
+            if peripheralArr.count > 0 {
+                peripheral = peripheralArr[0]
+                if let peripheral = peripheral {
+                    peripheral.delegate = self
+                    let peripheralName = peripheral.name ?? "Unknown"
+                    print("@@@ connecting to peripheral '\(peripheralName)' (UUID: \(peripheral.identifier.uuidString)).")
+                    central.connect(peripheral, options: nil)
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+    func centralManager(_: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData _: [String: Any], rssi _: NSNumber) {
+        print("@@@ [BLE] didDiscover")
+
+        timeStampLastStatusUpdate = Date()
+
+        if peripheral.identifier.uuidString == deviceAddress {
+            stopScanAndconnect(to: peripheral)
+        }
+    }
+
+    func centralManager(_: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        cancelConnectionTimer()
+
+        timeStampLastStatusUpdate = Date()
+
+        bluetoothDeviceDelegate?.didConnectTo(bluetoothDevice: self)
+
+        peripheral.discoverServices(servicesCBUUIDs)
+    }
+
+    func centralManager(_: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        timeStampLastStatusUpdate = Date()
+
+        let peripheralName = peripheral.name ?? "Unknown"
+        let errorMessage = error?.localizedDescription ?? "No error details provided"
+
+        print("@@@ Failed to connect to peripheral '\(peripheralName)' (UUID: \(peripheral.identifier.uuidString)). Error: \(errorMessage). Retrying...")
+
+        centralManager?.connect(peripheral, options: nil)
+    }
+
+    func centralManagerDidUpdateState(_ central: CBCentralManager) {
+        print("@@@ Central Manager Did Update State")
+
+        timeStampLastStatusUpdate = Date()
+
+        if central.state == .poweredOn {
+            _ = retrievePeripherals(central)
+        }
+    }
+
+    func centralManager(_: CBCentralManager, didDisconnectPeripheral _: CBPeripheral, error _: Error?) {
+        timeStampLastStatusUpdate = Date()
+
+        bluetoothDeviceDelegate?.didDisconnectFrom(bluetoothDevice: self)
+
+        if let ownPeripheral = peripheral {
+            centralManager?.connect(ownPeripheral, options: nil)
+        }
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices _: Error?) {
+        timeStampLastStatusUpdate = Date()
+
+        if let services = peripheral.services {
+            for service in services {
+                peripheral.discoverCharacteristics(nil, for: service)
+            }
+        } else {
+            disconnect()
+        }
+    }
+
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error _: Error?) {
+        timeStampLastStatusUpdate = Date()
+
+        if let characteristics = service.characteristics {
+            for characteristic in characteristics {
+                if characteristic.uuid == CBUUID(string: CBUUID_ReceiveCharacteristic) {
+                    receiveCharacteristic = characteristic
+                    peripheral.setNotifyValue(true, for: characteristic)
+                }
+            }
+        }
+    }
+
+    func peripheral(_: CBPeripheral, didWriteValueFor _: CBCharacteristic, error _: Error?) {
+        timeStampLastStatusUpdate = Date()
+    }
+
+    func peripheral(_: CBPeripheral, didUpdateNotificationStateFor _: CBCharacteristic, error _: Error?) {
+        timeStampLastStatusUpdate = Date()
+    }
+
+    func peripheral(_: CBPeripheral, didUpdateValueFor _: CBCharacteristic, error _: Error?) {
+        timeStampLastStatusUpdate = Date()
+    }
+
+    func centralManager(_: CBCentralManager, willRestoreState _: [String: Any]) {
+        print("@@@ Restoring BLE after crash/kill")
+    }
+
+    private func initialize() {
+        var cBCentralManagerOptionRestoreIdentifierKeyToUse: String?
+
+        cBCentralManagerOptionRestoreIdentifierKeyToUse = "LoopFollow-" + deviceAddress
+
+        centralManager = CBCentralManager(delegate: self, queue: nil, options: [CBCentralManagerOptionShowPowerAlertKey: true, CBCentralManagerOptionRestoreIdentifierKey: cBCentralManagerOptionRestoreIdentifierKeyToUse!])
+    }
+
+    enum startScanningResult: Equatable {
+        case success
+        case alreadyScanning
+        case poweredOff
+        case alreadyConnected
+        case connecting
+        case unknown
+        case unauthorized
+        case nfcScanNeeded
+        case other(reason: String)
+
+        func description() -> String {
+            switch self {
+            case .success:
+                return "success"
+            case .alreadyScanning:
+                return "alreadyScanning"
+            case .poweredOff:
+                return "poweredOff"
+            case .alreadyConnected:
+                return "alreadyConnected"
+            case .connecting:
+                return "connecting"
+            case let .other(reason):
+                return "other reason : " + reason
+            case .unknown:
+                return "unknown"
+            case .unauthorized:
+                return "unauthorized"
+            case .nfcScanNeeded:
+                return "nfcScanNeeded"
+            }
+        }
+    }
+
+    func expectedHeartbeatInterval() -> TimeInterval? {
+        return nil
+    }
+}
+
+extension BLEManager {
+    /// Returns the expected sensor fetch offset as a formatted string ("mm:ss (fetch delay: XX sec)")
+    /// for Dexcom and RileyLink devices. The expected offset is computed as the sensor's schedule offset plus the polling delay.
+    /// The device’s lastSeen time is used (mod cycleDuration) to calculate the effective delay between when the sensor value
+    /// becomes available and when the fetch is actually triggered.
+    func expectedSensorFetchOffsetString(for device: BLEDevice) -> String? {
+        guard
+            let matchedType = PodKeepAliveType.allCases.first(where: { $0.matches(device) }),
+            let heartBeatInterval = matchedType.heartBeatInterval,
+            let sensorOffset = Storage.shared.sensorScheduleOffset.value
+        else {
+            return nil
+        }
+
+        let heartbeatLast: Date? = {
+            if matchedType.estimatedDelayBasedOnHeartbeat {
+                guard device.isConnected, let lastHeartbeat = activeDevice?.lastHeartbeatTime else {
+                    return nil
+                }
+                return lastHeartbeat
+            } else {
+                return device.lastSeen
+            }
+        }()
+
+        guard let heartbeatLast = heartbeatLast else {
+            return nil
+        }
+
+        let pollingDelay: TimeInterval = Double(Storage.shared.bgUpdateDelay.value)
+
+        let expectedOffset = sensorOffset + pollingDelay
+
+        // If the heartbeat interval isn't a typical 60 or 300 seconds,
+        // we simply return a string indicating that the delay is "up to" the heartbeat interval.
+        if heartBeatInterval != 60, heartBeatInterval != 300 {
+            return "up to \(Int(heartBeatInterval)) sec"
+        }
+
+        let effectiveDelay = CycleHelper.computeDelay(sensorOffset: expectedOffset, heartbeatLast: heartbeatLast, heartbeatInterval: heartBeatInterval)
+
+        return "\(Int(effectiveDelay)) sec"
+    }
+}
+
+
+class RileyLinkHeartbeatBluetoothDevice: BluetoothDevice {
+    private let CBUUID_Service_RileyLink: String = "0235733B-99C5-4197-B856-69219C2A3845"
+    private let CBUUID_ReceiveCharacteristic_TimerTick: String = "6E6C7910-B89E-43A5-78AF-50C5E2B86F7E"
+    private let CBUUID_ReceiveCharacteristic_Data: String = "C842E849-5028-42E2-867C-016ADADA9155"
+
+    var refreshFunc: (() -> Void)?
+
+    init(address: String, name: String?, bluetoothDeviceDelegate: BluetoothDeviceDelegate) {
+        super.init(
+            address: address,
+            name: name,
+            CBUUID_Advertisement: nil,
+            servicesCBUUIDs: [CBUUID(string: CBUUID_Service_RileyLink)],
+            CBUUID_ReceiveCharacteristic: CBUUID_ReceiveCharacteristic_TimerTick,
+            bluetoothDeviceDelegate: bluetoothDeviceDelegate
+        )
+    }
+
+    override func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        super.centralManager(central, didConnect: peripheral)
+    }
+
+    override func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        super.peripheral(peripheral, didUpdateValueFor: characteristic, error: error)
+
+        guard characteristic.uuid == CBUUID(string: CBUUID_ReceiveCharacteristic_TimerTick) else {
+            return
+        }
+
+        bluetoothDeviceDelegate?.heartBeat()
+    }
+
+    override func expectedHeartbeatInterval() -> TimeInterval? {
+        return 60
+    }
+}
+
+
+enum CycleHelper {
+    /// Returns a positive modulus value (always between 0 and modulus).
+    static func positiveModulo(_ value: TimeInterval, modulus: TimeInterval) -> TimeInterval {
+        let remainder = value.truncatingRemainder(dividingBy: modulus)
+        return remainder < 0 ? remainder + modulus : remainder
+    }
+
+    /// Calculates the cycle offset for a given date relative to midnight.
+    /// The offset is the number of seconds into the cycle (i.e., date mod interval).
+    static func cycleOffset(for date: Date, interval: TimeInterval) -> TimeInterval {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        let secondsSinceMidnight = date.timeIntervalSince(startOfDay)
+        return secondsSinceMidnight.truncatingRemainder(dividingBy: interval)
+    }
+
+    /// Same as above, but takes a timestamp (seconds since 1970) instead of a Date.
+    static func cycleOffset(for timestamp: TimeInterval, interval: TimeInterval) -> TimeInterval {
+        let date = Date(timeIntervalSince1970: timestamp)
+        return cycleOffset(for: date, interval: interval)
+    }
+
+    /// Computes the delay experienced when using a heartbeat device to read a sensor value.
+    /// The calculation is based on a sensor reference (Date) and sensor interval.
+    /// All calculations assume midnight as the base reference.
+    static func computeDelay(sensorReference: Date,
+                             sensorInterval: TimeInterval,
+                             heartbeatLast: Date,
+                             heartbeatInterval: TimeInterval) -> TimeInterval
+    {
+        let sensorOffset = cycleOffset(for: sensorReference, interval: sensorInterval)
+        let hbOffset = cycleOffset(for: heartbeatLast, interval: heartbeatInterval)
+        return positiveModulo(hbOffset - sensorOffset, modulus: heartbeatInterval)
+    }
+
+    /// Overloaded version of computeDelay where the sensor cycle offset is already known.
+    static func computeDelay(sensorOffset: TimeInterval,
+                             heartbeatLast: Date,
+                             heartbeatInterval: TimeInterval) -> TimeInterval
+    {
+        let hbOffset = cycleOffset(for: heartbeatLast, interval: heartbeatInterval)
+        return positiveModulo(hbOffset - sensorOffset, modulus: heartbeatInterval)
+    }
+}
+
+
+struct BLEDeviceSelectionView: View {
+    @ObservedObject var bleManager: BLEManager
+    var selectedFilter: PodKeepAliveType
+    var onSelectDevice: (BLEDevice) -> Void
+
+    var body: some View {
+        VStack {
+            //List {
+                let filteredDevices = bleManager.devices.filter { selectedFilter.matches($0) && !isSelected($0) }
+                if filteredDevices.isEmpty {
+                    Text("No devices found yet. They will appear here when discovered.")
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .padding()
+
+                } else {
+                    ForEach(filteredDevices, id: \.id) { device in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(device.name ?? "Unknown")
+
+                                Text("RSSI: \(device.rssi) dBm")
+                                    .foregroundColor(.secondary)
+                                    .font(.footnote)
+
+                                if let offset = BLEManager.shared.expectedSensorFetchOffsetString(for: device) {
+                                    //Text("Expected bg delay: \(offset)")
+                                    Text("Expected offset: \(offset)")
+                                        .foregroundColor(.secondary)
+                                        .font(.footnote)
+                                }
+                            }
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            onSelectDevice(device)
+                        }
+                    }
+                }
+            //}
+        }
+        .onAppear {
+            bleManager.startScanning()
+        }
+        .onDisappear {
+            bleManager.stopScanning()
+        }
+    }
+
+    private func isSelected(_ device: BLEDevice) -> Bool {
+        guard let selectedDevice = Storage.shared.selectedBLEDevice.value else {
+            return false
+        }
+        return selectedDevice.id == device.id
+    }
+}
+
+
+struct BLEDevice: Identifiable, Codable, Equatable {
+    let id: UUID
+
+    var name: String?
+    var rssi: Int
+    var isConnected: Bool
+    var advertisedServices: [String]?
+    var lastSeen: Date
+    var lastConnected: Date?
+
+    init(id: UUID,
+         name: String? = nil,
+         rssi: Int,
+         isConnected: Bool = false,
+         advertisedServices: [String]? = nil,
+         lastSeen: Date = Date(),
+         lastConnected: Date? = nil)
+    {
+        self.id = id
+        self.name = name
+        self.rssi = rssi
+        self.isConnected = isConnected
+        self.advertisedServices = advertisedServices
+        self.lastSeen = lastSeen
+        self.lastConnected = lastConnected
+    }
+}
+
+
+fileprivate var refreshFunc: (() -> Void)? = nil
+
+func podKeepAliveSetup(refresh: @escaping () -> Void) {
+
+    Storage.shared.inBackground.value = false // reset to be sure
+
+    refreshFunc = refresh /// stash the refresh function pointer for background BLE use
+
+    let keepAliveType = Storage.shared.podKeepAliveType.value
+    print("@@@ podKeepAliveSetup called with current keep alive type = \(keepAliveType)")
+
+    /// Need to handle starting playing tunes or handle RL setup for cases
+    /// such as when first selecting OmniBLE pump type, right after pairing
+    /// and pod type is known, or any app restart issues.
+    switch keepAliveType {
+    case .silentTune:
+        // Shouldn't need to start the silent tune now as we should be in foreground
+        // BackgroundTask.shared.startBackgroundTask()
+        break
+    case .rileyLink:
+        // Force an attempt to connect if there is a selected BLE heartbeat device
+        _ = BLEManager()
+    default:
+        break // no extra setup actions should be needed
+    }
+}

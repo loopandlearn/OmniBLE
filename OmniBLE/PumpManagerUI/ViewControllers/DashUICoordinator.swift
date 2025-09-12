@@ -390,11 +390,24 @@ class DashUICoordinator: UINavigationController, PumpManagerOnboarding, Completi
         super.viewDidLoad()
         self.navigationBar.prefersLargeTitles = true
         delegate = self
+
+        // Trigger foreground and background functions
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        notificationCenter.addObserver(self, selector: #selector(appCameToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
     }
 
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         completionDelegate?.completionNotifyingDidComplete(self)
+    }
+
+    @objc func appMovedToBackground() {
+        BackgroundTask.shared.startBackgroundTask()
+    }
+
+    @objc func appCameToForeground() {
+        BackgroundTask.shared.stopBackgroundTask()
     }
 
     public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {

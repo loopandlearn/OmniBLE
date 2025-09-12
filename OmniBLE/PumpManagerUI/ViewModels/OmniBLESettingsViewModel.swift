@@ -211,7 +211,13 @@ class OmniBLESettingsViewModel: ObservableObject {
         }
         return nil
     }
-    
+
+    var displayPodKeepAlives: Bool {
+        // If usingInPlayPod returns nil, we are not paired and so the pod type is currently unknown.
+        // Use a != false test here so that the Pod Keep Alive option is always shown before pairing.
+        return pumpManager.iPhoneWithPossibleInPlayIssues && pumpManager.usingInPlayPod != false
+    }
+
     let reservoirVolumeFormatter = QuantityFormatter(for: .internationalUnit())
     
     var didFinish: (() -> Void)?
