@@ -14,8 +14,8 @@ import os.log
 import CoreBluetooth
 import UIKit
 
-var fakeInPlayPod = true
-var fakeIPhoneWithPossibleInPlayIssues = true
+var fakeInPlayPod = false
+var fakeIPhoneWithPossibleInPlayIssues = false
 
 // Returns a String of the form "iPhoneZ,Y" or "iPodX,Y"
 extension UIDevice {
@@ -115,6 +115,19 @@ public class OmniBLEPumpManager: DeviceManager {
         self.podComms.delegate = self
         self.podComms.messageLogger = self
 
+        let nc = NotificationCenter.default
+        nc.addObserver(
+            self,
+            selector: #selector(appMovedToBackground),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
+        nc.addObserver(
+            self,
+            selector: #selector(appMovedToForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil
+        )
     }
 
     public required convenience init?(rawState: PumpManager.RawStateValue) {
@@ -290,6 +303,15 @@ public class OmniBLEPumpManager: DeviceManager {
         podStateObservers.forEach { (observer) in
             observer.podConnectionStateDidChange(isConnected: isConnected)
         }
+    }
+
+    private let backgroundTask = BackgroundTask()
+    @objc func appMovedToBackground() {
+        backgroundTask.startBackgroundTask()
+    }
+
+    @objc func appMovedToForeground() {
+        backgroundTask.stopBackgroundTask()
     }
 
     private let pumpDelegate = WeakSynchronizedDelegate<PumpManagerDelegate>()
@@ -2525,7 +2547,7 @@ extension OmniBLEPumpManager: PumpManager {
         }
 
         // For now, assume iPhone 17's (Apple model # "iPhone18,N", sigh) will also fail.
-        // If InPlay pods are found to work with iPhone 17's, this code can be removed.
+        // N.B. If InPlay pods are found to work with iPhone 17's, this code should be removed.
         if deviceModel.contains("iPhone18") {
             return true
         }

@@ -200,12 +200,12 @@ struct PodKeepAliveView: View {
 
 class PodKeepAliveViewModel: ObservableObject {
     @Published var podKeepAliveType: PodKeepAliveType
-    
+
     private var storage = Storage.shared
     private var cancellables = Set<AnyCancellable>()
-    
+
     private var isInitialSetup = true // Tracks whether the value is being set initially
-    
+
     init() {
         podKeepAliveType = storage.podKeepAliveType.value
         setupBindings()
@@ -223,7 +223,7 @@ class PodKeepAliveViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
+
     private func handlePodKeepAliveTypeChange(oldValue: PodKeepAliveType, newValue: PodKeepAliveType) {
         print("@@@ Pod keep alive type changed from \(oldValue.rawValue) to \(newValue.rawValue)")
 
@@ -353,8 +353,6 @@ class BackgroundTask {
     static let shared = BackgroundTask()
 
     var player = AVAudioPlayer()
-
-    init() {}
 
     // MARK: - Methods
 

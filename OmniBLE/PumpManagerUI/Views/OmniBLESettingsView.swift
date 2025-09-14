@@ -493,13 +493,11 @@ struct OmniBLESettingsView: View  {
                 }
 
                 let localizedPodKeepAliveStr = LocalizedString("Pod Keep Alive", comment: "Title for the pod keep alive row and page")
-                if self.viewModel.displayPodKeepAlives {
-                    NavigationLink(destination: PodKeepAliveView(
-                        title: localizedPodKeepAliveStr))
-                    {
-                        Text(localizedPodKeepAliveStr)
-                            .foregroundColor(Color.primary)
-                    }
+                NavigationLink(destination: PodKeepAliveView(
+                    title: localizedPodKeepAliveStr))
+                {
+                    Text(localizedPodKeepAliveStr)
+                        .foregroundColor(Color.primary)
                 }
             }
 

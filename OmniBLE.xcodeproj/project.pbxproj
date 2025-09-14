@@ -569,7 +569,6 @@
 		84752E7826ED0FFE009FD801 = {
 			isa = PBXGroup;
 			children = (
-				D87B145C2E73D71300B1F834 /* blank.wav */,
 				B66D1F922E6A89E400471149 /* Localizable.xcstrings */,
 				A91B2DEB276E1E5E001B0E95 /* README.md */,
 				84752EE926ED1402009FD801 /* Common */,
@@ -601,6 +600,7 @@
 				84752EAD26ED11A4009FD801 /* PumpManager */,
 				8475311D26ED8246009FD801 /* PumpManagerUI */,
 				84752E8526ED0FFE009FD801 /* OmniBLE.h */,
+				D87B145C2E73D71300B1F834 /* blank.wav */,
 				84752E8626ED0FFE009FD801 /* Info.plist */,
 				B66D1F902E6A89E400471149 /* Localizable.xcstrings */,
 			);
