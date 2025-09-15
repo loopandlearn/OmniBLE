@@ -1729,7 +1729,7 @@
       }
     },
     "A silent tune will play in the background, keeping the app active. May be interrupted by other apps. Allows for pod keep alives when app is background, but consumes more iPhone battery." : {
-
+      "comment" : "Description for PodKeepAlive.silentTune"
     },
     "Activation time exceeded" : {
       "comment" : "Format string for activation time exceeded\nPod state when activation not completed in the time allowed",
@@ -7229,7 +7229,7 @@
       }
     },
     "Disabled" : {
-      "comment" : "Title string for BeepPreference.silent\nTitle string for SilencePodPreference.disabled",
+      "comment" : "Title string for BeepPreference.silent\nTitle string for PodKeepAlive.disabled\nTitle string for SilencePodPreference.disabled",
       "localizations" : {
         "da" : {
           "stringUnit" : {
@@ -20810,14 +20810,11 @@
     "Pod Keep Alive" : {
       "comment" : "Title for the pod keep alive row and page"
     },
-    "Pod Keep Alive Type" : {
-
-    },
     "Pod keep alives disabled." : {
-
+      "comment" : "Description for PodKeepAlive.disabled"
     },
     "Pod keep alives will be sent when app is open." : {
-
+      "comment" : "Description for PodKeepAlive.whenOpen"
     },
     "Pod not connected" : {
       "comment" : "Error message shown when the pod is not connected.",
@@ -23407,8 +23404,8 @@
         }
       }
     },
-    "Requires a RileyLink-compatible device within Bluetooth range. Allows pod keep alives when app is in background and uses less iPhone battery than the silent tune method." : {
-
+    "Requires a RileyLink-compatible device within Bluetooth range. Allows pod keep alives when app is in background and uses less iPhone battery than the silent tune method. The RileyLink-compatible device must be the selected and be connected." : {
+      "comment" : "Description for PodKeepAlive.rileyLink"
     },
     "Resume" : {
       "comment" : "Pump Event title for UnfinalizedDose with doseType of .resume",
@@ -24073,6 +24070,9 @@
           }
         }
       }
+    },
+    "RileyLink" : {
+      "comment" : "Title string for PodKeepAlive.rileyLink"
     },
     "RSSI: %lld dBm" : {
 
@@ -25515,6 +25515,9 @@
           }
         }
       }
+    },
+    "Silent Tune" : {
+      "comment" : "Title string for PodKeepAlive.silentTune"
     },
     "Skip Omnipod Onboarding?" : {
       "localizations" : {
@@ -31012,6 +31015,9 @@
           }
         }
       }
+    },
+    "When Open" : {
+      "comment" : "Title string for PodKeepAlive.whenOpen"
     },
     "Yes" : {
       "comment" : "Button label for user to answer cannula was properly inserted",

@@ -940,11 +940,11 @@ extension OmniBLEPumpManager {
                         self.resetPerPodPumpManagerState()
 
                         if self.usingInPlayPod == true && self.iPhoneWithPossibleInPlayIssues {
-                            if Storage.shared.podKeepAliveType.value == .disabled {
+                            if Storage.shared.podKeepAlive.value == .disabled {
                                 // Enable the most conservative pod keep alive mode
                                 // that should work through the for pod setup process.
                                 self.log.debug("@@@ Enabling pod keep alives")
-                                Storage.shared.podKeepAliveType.value = .whenOpen
+                                Storage.shared.podKeepAlive.value = .whenOpen
                             }
                         }
                         // Calls completion

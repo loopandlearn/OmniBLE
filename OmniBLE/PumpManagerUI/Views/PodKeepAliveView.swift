@@ -11,35 +11,38 @@ import SwiftUI
 import Combine
 import Foundation
 
+fileprivate var savedOnSave: ((_ selectedValue: PodKeepAlive) -> Void)?
 
 struct PodKeepAliveView: View {
     @ObservedObject var viewModel: PodKeepAliveViewModel = PodKeepAliveViewModel()
 
-    //@State private var timer: Timer?
     @State private var forceRefresh = false
 
     @ObservedObject var bleManager = BLEManager.shared
 
-    var title: String
+    private var title: String
+    private var initialValue: PodKeepAlive
+    @State private var preference: PodKeepAlive
+
+    init(title: String, initialValue: PodKeepAlive, onSave: @escaping (_ selectedValue: PodKeepAlive) -> Void) {
+        self.title = title
+        self.initialValue = initialValue
+        self._preference = State(initialValue: initialValue)
+        savedOnSave = onSave
+    }
 
     var body: some View {
         List {
             refreshTypeSection
 
-            if viewModel.podKeepAliveType.isBluetooth {
+            if viewModel.podKeepAlive.isBluetooth {
                 selectedDeviceSection
                 availableDevicesSection
             }
         }
         .onAppear {
-            //startTimer()
             self.forceRefresh.toggle()
         }
-        #if NOTDEF
-        .onDisappear {
-            stopTimer()
-        }
-        #endif
         .insetGroupedListStyle()
         .navigationBarTitle(Text(title), displayMode: .automatic)
     }
@@ -48,36 +51,17 @@ struct PodKeepAliveView: View {
 
     private var refreshTypeSection: some View {
         Section {
-            Picker("Pod Keep Alive Type", selection: $viewModel.podKeepAliveType) {
-                ForEach(PodKeepAliveType.allCases, id: \.self) { type in
-                    Text(type.rawValue).tag(type)
+            Picker("Pod Keep Alive", selection: $viewModel.podKeepAlive) {
+                ForEach(PodKeepAlive.allCases, id: \.self) { type in
+                    Text(type.title).tag(type)
                 }
             }
             .pickerStyle(MenuPickerStyle())
 
             VStack(alignment: .leading, spacing: 4) {
-
-                switch viewModel.podKeepAliveType {
-                case .disabled:
-                    Text("Pod keep alives disabled.")
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-
-                case .whenOpen:
-                    Text("Pod keep alives will be sent when app is open.")
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-
-                case .silentTune:
-                    Text("A silent tune will play in the background, keeping the app active. May be interrupted by other apps. Allows for pod keep alives when app is background, but consumes more iPhone battery.")
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-
-                case .rileyLink:
-                    Text("Requires a RileyLink-compatible device within Bluetooth range. Allows pod keep alives when app is in background and uses less iPhone battery than the silent tune method.")
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                }
+                Text(viewModel.podKeepAlive.description)
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
             }
         }
     }
@@ -92,7 +76,7 @@ struct PodKeepAliveView: View {
 
                     deviceConnectionStatus(for: storedDevice)
 
-                    #if NOTDEF
+                    #if XXX
                     /// RSSI not getting updates for RL's and bg delay not used for pod keep alives
                     if storedDevice.rssi != 0 {
                         Text("RSSI: \(storedDevice.rssi) dBm")
@@ -138,7 +122,7 @@ struct PodKeepAliveView: View {
         Section(header: scanningStatusHeader) {
             BLEDeviceSelectionView(
                 bleManager: bleManager,
-                selectedFilter: viewModel.podKeepAliveType,
+                selectedFilter: viewModel.podKeepAlive,
                 onSelectDevice: { device in
                     bleManager.connect(device: device)
                 }
@@ -147,7 +131,7 @@ struct PodKeepAliveView: View {
     }
 
     private var scanningStatusHeader: some View {
-        Text("\(Storage.shared.selectedBLEDevice.value != nil ? "Additional" : "Scanning for") \(viewModel.podKeepAliveType.rawValue)...")
+        Text("\(Storage.shared.selectedBLEDevice.value != nil ? "Additional" : "Scanning for") \(viewModel.podKeepAlive.title)...")
             .font(.subheadline)
             .foregroundColor(.secondary)
     }
@@ -182,24 +166,11 @@ struct PodKeepAliveView: View {
                 .foregroundColor(.orange)
         }
     }
-
-    #if NOTDEF
-    private func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { _ in
-            self.forceRefresh.toggle()
-        }
-    }
-
-    private func stopTimer() {
-        timer?.invalidate()
-        timer = nil
-    }
-    #endif
 }
 
 
 class PodKeepAliveViewModel: ObservableObject {
-    @Published var podKeepAliveType: PodKeepAliveType
+    @Published var podKeepAlive: PodKeepAlive
 
     private var storage = Storage.shared
     private var cancellables = Set<AnyCancellable>()
@@ -207,25 +178,26 @@ class PodKeepAliveViewModel: ObservableObject {
     private var isInitialSetup = true // Tracks whether the value is being set initially
 
     init() {
-        podKeepAliveType = storage.podKeepAliveType.value
+        podKeepAlive = storage.podKeepAlive.value
         setupBindings()
     }
 
     private func setupBindings() {
-        $podKeepAliveType
+        $podKeepAlive
             .dropFirst() // Ignore the initial emission during setup
             .sink { [weak self] newValue in
                 guard let self = self else { return }
-                self.handlePodKeepAliveTypeChange(oldValue: self.storage.podKeepAliveType.value, newValue: newValue)
+                self.handlePodKeepAliveChange(oldValue: storage.podKeepAlive.value, newValue: newValue)
 
                 // Persist the change
-                self.storage.podKeepAliveType.value = newValue
+                storage.podKeepAlive.value = newValue
+                savedOnSave?(newValue)
             }
             .store(in: &cancellables)
     }
 
-    private func handlePodKeepAliveTypeChange(oldValue: PodKeepAliveType, newValue: PodKeepAliveType) {
-        print("@@@ Pod keep alive type changed from \(oldValue.rawValue) to \(newValue.rawValue)")
+    private func handlePodKeepAliveChange(oldValue: PodKeepAlive, newValue: PodKeepAlive) {
+        print("@@@ Pod keep alive changed from \(oldValue.rawValue) to \(newValue.rawValue)")
 
         // Shouldn't be needed as this should only occur while app is in foreground
         //if oldValue == .silentTune {
@@ -236,12 +208,37 @@ class PodKeepAliveViewModel: ObservableObject {
     }
 }
 
+enum PodKeepAlive: Int, CaseIterable, Codable {
+    case disabled
+    case whenOpen
+    case silentTune
+    case rileyLink
 
-enum PodKeepAliveType: String, Codable, CaseIterable {
-    case disabled = "Disabled"
-    case whenOpen = "When Open"
-    case silentTune = "Silent Tune"
-    case rileyLink = "RileyLink"
+    var title: String {
+        switch self {
+        case .disabled:
+            return LocalizedString("Disabled", comment: "Title string for PodKeepAlive.disabled")
+        case .whenOpen:
+            return LocalizedString("When Open", comment: "Title string for PodKeepAlive.whenOpen")
+        case .silentTune:
+            return LocalizedString("Silent Tune", comment: "Title string for PodKeepAlive.silentTune")
+        case .rileyLink:
+            return LocalizedString("RileyLink", comment: "Title string for PodKeepAlive.rileyLink")
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .disabled:
+            return LocalizedString("Pod keep alives disabled.", comment: "Description for PodKeepAlive.disabled")
+        case .whenOpen:
+            return LocalizedString("Pod keep alives will be sent when app is open.", comment: "Description for PodKeepAlive.whenOpen")
+        case .silentTune:
+            return LocalizedString("A silent tune will play in the background, keeping the app active. May be interrupted by other apps. Allows for pod keep alives when app is background, but consumes more iPhone battery.", comment: "Description for PodKeepAlive.silentTune")
+        case .rileyLink:
+            return LocalizedString("Requires a RileyLink-compatible device within Bluetooth range. Allows pod keep alives when app is in background and uses less iPhone battery than the silent tune method. The RileyLink-compatible device must be the selected and be connected.", comment: "Description for PodKeepAlive.rileyLink")
+        }
+    }
 
     /// Indicates if the device type uses Bluetooth
     var isBluetooth: Bool {
@@ -292,14 +289,14 @@ enum PodKeepAliveType: String, Codable, CaseIterable {
 class Storage {
     var bgUpdateDelay = StorageValue<Int>(key: "bgUpdateDelay", defaultValue: 10)
     var lastUpdateTime = StorageValue<Date>(key: "lastUpdateTime", defaultValue: .distantPast)
-    var podKeepAliveType = StorageValue<PodKeepAliveType>(key: "podKeepAliveType", defaultValue: .disabled)
+    var podKeepAlive = StorageValue<PodKeepAlive>(key: "podKeepAlive", defaultValue: .disabled)
     var selectedBLEDevice = StorageValue<BLEDevice?>(key: "selectedBLEDevice", defaultValue: nil)
     var sensorScheduleOffset = StorageValue<Double?>(key: "sensorScheduleOffset", defaultValue: nil)
     var inBackground = StorageValue<Bool>(key: "inBackground", defaultValue: false)
 
     // Seconds after last update to force another when pod keep alives are enabled.
     // Should be 60N + some-pad, < 180 (pod disconnect interval), > 60 (RL heartbeat interval)
-    var refreshTimerInterval = StorageValue<TimeInterval>(key: "refreshTimerInterval", defaultValue: (60 * 2) + 30)
+    var refreshTimerInterval = StorageValue<TimeInterval>(key: "refreshTimerInterval", defaultValue: (60 * 2) + 40)
 
     static let shared = Storage()
     private init() {}
@@ -358,7 +355,7 @@ class BackgroundTask {
 
     func startBackgroundTask() {
         Storage.shared.inBackground.value = true
-        if Storage.shared.podKeepAliveType.value == .silentTune {
+        if Storage.shared.podKeepAlive.value == .silentTune {
             print("@@@ Starting silent audio")
             NotificationCenter.default.addObserver(self, selector: #selector(interruptedAudio), name: AVAudioSession.interruptionNotification, object: AVAudioSession.sharedInstance())
             playAudio()
@@ -367,7 +364,7 @@ class BackgroundTask {
 
     func stopBackgroundTask() {
         Storage.shared.inBackground.value = false
-        if Storage.shared.podKeepAliveType.value == .silentTune {
+        if Storage.shared.podKeepAlive.value == .silentTune {
             print("@@@ Stopping silent audio")
             NotificationCenter.default.removeObserver(self, name: AVAudioSession.interruptionNotification, object: nil)
             player.stop()
@@ -467,8 +464,8 @@ class BLEManager: NSObject, ObservableObject {
         print("@@@ attempting connect with device \(device.name ?? "") \(device.id.uuidString)")
         disconnect()
 
-        if let matchedType = PodKeepAliveType.allCases.first(where: { $0.matches(device) }) {
-            Storage.shared.podKeepAliveType.value = matchedType
+        if let matchedType = PodKeepAlive.allCases.first(where: { $0.matches(device) }) {
+            Storage.shared.podKeepAlive.value = matchedType
             Storage.shared.selectedBLEDevice.value = device
 
             findAndUpdateDevice(with: device.id.uuidString) { device in
@@ -480,7 +477,7 @@ class BLEManager: NSObject, ObservableObject {
             case .rileyLink:
                 activeDevice = RileyLinkHeartbeatBluetoothDevice(address: device.id.uuidString, name: device.name, bluetoothDeviceDelegate: self)
                 activeDevice?.connect()
-#if NOTDEF
+#if notdef
             case .dexcom:
                 activeDevice = DexcomHeartbeatBluetoothDevice(address: device.id.uuidString, name: device.name, bluetoothDeviceDelegate: self)
                 activeDevice?.connect()
@@ -991,7 +988,7 @@ extension BLEManager {
     /// becomes available and when the fetch is actually triggered.
     func expectedSensorFetchOffsetString(for device: BLEDevice) -> String? {
         guard
-            let matchedType = PodKeepAliveType.allCases.first(where: { $0.matches(device) }),
+            let matchedType = PodKeepAlive.allCases.first(where: { $0.matches(device) }),
             let heartBeatInterval = matchedType.heartBeatInterval,
             let sensorOffset = Storage.shared.sensorScheduleOffset.value
         else {
@@ -1116,7 +1113,7 @@ enum CycleHelper {
 
 struct BLEDeviceSelectionView: View {
     @ObservedObject var bleManager: BLEManager
-    var selectedFilter: PodKeepAliveType
+    var selectedFilter: PodKeepAlive
     var onSelectDevice: (BLEDevice) -> Void
 
     var body: some View {
@@ -1210,13 +1207,13 @@ func podKeepAliveSetup(refresh: @escaping () -> Void) {
 
     refreshFunc = refresh /// stash the refresh function pointer for background BLE use
 
-    let keepAliveType = Storage.shared.podKeepAliveType.value
-    print("@@@ podKeepAliveSetup called with current keep alive type = \(keepAliveType)")
+    let podKeepAlive = Storage.shared.podKeepAlive.value
+    print("@@@ podKeepAliveSetup called with current keep alive type = \(podKeepAlive)")
 
     /// Need to handle starting playing tunes or handle RL setup for cases
     /// such as when first selecting OmniBLE pump type, right after pairing
     /// and pod type is known, or any app restart issues.
-    switch keepAliveType {
+    switch podKeepAlive {
     case .silentTune:
         // Shouldn't need to start the silent tune now as we should be in foreground
         // BackgroundTask.shared.startBackgroundTask()

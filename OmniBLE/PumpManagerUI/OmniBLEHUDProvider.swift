@@ -141,15 +141,15 @@ internal class OmniBLEHUDProvider: NSObject, HUDProvider {
         }
         Storage.shared.lastUpdateTime.value = podTimeUpdated // save the pod time updated value
 
-        let podKeepAliveType = Storage.shared.podKeepAliveType.value
+        let podKeepAlive = Storage.shared.podKeepAlive.value
         let inBackground = Storage.shared.inBackground.value
-        if podKeepAliveType == .disabled {
+        if podKeepAlive == .disabled {
             return // all done for now
         }
 
         // If podKeepAliveType is .rileyLink, only bail if running in the background so that we
         // can have longer than 2 minute pod alive status requests while running in the foreground.
-        if inBackground && podKeepAliveType == .rileyLink {
+        if inBackground && podKeepAlive == .rileyLink {
             print("@@@ Skipping timer refresh while in background using rileyLink")
             return
         }
