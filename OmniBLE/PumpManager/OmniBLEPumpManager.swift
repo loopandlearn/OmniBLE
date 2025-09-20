@@ -128,6 +128,14 @@ public class OmniBLEPumpManager: DeviceManager {
             name: UIApplication.willEnterForegroundNotification,
             object: nil
         )
+
+        // Needed setup if pod keep alives might be used
+        podKeepAliveSetup(refresh: refresh)
+    }
+
+    func refresh() {
+        // run in a separate thread?
+        self.getPodStatus() { _ in }
     }
 
     public required convenience init?(rawState: PumpManager.RawStateValue) {

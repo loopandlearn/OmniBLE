@@ -11,8 +11,6 @@ import SwiftUI
 import Combine
 import Foundation
 
-fileprivate var savedOnSave: ((_ selectedValue: PodKeepAlive) -> Void)?
-
 struct PodKeepAliveView: View {
     @ObservedObject var viewModel: PodKeepAliveViewModel = PodKeepAliveViewModel()
 
@@ -24,11 +22,11 @@ struct PodKeepAliveView: View {
     private var initialValue: PodKeepAlive
     @State private var preference: PodKeepAlive
 
-    init(title: String, initialValue: PodKeepAlive, onSave: @escaping (_ selectedValue: PodKeepAlive) -> Void) {
+    init(title: String, initialValue: PodKeepAlive, onChange: @escaping (_ selectedValue: PodKeepAlive) -> Void) {
         self.title = title
         self.initialValue = initialValue
         self._preference = State(initialValue: initialValue)
-        savedOnSave = onSave
+        savedOnChange = onChange
     }
 
     var body: some View {
@@ -76,7 +74,7 @@ struct PodKeepAliveView: View {
 
                     deviceConnectionStatus(for: storedDevice)
 
-                    #if XXX
+                    #if notneeded
                     /// RSSI not getting updates for RL's and bg delay not used for pod keep alives
                     if storedDevice.rssi != 0 {
                         Text("RSSI: \(storedDevice.rssi) dBm")
@@ -168,6 +166,7 @@ struct PodKeepAliveView: View {
     }
 }
 
+fileprivate var savedOnChange: ((_ selectedValue: PodKeepAlive) -> Void)?
 
 class PodKeepAliveViewModel: ObservableObject {
     @Published var podKeepAlive: PodKeepAlive
@@ -191,19 +190,45 @@ class PodKeepAliveViewModel: ObservableObject {
 
                 // Persist the change
                 storage.podKeepAlive.value = newValue
-                savedOnSave?(newValue)
+                savedOnChange?(newValue) // Ugh
             }
             .store(in: &cancellables)
     }
 
     private func handlePodKeepAliveChange(oldValue: PodKeepAlive, newValue: PodKeepAlive) {
-        print("@@@ Pod keep alive changed from \(oldValue.rawValue) to \(newValue.rawValue)")
+        print("@@@ Pod keep alive changed from \(oldValue.title) to \(newValue.title)")
+        let lastUpdateTime = storage.lastUpdateTime.value
+        let refreshTimerInterval = storage.refreshTimerInterval.value
+        let refreshTimeTarget = lastUpdateTime + refreshTimerInterval
+        var refreshInterval = refreshTimeTarget.timeIntervalSinceNow
+        if refreshInterval < 0 {
+            refreshInterval = .seconds(1)
+        }
 
-        // Shouldn't be needed as this should only occur while app is in foreground
-        //if oldValue == .silentTune {
-        //    BackgroundTask.shared.stopBackgroundTask()  // stop playing silent tune
-        //}
+        switch newValue {
+        case .silentTune, .whenOpen:
+            /// Setup a refreshTimer to try to prevent a possible pod disconnect
+            /// pod disconnect if no pod comms are done in the remaining window.
+            print("handlePodKeepAliveChange: initializing refresh timer for \(refreshInterval.timeIntervalStr) with refreshTimeTarget \(timeStr(refreshTimeTarget))")
+            setup_refreshTimer(when: refreshInterval)
 
+        case .rileyLink:
+            /// trigger a refresh right now if there is less than a minunte until the end of remaining window
+            if refreshInterval < .seconds(60), let refresh = refreshFunc {
+                print("handlePodKeepAliveChange: calling refresh with only \(refreshInterval.timeIntervalStr) left before refreshTimeTarget \(timeStr(refreshTimeTarget))")
+                refresh()
+            }
+
+        case .disabled:
+            break
+        }
+
+        if oldValue == .silentTune || newValue == .disabled {
+            print("handlePodKeepAliveChange: stopping background task")
+            BackgroundTask.shared.stopBackgroundTask()
+        }
+
+        print("handlePodKeepAliveChange: calling BLEManager.disconnect")
         BLEManager.shared.disconnect()
     }
 }
@@ -236,7 +261,7 @@ enum PodKeepAlive: Int, CaseIterable, Codable {
         case .silentTune:
             return LocalizedString("A silent tune will play in the background, keeping the app active. May be interrupted by other apps. Allows for pod keep alives when app is background, but consumes more iPhone battery.", comment: "Description for PodKeepAlive.silentTune")
         case .rileyLink:
-            return LocalizedString("Requires a RileyLink-compatible device within Bluetooth range. Allows pod keep alives when app is in background and uses less iPhone battery than the silent tune method. The RileyLink-compatible device must be the selected and be connected.", comment: "Description for PodKeepAlive.rileyLink")
+            return LocalizedString("Requires a RileyLink-compatible device within Bluetooth range. Allows pod keep alives when app is in background and uses less iPhone battery and slightly more DASH battery than the silent tune method. The RileyLink-compatible device must be the selected and be connected.", comment: "Description for PodKeepAlive.rileyLink")
         }
     }
 
@@ -299,6 +324,7 @@ class Storage {
     var refreshTimerInterval = StorageValue<TimeInterval>(key: "refreshTimerInterval", defaultValue: (60 * 2) + 40)
 
     static let shared = Storage()
+
     private init() {}
 }
 
@@ -528,10 +554,10 @@ class BLEManager: NSObject, ObservableObject {
     private func cleanupOldDevices() {
         let expirationDate = Date().addingTimeInterval(-600) // 10 minutes ago
 
-        // Get the selected device's ID (if any)
+        /// Get the selected device's ID (if any)
         let selectedDeviceID = Storage.shared.selectedBLEDevice.value?.id
 
-        // Filter devices, keeping those seen within the last 10 minutes or the selected device
+        /// Filter devices, keeping those seen within the last 10 minutes or the selected device
         devices = devices.filter { $0.lastSeen > expirationDate || $0.id == selectedDeviceID }
     }
 }
@@ -606,8 +632,9 @@ extension BLEManager: BluetoothDeviceDelegate {
         }
 
         let now = Date()
+        let nowTimeStr=timeStr(now)
         guard let expectedInterval = device.expectedHeartbeatInterval() else {
-            print("@@@ HeartBeat triggered")
+            print("@@@ HeartBeat triggered at \(nowTimeStr)")
             device.lastHeartbeatTime = now
             // TaskScheduler.shared.checkTasksNow()
             return
@@ -629,28 +656,23 @@ extension BLEManager: BluetoothDeviceDelegate {
 
         device.lastHeartbeatTime = now
 
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm:ss"
-
         let lastUpdateTime = Storage.shared.lastUpdateTime.value
+
         let refreshTimerInterval = Storage.shared.refreshTimerInterval.value
         let refreshTargetTime = lastUpdateTime.addingTimeInterval(refreshTimerInterval)
-        print("@@@ HeartBeat next refresh target time of \(dateFormatter.string(from: lastUpdateTime)) + \(refreshTimerInterval.timeIntervalStr) = \(dateFormatter.string(from: refreshTargetTime))")
+        let refreshTargetTimeStr = timeStr(refreshTargetTime)
+        print("@@@ HeartBeat next refresh target time of \(timeStr(lastUpdateTime)) + \(refreshTimerInterval.timeIntervalStr) = \(refreshTargetTimeStr)")
 
         let nextExpectedHeartbeatTime = now.addingTimeInterval(expectedInterval)
-        let nextExpectedHeartbeatTimeStr = dateFormatter.string(from: nextExpectedHeartbeatTime)
-        print("@@@ HeartBeat next heartbeat expected at \(dateFormatter.string(from: now)) + \(expectedInterval.timeIntervalStr) = \(nextExpectedHeartbeatTimeStr)")
+        let nextExpectedHeartbeatTimeStr = timeStr(nextExpectedHeartbeatTime)
+        print("@@@ HeartBeat next heartbeat expected at \(nowTimeStr) + \(expectedInterval.timeIntervalStr) = \(nextExpectedHeartbeatTimeStr)")
 
         let pad: TimeInterval = .seconds(5)
         if refreshTargetTime < nextExpectedHeartbeatTime - pad {
-            print("@@@ HeartBeat refreshTargetTime within \(pad.timeIntervalStr) of nextExpectedHeartbeatTime (\(nextExpectedHeartbeatTimeStr))")
+            print("@@@ HeartBeat refreshTargetTime \(refreshTargetTimeStr) within \(pad.timeIntervalStr) of nextExpectedHeartbeatTime \(nextExpectedHeartbeatTimeStr)")
             if let refresh = refreshFunc {
-                if Storage.shared.inBackground.value == false {
-                    print("@@@ HeartBeat skipping heartbeat refresh while in foreground")
-                } else {
-                    print("@@@ HeartBeat calling heartbeat refresh while in background")
-                    refresh()
-                }
+                print("@@@ HeartBeat calling refresh with inBackground \(Storage.shared.inBackground.value) at \(nowTimeStr)")
+                refresh()
             }
         }
     }
@@ -1118,40 +1140,38 @@ struct BLEDeviceSelectionView: View {
 
     var body: some View {
         VStack {
-            //List {
-                let filteredDevices = bleManager.devices.filter { selectedFilter.matches($0) && !isSelected($0) }
-                if filteredDevices.isEmpty {
-                    Text("No devices found yet. They will appear here when discovered.")
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding()
+            let filteredDevices = bleManager.devices.filter { selectedFilter.matches($0) && !isSelected($0) }
+            let additionalStr = Storage.shared.selectedBLEDevice.value != nil ? "additional " : ""
+            if filteredDevices.isEmpty {
+                Text("No \(additionalStr)RileyLinks found. They will appear here when discovered.")
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding()
+            } else {
+                ForEach(filteredDevices, id: \.id) { device in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(device.name ?? "Unknown")
 
-                } else {
-                    ForEach(filteredDevices, id: \.id) { device in
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(device.name ?? "Unknown")
+                            Text("RSSI: \(device.rssi) dBm")
+                                .foregroundColor(.secondary)
+                                .font(.footnote)
 
-                                Text("RSSI: \(device.rssi) dBm")
+                            if let offset = BLEManager.shared.expectedSensorFetchOffsetString(for: device) {
+                                //Text("Expected bg delay: \(offset)")
+                                Text("Expected offset: \(offset)")
                                     .foregroundColor(.secondary)
                                     .font(.footnote)
-
-                                if let offset = BLEManager.shared.expectedSensorFetchOffsetString(for: device) {
-                                    //Text("Expected bg delay: \(offset)")
-                                    Text("Expected offset: \(offset)")
-                                        .foregroundColor(.secondary)
-                                        .font(.footnote)
-                                }
                             }
-                            Spacer()
                         }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            onSelectDevice(device)
-                        }
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        onSelectDevice(device)
                     }
                 }
-            //}
+            }
         }
         .onAppear {
             bleManager.startScanning()
@@ -1204,8 +1224,7 @@ fileprivate var refreshFunc: (() -> Void)? = nil
 func podKeepAliveSetup(refresh: @escaping () -> Void) {
 
     Storage.shared.inBackground.value = false // reset to be sure
-
-    refreshFunc = refresh /// stash the refresh function pointer for background BLE use
+    refreshFunc = refresh /// stash the refresh function
 
     let podKeepAlive = Storage.shared.podKeepAlive.value
     print("@@@ podKeepAliveSetup called with current keep alive type = \(podKeepAlive)")
@@ -1215,13 +1234,64 @@ func podKeepAliveSetup(refresh: @escaping () -> Void) {
     /// and pod type is known, or any app restart issues.
     switch podKeepAlive {
     case .silentTune:
-        // Shouldn't need to start the silent tune now as we should be in foreground
-        // BackgroundTask.shared.startBackgroundTask()
+        /// Shouldn't need to start the silent tune now as we should be in foreground
+        /// BackgroundTask.shared.startBackgroundTask()
         break
+
     case .rileyLink:
-        // Force an attempt to connect if there is a selected BLE heartbeat device
-        _ = BLEManager()
+        /// Try to force an attempt to connect if there is a selected BLE heartbeat device
+        /// XXX doesn't seem to work reliably, still best to manually select RL device on restarts
+        let bleManager = BLEManager()
+        if let device = Storage.shared.selectedBLEDevice.value {
+            print("@@@ podKeepAliveSetup attempting connect to \(device.name ?? "unknown name")")
+            bleManager.connect(device: device)
+        }
+
     default:
-        break // no extra setup actions should be needed
+        break /// no extra setup actions should be needed for other cases
     }
+}
+
+fileprivate func timeStr(_ when: Date) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm:ss"
+    let str = dateFormatter.string(from: when)
+    return str
+}
+
+fileprivate var refreshTimer: Timer?
+
+/// Manages private refreshTimer to implement pod keep alives
+/// when in foreground, playing a silent tune, or under Xcode.
+func setup_refreshTimer(when: TimeInterval) {
+    // The following code implements a timer to trigger a refresh
+    // after refreshTimerInterval seconds has past since the last response,
+    refreshTimer?.invalidate()
+    refreshTimer = Timer(timeInterval: when, repeats: false) { _ in
+        if let refresh = refreshFunc {
+            print("@@@ refreshTimer expired, doing refresh at \(timeStr(Date()))")
+            refresh()
+        }
+    }
+
+    let now = Date()
+    let refreshTimerTarget = now + when
+    print("@@@ refreshTimer created for \(timeStr(now)) + \(when.timeIntervalStr) = \(timeStr(refreshTimerTarget))")
+    RunLoop.main.add(refreshTimer!, forMode: .default)
+}
+
+/// Called for each pod response received.
+/// Updates saved lastUpdateTime value and acts as a front end to  refreshTimer()
+func gotPodResponse() {
+    let now = Date()
+    Storage.shared.lastUpdateTime.value = now
+
+    let podKeepAlive = Storage.shared.podKeepAlive.value
+    if podKeepAlive == .disabled || podKeepAlive == .rileyLink {
+        print("@@@ refreshTimer disabled with podKeepAlive = \(podKeepAlive.title) at \(timeStr(now))")
+        refreshTimer?.invalidate()
+        return
+    }
+
+    setup_refreshTimer(when: Storage.shared.refreshTimerInterval.value)
 }

@@ -14734,6 +14734,9 @@
         }
       }
     },
+    "No %@RileyLinks found. They will appear here when discovered." : {
+
+    },
     "No alerts" : {
       "comment" : "Pod alert state when no alerts are active",
       "localizations" : {
@@ -14929,9 +14932,6 @@
           }
         }
       }
-    },
-    "No devices found yet. They will appear here when discovered." : {
-
     },
     "No faults" : {
       "comment" : "Description for Fault Event Code .noFaults",
@@ -23404,7 +23404,7 @@
         }
       }
     },
-    "Requires a RileyLink-compatible device within Bluetooth range. Allows pod keep alives when app is in background and uses less iPhone battery than the silent tune method. The RileyLink-compatible device must be the selected and be connected." : {
+    "Requires a RileyLink-compatible device within Bluetooth range. Allows pod keep alives when app is in background and uses less iPhone battery and slightly more DASH battery than the silent tune method. The RileyLink-compatible device must be the selected and be connected." : {
       "comment" : "Description for PodKeepAlive.rileyLink"
     },
     "Resume" : {

@@ -495,7 +495,7 @@ struct OmniBLESettingsView: View  {
                 let localizedPodKeepAliveStr = LocalizedString("Pod Keep Alive", comment: "Title for the pod keep alive row and page")
                 NavigationLink(destination: PodKeepAliveView(title: localizedPodKeepAliveStr,
                                                              initialValue: viewModel.podKeepAlivePreference,
-                                                             onSave: viewModel.setPodKeepAlive))
+                                                             onChange: viewModel.setPodKeepAlive))
                 {
                     HStack {
                         Text(localizedPodKeepAliveStr)
