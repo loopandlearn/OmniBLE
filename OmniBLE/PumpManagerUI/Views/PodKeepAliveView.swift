@@ -379,9 +379,9 @@ class BackgroundTask {
 
     // MARK: - Methods
 
-    func startBackgroundTask() {
+    func startBackgroundTask(hasPod: Bool) {
         Storage.shared.inBackground.value = true
-        if Storage.shared.podKeepAlive.value == .silentTune {
+        if hasPod && Storage.shared.podKeepAlive.value == .silentTune {
             print("@@@ Starting silent audio")
             NotificationCenter.default.addObserver(self, selector: #selector(interruptedAudio), name: AVAudioSession.interruptionNotification, object: AVAudioSession.sharedInstance())
             playAudio()
@@ -390,16 +390,16 @@ class BackgroundTask {
 
     func stopBackgroundTask() {
         Storage.shared.inBackground.value = false
-        if Storage.shared.podKeepAlive.value == .silentTune {
-            print("@@@ Stopping silent audio")
-            NotificationCenter.default.removeObserver(self, name: AVAudioSession.interruptionNotification, object: nil)
-            player.stop()
-        }
+        print("@@@ Stopping silent audio")
+        NotificationCenter.default.removeObserver(self, name: AVAudioSession.interruptionNotification, object: nil)
+        player.stop()
     }
 
     @objc fileprivate func interruptedAudio(_ notification: Notification) {
         print("@@@ interruptedAudio: silent audio interrupted")
-        if notification.name == AVAudioSession.interruptionNotification, notification.userInfo != nil {
+        if notification.name == AVAudioSession.interruptionNotification, notification.userInfo != nil,
+           Storage.shared.podKeepAlive.value == .silentTune
+        {
             let info = notification.userInfo!
             var intValue = 0
             (info[AVAudioSessionInterruptionTypeKey]! as AnyObject).getValue(&intValue)

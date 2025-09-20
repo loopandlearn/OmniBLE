@@ -315,7 +315,7 @@ public class OmniBLEPumpManager: DeviceManager {
 
     private let backgroundTask = BackgroundTask()
     @objc func appMovedToBackground() {
-        backgroundTask.startBackgroundTask()
+        backgroundTask.startBackgroundTask(hasPod: state.podState != nil)
     }
 
     @objc func appMovedToForeground() {
