@@ -120,6 +120,12 @@
             "state" : "translated",
             "value" : "↩\n  Bolus ikke levert: %1$@ E"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加胰岛素未注射：%1$@ 单位"
+          }
         }
       }
     },
@@ -232,6 +238,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "\nGuadagno basso ricevitore: %1$@"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mottaker lav forsterkning: %1$@"
           }
         }
       }
@@ -1414,6 +1426,12 @@
             "state" : "translated",
             "value" : "⚠️ Insulintilførsel stoppet. Bytt pod nå."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚠️ 胰岛素输注已停止，请立即更换 Pod。"
+          }
         }
       }
     },
@@ -2118,6 +2136,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pompa Zamanı Ayarlanıyor..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "调整泵时间..."
           }
         }
       }
@@ -5361,6 +5385,12 @@
             "state" : "translated",
             "value" : "Kontrol ediliyor..."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查中..."
+          }
         }
       }
     },
@@ -6644,6 +6674,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "gün"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "天"
           }
         }
       }
@@ -9914,6 +9950,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kurulumu Bitir"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完成设置"
           }
         }
       }
@@ -16459,6 +16501,12 @@
             "state" : "translated",
             "value" : "Tıkanma tespit edildi"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发现输注堵塞"
+          }
         }
       }
     },
@@ -16654,6 +16702,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "好的"
           }
         }
       }
@@ -22260,6 +22314,12 @@
             "state" : "translated",
             "value" : "Pompa Zamanı"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "泵时间"
+          }
         }
       }
     },
@@ -22456,6 +22516,12 @@
             "state" : "translated",
             "value" : "Leser podstatus…"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在读取 Pod 状态..."
+          }
         }
       }
     },
@@ -22472,6 +22538,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Leser pulslogg pluss..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在读取 Pulse Log Plus 扩展日志…"
           }
         }
       }
@@ -22490,6 +22562,12 @@
             "state" : "translated",
             "value" : "Leser pulslogg..."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在读取脉冲日志..."
+          }
         }
       }
     },
@@ -22506,6 +22584,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Leser utløste varsler..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正在读取触发的警报..."
           }
         }
       }
@@ -23166,6 +23250,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Podu Vücuttan Çıkarın"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "从身体上取下 Pod"
           }
         }
       }
@@ -25411,6 +25501,12 @@
             "state" : "translated",
             "value" : "Stillemodus pod"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "静音 Pod"
+          }
         }
       }
     },
@@ -25434,6 +25530,12 @@
             "state" : "translated",
             "value" : "Stillemodus for pod undertrykker all varsling og bekreftelsespip fra pod."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "静音 Pod 模式会关闭所有 Pod 警报和确认提醒的蜂鸣声。"
+          }
         }
       }
     },
@@ -25456,6 +25558,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Stillemodus"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已静音"
           }
         }
       }
@@ -25539,6 +25647,12 @@
             "state" : "translated",
             "value" : "Omnipod Katılımı Atlansın mı?"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跳过 Omnipod 入门引导"
+          }
         }
       }
     },
@@ -25561,6 +25675,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Skyveknapp for å sette inn kanylen"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "滑动按钮开始插入针管"
           }
         }
       }
@@ -25585,6 +25705,12 @@
             "state" : "translated",
             "value" : "Skyv bryteren nedenfor for å starte innskyting av kanylen."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "滑动下方开关以开始插入针管。"
+          }
         }
       }
     },
@@ -25608,6 +25734,12 @@
             "state" : "translated",
             "value" : "Skyv for å deaktivere pod"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "滑动以停用 Pod"
+          }
         }
       }
     },
@@ -25630,6 +25762,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Skyv for å sette inn kanyle"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "滑动插入针管"
           }
         }
       }
@@ -25980,6 +26118,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "İnsülin İletimini Askıya Al"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂停胰岛素输送"
           }
         }
       }
@@ -26468,6 +26612,12 @@
             "state" : "translated",
             "value" : "İnsülin iletimi askıya alınıyor..."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂停胰岛素输送..."
+          }
         }
       }
     },
@@ -26545,6 +26695,12 @@
             "state" : "translated",
             "value" : "Askıya alma süresi doldu. Uygulamayı açın ve devam edin."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂停时间已到。请打开应用程序并恢复。"
+          }
         }
       }
     },
@@ -26615,6 +26771,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Diğer insülin iletim cihazına geçin"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更换其他胰岛素输送装置"
           }
         }
       }
@@ -26698,6 +26860,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geçerli Saate Senkronize Et"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同步到当前时间"
           }
         }
       }
@@ -27510,6 +27678,12 @@
             "state" : "translated",
             "value" : "Geçici Bazal"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "临时基础率"
+          }
         }
       }
     },
@@ -27592,6 +27766,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geçici Bazal Başarısız"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "临时基础率设置失败"
           }
         }
       }
@@ -28273,6 +28453,12 @@
             "state" : "translated",
             "value" : "Zaman"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "时间"
+          }
         }
       }
     },
@@ -28361,6 +28547,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Zaman Değişikliği Algılandı"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检测到时间变化"
           }
         }
       }
@@ -28901,6 +29093,12 @@
             "state" : "translated",
             "value" : "Tekrar deneyin"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再试一次"
+          }
         }
       }
     },
@@ -28971,6 +29169,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bluetooth'u açın"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开蓝牙"
           }
         }
       }
@@ -29257,6 +29461,12 @@
             "state" : "translated",
             "value" : "Pod'a Ulaşılamıyor"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法连接到 Pod"
+          }
         }
       }
     },
@@ -29339,6 +29549,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pod'a Ulaşılamıyor"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法连接到 Pod"
           }
         }
       }
@@ -29423,6 +29639,12 @@
             "state" : "translated",
             "value" : "Geçici bir bazal oran ayarlanamıyor: %1$@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法设置临时基础率： %1$@"
+          }
         }
       }
     },
@@ -29505,6 +29727,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Geçici bir bazal oran ayarlanamıyor: %1$@ \n\n %2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法设置临时基础率： %1$@\n\n%2$@"
           }
         }
       }
@@ -29647,6 +29875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uventet varsel"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "意外警报"
           }
         }
       }
@@ -30841,6 +31075,12 @@
             "state" : "translated",
             "value" : "Yerleştirme işlemi tamamlanana kadar bekleyin."
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "等待插入完成。"
+          }
         }
       }
     },
@@ -31037,6 +31277,12 @@
             "state" : "translated",
             "value" : "Evet"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "是"
+          }
         }
       }
     },
@@ -31108,6 +31354,12 @@
             "state" : "translated",
             "value" : "Evet, Pod'u Devre Dışı Bırak"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "是的，停用 Pod"
+          }
         }
       }
     },
@@ -31178,6 +31430,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Evet, Geçerli Saatle Senkronize Et"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "是的，同步到当前时间"
           }
         }
       }
