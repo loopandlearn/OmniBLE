@@ -2543,6 +2543,7 @@ extension OmniBLEPumpManager: PumpManager {
     }
 
     // Running on an iPhone that might have BLE connect issues with newer InPlay BLE pods (or faking it)?
+    // In initial iPhone 17 testing, it appears that these issues are limited to just all iPhone 16's.
     var iPhoneWithPossibleInPlayIssues: Bool {
         if fakeIPhoneWithPossibleInPlayIssues {
             return true
@@ -2551,12 +2552,6 @@ extension OmniBLEPumpManager: PumpManager {
         // Are we running on an iPhone 16 (Apple model # "iPhone17,N", sigh)?
         let deviceModel = UIDevice.current.modelIdentifier
         if deviceModel.contains("iPhone17") {
-            return true
-        }
-
-        // For now, assume iPhone 17's (Apple model # "iPhone18,N", sigh) will also fail.
-        // N.B. If InPlay pods are found to work with iPhone 17's, this code should be removed.
-        if deviceModel.contains("iPhone18") {
             return true
         }
 
