@@ -202,8 +202,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\n\n⚠️ Critical Pod Fault %1$03d (0x%2$02X)"
+            "state" : "translated",
+            "value" : "\n\n⚠️ Kritieke Pod fout %1$03d (0x%2$02X)"
           }
         },
         "pl" : {
@@ -256,8 +256,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\n\n⚠️ Critical Pod Fault %1$03d (0x%2$02X)"
+            "state" : "translated",
+            "value" : "\n\nLỗi nghiêm trọng của Pod %1$03d (0x%2$02X)"
           }
         },
         "yy-YY" : {
@@ -339,8 +339,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\n  Immediate Bolus In Progress: %1$@"
+            "state" : "translated",
+            "value" : "\n  Onmiddellijke bolus in uitvoering: %1$@"
           }
         },
         "pl" : {
@@ -393,8 +393,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\n  Immediate Bolus In Progress: %1$@"
+            "state" : "translated",
+            "value" : "\nĐang tiêm bolus ngay: %1$@"
           }
         },
         "yy-YY" : {
@@ -476,8 +476,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\n  Insulin State Table Corrupted: %@"
+            "state" : "translated",
+            "value" : "\n  Insuline status corrupt: %@"
           }
         },
         "pl" : {
@@ -530,8 +530,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\n  Insulin State Table Corrupted: %@"
+            "state" : "translated",
+            "value" : "\nBảng trạng thái insulin bị hỏng: %@"
           }
         },
         "yy-YY" : {
@@ -613,8 +613,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\n  Occlusion Type: %1$@"
+            "state" : "translated",
+            "value" : "\nSoort blokkade: %1$@"
           }
         },
         "pl" : {
@@ -667,8 +667,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\n  Occlusion Type: %1$@"
+            "state" : "translated",
+            "value" : "\nLoại tắc nghẽn: %1$@"
           }
         },
         "yy-YY" : {
@@ -750,8 +750,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\n  Previous Pod Progress: %1$@"
+            "state" : "translated",
+            "value" : "\n  Vorige Pod voortgang: %1$@"
           }
         },
         "pl" : {
@@ -804,8 +804,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\n  Previous Pod Progress: %1$@"
+            "state" : "translated",
+            "value" : "\nTiến trình Pod trước: %1$@"
           }
         },
         "yy-YY" : {
@@ -887,8 +887,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nAlerts: %1$@"
+            "state" : "translated",
+            "value" : "Waarschuwingen: %1$@"
           }
         },
         "pl" : {
@@ -941,8 +941,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nAlerts: %1$@"
+            "state" : "translated",
+            "value" : "\nCảnh báo: %1$@"
           }
         },
         "yy-YY" : {
@@ -1024,8 +1024,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nBolus Not Delivered: %1$@ U"
+            "state" : "translated",
+            "value" : "\nLaatste bolus niet afgegeven: %1$@ E"
           }
         },
         "pl" : {
@@ -1078,8 +1078,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nBolus Not Delivered: %1$@ U"
+            "state" : "translated",
+            "value" : "\nLiều Bolus chưa được tiêm: %1$@ U"
           }
         },
         "yy-YY" : {
@@ -1161,8 +1161,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nDelivery Status: %1$@"
+            "state" : "translated",
+            "value" : "Status afgifte: %1$@\n"
           }
         },
         "pl" : {
@@ -1215,8 +1215,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nDelivery Status: %1$@"
+            "state" : "translated",
+            "value" : "\nTrạng thái tiêm: %1$@"
           }
         },
         "yy-YY" : {
@@ -1298,8 +1298,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nFault Event Info: %1$03d (0x%2$02X),"
+            "state" : "translated",
+            "value" : "\nFout informatie: %1$03d (0x%2$02X),"
           }
         },
         "pl" : {
@@ -1352,8 +1352,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nFault Event Info: %1$03d (0x%2$02X),"
+            "state" : "translated",
+            "value" : "\nThông tin sự cố: %1$03d (0x%2$02X),"
           }
         },
         "yy-YY" : {
@@ -1435,8 +1435,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nFault Time: %1$@"
+            "state" : "translated",
+            "value" : "\nFout tijd: %1$@"
           }
         },
         "pl" : {
@@ -1489,8 +1489,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nFault Time: %1$@"
+            "state" : "translated",
+            "value" : "\nThời gian sự cố: %1$@"
           }
         },
         "yy-YY" : {
@@ -1572,8 +1572,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nLast Programming Seq Num: %1$@"
+            "state" : "translated",
+            "value" : "\nLaatste Seq nummer: %1$@"
           }
         },
         "pl" : {
@@ -1626,8 +1626,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nLast Programming Seq Num: %1$@"
+            "state" : "translated",
+            "value" : "\nSố thứ tự lập trình cuối cùng: %1$@"
           }
         },
         "yy-YY" : {
@@ -1709,8 +1709,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nPod Progress: %1$@"
+            "state" : "translated",
+            "value" : "\nPod voortgang: %1$@"
           }
         },
         "pl" : {
@@ -1763,8 +1763,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nPod Progress: %1$@"
+            "state" : "translated",
+            "value" : "\nTiến trình Pod: %1$@"
           }
         },
         "yy-YY" : {
@@ -1846,8 +1846,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nPulse Count: %1$d"
+            "state" : "translated",
+            "value" : "\nPuls aantal: %1$d"
           }
         },
         "pl" : {
@@ -1900,8 +1900,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nPulse Count: %1$d"
+            "state" : "translated",
+            "value" : "\nSố xung: %1$d"
           }
         },
         "yy-YY" : {
@@ -1983,8 +1983,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nReceiver Low Gain: %1$@"
+            "state" : "translated",
+            "value" : "Laag ontvangstsignaal:  %1$@"
           }
         },
         "pl" : {
@@ -2037,8 +2037,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nReceiver Low Gain: %1$@"
+            "state" : "translated",
+            "value" : "\nBộ thu có độ lợi thấp:%1$@"
           }
         },
         "yy-YY" : {
@@ -2120,7 +2120,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "\nRef: %@"
           }
         },
@@ -2174,7 +2174,7 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "\nRef: %@"
           }
         },
@@ -2257,8 +2257,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nReservoir Level: %1$@ U"
+            "state" : "translated",
+            "value" : "\nReservoir niveau: %1$@ E"
           }
         },
         "pl" : {
@@ -2311,8 +2311,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "\nReservoir Level: %1$@ U"
+            "state" : "translated",
+            "value" : "\nBình chứa Insulin: %1$@ U"
           }
         },
         "yy-YY" : {
@@ -2394,7 +2394,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "\nRSSI: %1$@"
           }
         },
@@ -2448,7 +2448,7 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "\nRSSI: %1$@"
           }
         },
@@ -3489,8 +3489,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ has been unable to communicate with the pod on your body since %2$@.\n\nDo not Discard the Pod without scrolling to read this entire screen.\n\nCommunication was interrupted at a critical time. Information about active insulin / pod temp basal rate is uncertain.\n\nYou can toggle phone Bluetooth off and on or quit and restart the app. (Wait up to 30 seconds for recovery.)\n\nIf you decide to give up because communication cannot be restored, tap the Discard Pod button, follow the steps and start a new pod.\nMonitor your glucose closely for the next 6 hours, as there may or may not be insulin actively working in your body that %3$@ cannot display."
+            "state" : "translated",
+            "value" : "%1$@ is sinds %2$@niet in staat om te communiceren met de pod op je lichaam.\n\nVerwijder de Pod niet zonder te scrollen om dit hele scherm te lezen.\n\nCommunicatie werd op een kritiek moment onderbroken Informatie over de actieve insuline / pod tijdelijke basaalstand is onduidelijk.\n\nJe kunt RileyLink-verbinding (hieronder) aan-/uitzetten. Schakel Bluetooth van je telefoon uit en aan; zet het RileyLink-apparaat uit en aan; of probeer een andere RileyLink uit. Wacht tot 30 seconden op herstel.\n\nAls je besluit om op te geven omdat de communicatie niet kan worden hersteld. tik op de knop Verwijderen van Pod, volg de stappen en start een nieuwe pod.\nVolg jouw glucose goed voor de komende 6 uur. Als er al dan niet insuline actief werkt in je lichaam dat %3$@ niet kan tonen."
           }
         },
         "pl" : {
@@ -3543,8 +3543,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ has been unable to communicate with the pod on your body since %2$@.\n\nDo not Discard the Pod without scrolling to read this entire screen.\n\nCommunication was interrupted at a critical time. Information about active insulin / pod temp basal rate is uncertain.\n\nYou can toggle phone Bluetooth off and on or quit and restart the app. (Wait up to 30 seconds for recovery.)\n\nIf you decide to give up because communication cannot be restored, tap the Discard Pod button, follow the steps and start a new pod.\nMonitor your glucose closely for the next 6 hours, as there may or may not be insulin actively working in your body that %3$@ cannot display."
+            "state" : "translated",
+            "value" : "%1$@ không thể liên lạc với pod trên cơ thể bạn kể từ %2$@.\n\nĐừng vứt Pod mà chưa kéo xuống đọc hết màn hình này.\n\nLiên lạc đã bị gián đoạn vào thời điểm quan trọng. Thông tin về insulin đang hoạt động / tỷ lệ basal tạm thời của pod hiện không chắc chắn.\n\nBạn có thể:\n\nBật/tắt Bluetooth của điện thoại,\n\nHoặc thoát và khởi động lại ứng dụng.\n\n(Đợi tối đa 30 giây để khôi phục kết nối.)\n\nNếu bạn quyết định từ bỏ vì không thể khôi phục liên lạc, hãy nhấn nút Vứt Pod (Discard Pod), làm theo các bước và bắt đầu một pod mới.\n\nTheo dõi sát đường huyết trong 6 giờ tới, vì có thể hoặc không có insulin đang hoạt động trong cơ thể mà %3$@ không thể hiển thị."
           }
         },
         "yy-YY" : {
@@ -3626,8 +3626,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ has recovered communication with the pod on your body.\n\nInsulin delivery records have been updated and should match what has actually been delivered.\n\nYou may continue to use %2$@ normally now."
+            "state" : "translated",
+            "value" : "%1$@ heeft de communicatie met de pod op je lichaam hersteld. \n\nDe gegevens over insulinetoediening zijn bijgewerkt en moeten overeenkomen met wat daadwerkelijk is toegediend. \n\nJe kunt %2$@ nu weer normaal gebruiken."
           }
         },
         "pl" : {
@@ -3680,8 +3680,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ has recovered communication with the pod on your body.\n\nInsulin delivery records have been updated and should match what has actually been delivered.\n\nYou may continue to use %2$@ normally now."
+            "state" : "translated",
+            "value" : "%1$@ đã khôi phục liên lạc với pod trên cơ thể bạn.\n\nCác bản ghi về việc tiêm insulin đã được cập nhật và hiện khớp với lượng insulin thực tế đã được tiêm.\n\nBạn có thể tiếp tục sử dụng %2$@ như bình thường."
           }
         },
         "yy-YY" : {
@@ -3900,8 +3900,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ minutes"
+            "state" : "translated",
+            "value" : "%1$@ minuten"
           }
         },
         "pl" : {
@@ -3954,8 +3954,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ minutes"
+            "state" : "translated",
+            "value" : "%1$@ phút"
           }
         },
         "yy-YY" : {
@@ -4448,8 +4448,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "⚠️ Insulin delivery stopped. Change Pod now."
+            "state" : "translated",
+            "value" : "⚠️ Insulinetoediening gestopt. Vervang Pod nu."
           }
         },
         "pl" : {
@@ -4502,8 +4502,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "⚠️ Insulin delivery stopped. Change Pod now."
+            "state" : "translated",
+            "value" : "⚠️ Việc tiêm insulin đã dừng. Hãy thay Pod ngay."
           }
         },
         "yy-YY" : {
@@ -5133,8 +5133,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "A reminder is configured during Pod setup to notify you in advance of Pod expiration. Set the number of hours advance notice you would like to configure by default when pairing a new Pod."
+            "state" : "translated",
+            "value" : "iAPS configureert melding op de Pod om je op de hoogte te stellen wanneer de Pod verloopt. Stel het aantal uren vooraf in dat je standaard wilt instellen als je een nieuwe Pod koppelt."
           }
         },
         "pl" : {
@@ -5187,8 +5187,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "A reminder is configured during Pod setup to notify you in advance of Pod expiration. Set the number of hours advance notice you would like to configure by default when pairing a new Pod."
+            "state" : "translated",
+            "value" : "Một lời nhắc được thiết lập khi cài đặt Pod để thông báo trước khi Pod hết hạn. Hãy đặt số giờ thông báo trước mà bạn muốn sử dụng làm mặc định khi ghép nối Pod mới."
           }
         },
         "yy-YY" : {
@@ -5818,8 +5818,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All Pod alerts use no beeps and confirmation reminder beeps are suppressed. The Pod will only beep for fatal Pod faults and when playing test beeps.\n\n⚠️Warning - If your phone is out of range of the pod while this feature is enabled, you will not receive any in-app notifications; and the pod will not beep to alert you."
+            "state" : "translated",
+            "value" : "Alle Pod alarmen gebruiken geen biepen en bevestigingspunten worden onderdrukt. De Pod zal alleen piepen bij fatale Pod gebreken en bij het spelen van testpiepen.\n\n⚠️Waarschuwing - Als je telefoon buiten bereik is als deze functie is ingeschakeld, krijg je geen in-app meldingen; en de pod zal niet piepen om je te waarschuwen"
           }
         },
         "pl" : {
@@ -5872,8 +5872,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "All Pod alerts use no beeps and confirmation reminder beeps are suppressed. The Pod will only beep for fatal Pod faults and when playing test beeps.\n\n⚠️Warning - If your phone is out of range of the pod while this feature is enabled, you will not receive any in-app notifications; and the pod will not beep to alert you."
+            "state" : "translated",
+            "value" : "Tất cả cảnh báo của Pod không phát tiếng bíp, và tiếng bíp nhắc xác nhận cũng bị tắt. Pod chỉ phát tiếng bíp khi xảy ra lỗi nghiêm trọng hoặc khi thực hiện bài kiểm tra tiếng bíp.\n\n⚠️ Cảnh báo – Nếu điện thoại của bạn ngoài phạm vi kết nối với Pod khi tính năng này được bật, bạn sẽ không nhận được bất kỳ thông báo nào trong ứng dụng, và Pod cũng sẽ không bíp để cảnh báo bạn."
           }
         },
         "yy-YY" : {
@@ -6693,8 +6693,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Auto-off"
+            "state" : "translated",
+            "value" : "Tự động tắt"
           }
         },
         "yy-YY" : {
@@ -7529,8 +7529,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bluetooth is powered off"
+            "state" : "translated",
+            "value" : "Bluetooth đang tắt"
           }
         },
         "yy-YY" : {
@@ -7666,8 +7666,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bluetooth is resetting"
+            "state" : "translated",
+            "value" : "Bluetooth đang được khởi động lại"
           }
         },
         "yy-YY" : {
@@ -7803,8 +7803,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bluetooth is unavailable for an unknown reason."
+            "state" : "translated",
+            "value" : "Bluetooth không khả dụng vì lý do không xác định."
           }
         },
         "yy-YY" : {
@@ -7940,8 +7940,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bluetooth is unavailable: %1$@"
+            "state" : "translated",
+            "value" : "Bluetooth không khả dụng: %1$@"
           }
         },
         "yy-YY" : {
@@ -8077,8 +8077,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bluetooth use is unauthorized"
+            "state" : "translated",
+            "value" : "Việc sử dụng Bluetooth không được phép"
           }
         },
         "yy-YY" : {
@@ -8214,8 +8214,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Bluetooth use unsupported on this device"
+            "state" : "translated",
+            "value" : "Thiết bị này không hỗ trợ Bluetooth"
           }
         },
         "yy-YY" : {
@@ -11592,8 +11592,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When %1$@ automatically adjusts delivery, no confidence reminders are used."
+            "state" : "translated",
+            "value" : "Piepjes uit de Pod zullen klinken voor commando's die je hebt geïnitieerd, zoals bolus, annulering, geschorst, hervatten, opslaan van meldingen etc. Als %1$@ automatisch de levering wijzigt, worden er geen piepjes gebruikt."
           }
         },
         "pl" : {
@@ -11646,8 +11646,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confidence reminders will sound for commands you initiate, like bolus, cancel bolus, suspend, resume, save notification reminders, etc. When %1$@ automatically adjusts delivery, no confidence reminders are used."
+            "state" : "translated",
+            "value" : "Thông báo xác nhận sẽ phát tiếng bíp khi bạn thực hiện các lệnh, chẳng hạn như tiêm bolus, hủy bolus, tạm dừng, tiếp tục, lưu thông báo nhắc, v.v. Khi %1$@ tự động điều chỉnh việc tiêm, các thông báo xác nhận sẽ không được sử dụng."
           }
         },
         "yy-YY" : {
@@ -11729,8 +11729,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confidence reminders will sound when %1$@ automatically adjusts delivery as well as for commands you initiate."
+            "state" : "translated",
+            "value" : "Piepjes zullen klinken als %1$@ de levering automatisch aanpast evenals voor commando's die je initieert."
           }
         },
         "pl" : {
@@ -11783,8 +11783,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Confidence reminders will sound when %1$@ automatically adjusts delivery as well as for commands you initiate."
+            "state" : "translated",
+            "value" : "Thông báo xác nhận sẽ phát tiếng bíp khi %1$@ tự động điều chỉnh việc tiêm cũng như khi bạn thực hiện các lệnh."
           }
         },
         "yy-YY" : {
@@ -12468,8 +12468,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Could not parse message: %1$@"
+            "state" : "translated",
+            "value" : "Không thể phân tích thông điệp: %1$@"
           }
         },
         "yy-YY" : {
@@ -12688,8 +12688,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Critical Pod Fault %1$03d"
+            "state" : "translated",
+            "value" : "Kritieke Pod fout %1$03d"
           }
         },
         "pl" : {
@@ -12742,8 +12742,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Critical Pod Fault %1$03d"
+            "state" : "translated",
+            "value" : "Lỗi nghiêm trọng của Pod %1$03d"
           }
         },
         "yy-YY" : {
@@ -15579,8 +15579,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Expiration reminder"
+            "state" : "translated",
+            "value" : "Waarschuwing dat je Pod vervalt"
           }
         },
         "pl" : {
@@ -15633,8 +15633,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Expiration reminder"
+            "state" : "translated",
+            "value" : "Nhắc nhở hết hạn"
           }
         },
         "yy-YY" : {
@@ -15990,8 +15990,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Expiration reminder time for the current Pod."
+            "state" : "translated",
+            "value" : "De verloopherinneringstijd voor de huidige Pod."
           }
         },
         "pl" : {
@@ -16044,8 +16044,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Expiration reminder time for the current Pod."
+            "state" : "translated",
+            "value" : "Thời gian nhắc nhở hết hạn cho Pod hiện tại."
           }
         },
         "yy-YY" : {
@@ -16401,8 +16401,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extended bolus running while suspended"
+            "state" : "translated",
+            "value" : "Vertraagde bolus uitvoeren tijdens pauzeren"
           }
         },
         "pl" : {
@@ -16455,8 +16455,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Extended bolus running while suspended"
+            "state" : "translated",
+            "value" : "Liều bolus mở rộng đang chạy khi bơm bị tạm dừng"
           }
         },
         "yy-YY" : {
@@ -16812,8 +16812,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to play test beeps."
+            "state" : "translated",
+            "value" : "Testpiepjes afspelen mislukt"
           }
         },
         "pl" : {
@@ -16866,8 +16866,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to play test beeps."
+            "state" : "translated",
+            "value" : "Không thể phát tiếng bíp kiểm tra."
           }
         },
         "yy-YY" : {
@@ -16949,8 +16949,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to read activation time."
+            "state" : "translated",
+            "value" : "Kan de activeringstijd niet lezen."
           }
         },
         "pl" : {
@@ -17003,8 +17003,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to read activation time."
+            "state" : "translated",
+            "value" : "Không thể đọc thời gian kích hoạt."
           }
         },
         "yy-YY" : {
@@ -17086,8 +17086,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to read pod status."
+            "state" : "translated",
+            "value" : "Lezen pod status is mislukt."
           }
         },
         "pl" : {
@@ -17140,8 +17140,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to read pod status."
+            "state" : "translated",
+            "value" : "Không thể đọc trạng thái Pod."
           }
         },
         "yy-YY" : {
@@ -17223,8 +17223,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to read pulse log plus."
+            "state" : "translated",
+            "value" : "Lezen van het plus pulslogboek is mislukt."
           }
         },
         "pl" : {
@@ -17277,8 +17277,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to read pulse log plus."
+            "state" : "translated",
+            "value" : "Đọc nhật ký xung thất bại."
           }
         },
         "yy-YY" : {
@@ -17360,8 +17360,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to read pulse log."
+            "state" : "translated",
+            "value" : "Lezen van pulslogboek is mislukt."
           }
         },
         "pl" : {
@@ -17414,8 +17414,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to read pulse log."
+            "state" : "translated",
+            "value" : "Không thể đọc nhật ký xung."
           }
         },
         "yy-YY" : {
@@ -17497,8 +17497,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to read triggered alerts."
+            "state" : "translated",
+            "value" : "Fout bij het lezen van geactiveerde meldingen."
           }
         },
         "pl" : {
@@ -17551,8 +17551,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to read triggered alerts."
+            "state" : "translated",
+            "value" : "Không thể đọc các cảnh báo đã kích hoạt."
           }
         },
         "yy-YY" : {
@@ -20298,8 +20298,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "state" : "translated",
+            "value" : "Gói tin không đúng: %1$@ (vị trí=%2$d)"
           }
         },
         "yy-YY" : {
@@ -21394,8 +21394,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Insulin\nSuspended"
+            "state" : "translated",
+            "value" : "Insulin\n Đã tạm ngưng"
           }
         },
         "yy-YY" : {
@@ -21751,8 +21751,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Insulin delivery will be stopped until you resume manually. Select when you want to be reminded to resume delivery?"
+            "state" : "translated",
+            "value" : "De insulinetoediening wordt gestopt totdat je de toediening handmatig hervat. Wanneer wil je dat iAPS je eraan herinnert om de toediening te hervatten?"
           }
         },
         "pl" : {
@@ -21805,8 +21805,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Insulin delivery will be stopped until you resume manually. Select when you want to be reminded to resume delivery?"
+            "state" : "translated",
+            "value" : "Việc tiêm insulin sẽ bị dừng cho đến khi bạn tiếp tục thủ công. Chọn thời gian bạn muốn nhận nhắc nhở để tiếp tục tiêm?"
           }
         },
         "yy-YY" : {
@@ -22573,8 +22573,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Internal Pod fault code %1$03d\n%2$@\nRef: %3$@\n"
+            "state" : "translated",
+            "value" : "Interne Pod foutcode %1$03d\n%2$@\nRef: %3$@\n"
           }
         },
         "pl" : {
@@ -22627,8 +22627,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Internal Pod fault code %1$03d\n%2$@\nRef: %3$@\n"
+            "state" : "translated",
+            "value" : "Mã lỗi nội bộ của Pod: %1$03d\n%2$@\nTham chiếu: %3$@\n"
           }
         },
         "yy-YY" : {
@@ -23312,8 +23312,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Invalid LTK Key: %1$@"
+            "state" : "translated",
+            "value" : "Khóa LTK không hợp lệ: %1$@"
           }
         },
         "yy-YY" : {
@@ -23669,8 +23669,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep Waiting"
+            "state" : "translated",
+            "value" : "Blijf wachten"
           }
         },
         "pl" : {
@@ -23723,8 +23723,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Keep Waiting"
+            "state" : "translated",
+            "value" : "Tiếp tục chờ"
           }
         },
         "yy-YY" : {
@@ -24271,8 +24271,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Low reservoir"
+            "state" : "translated",
+            "value" : "Sắp hết insulin"
           }
         },
         "yy-YY" : {
@@ -25792,8 +25792,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Message IO Exception: %1$@"
+            "state" : "translated",
+            "value" : "Lỗi I/O thông điệp: %1$@"
           }
         },
         "yy-YY" : {
@@ -26477,7 +26477,7 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "NA"
           }
         },
@@ -27025,8 +27025,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "No\nDelivery"
+            "state" : "translated",
+            "value" : "Không\n Tiêm"
           }
         },
         "yy-YY" : {
@@ -29170,8 +29170,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not used"
+            "state" : "translated",
+            "value" : "Niet in gebruik"
           }
         },
         "pl" : {
@@ -29224,8 +29224,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not used"
+            "state" : "translated",
+            "value" : "Không sử dụng"
           }
         },
         "yy-YY" : {
@@ -30600,7 +30600,7 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "oneNotUsed"
           }
         },
@@ -31285,8 +31285,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pairing Exception: %1$@"
+            "state" : "translated",
+            "value" : "Lỗi ghép nối: %1$@"
           }
         },
         "yy-YY" : {
@@ -31833,8 +31833,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Payload crc32 %1$@ does not match computed crc32 %2$@"
+            "state" : "translated",
+            "value" : "Crc32 của payload %1$@ không khớp với Crc32 đã tính %2$@"
           }
         },
         "yy-YY" : {
@@ -32326,8 +32326,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Play test beeps command sent successfully.\n\nIf you did not hear any beeps from your Pod, the piezo speaker in your Pod may be broken or disabled."
+            "state" : "translated",
+            "value" : "Test beeps commando met succes verzonden.\n\nAls je geen beeps vanuit je pod hebt gehoord is het goed mogelijk dat de speaker van de pod kapot is."
           }
         },
         "pl" : {
@@ -32380,8 +32380,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Play test beeps command sent successfully.\n\nIf you did not hear any beeps from your Pod, the piezo speaker in your Pod may be broken or disabled."
+            "state" : "translated",
+            "value" : "Lệnh phát tiếng bíp kiểm tra đã được gửi thành công.\n\nNếu bạn không nghe thấy bất kỳ tiếng bíp nào từ Pod, loa piezo trong Pod có thể bị hỏng hoặc bị tắt."
           }
         },
         "yy-YY" : {
@@ -32463,8 +32463,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Playing Test Beeps..."
+            "state" : "translated",
+            "value" : "Speel testpiepjes af..."
           }
         },
         "pl" : {
@@ -32517,8 +32517,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Playing Test Beeps..."
+            "state" : "translated",
+            "value" : "Đang kiểm tra tiếng Bíp..."
           }
         },
         "yy-YY" : {
@@ -32935,8 +32935,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please confirm that the Pod is securely attached to your body.\n\nThe cannula can be inserted only once with each Pod. Tap “Confirm” when Pod is attached."
+            "state" : "translated",
+            "value" : "Vui lòng xác nhận rằng Pod đã được gắn chắc chắn vào cơ thể bạn.\n\nKim tiêm chỉ có thể được chèn một lần cho mỗi Pod. Nhấn “Xác nhận” khi Pod đã được gắn."
           }
         },
         "yy-YY" : {
@@ -33346,8 +33346,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please enable bluetooth permissions for this app in system settings"
+            "state" : "translated",
+            "value" : "Vui lòng bật quyền Bluetooth cho ứng dụng này trong cài đặt hệ thống"
           }
         },
         "yy-YY" : {
@@ -34031,8 +34031,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Please use a different device with bluetooth capabilities"
+            "state" : "translated",
+            "value" : "Vui lòng sử dụng thiết bị khác có hỗ trợ Bluetooth"
           }
         },
         "yy-YY" : {
@@ -34251,8 +34251,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pod Active: %1$@"
+            "state" : "translated",
+            "value" : "Pod actief: %1$@"
           }
         },
         "pl" : {
@@ -34305,8 +34305,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pod Active: %1$@"
+            "state" : "translated",
+            "value" : "Pod hoạt động: %1$@"
           }
         },
         "yy-YY" : {
@@ -36327,8 +36327,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pod Fault %1$03d"
+            "state" : "translated",
+            "value" : "Pod fout: %1$03d"
           }
         },
         "pl" : {
@@ -36381,8 +36381,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pod Fault %1$03d"
+            "state" : "translated",
+            "value" : "Pod lỗi: %1$03d"
           }
         },
         "yy-YY" : {
@@ -37978,8 +37978,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pod setup is not complete"
+            "state" : "translated",
+            "value" : "Pod setup is niet voltooid"
           }
         },
         "pl" : {
@@ -38032,8 +38032,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pod setup is not complete"
+            "state" : "translated",
+            "value" : "Pod chưa được cài đặt xong"
           }
         },
         "yy-YY" : {
@@ -38533,8 +38533,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Possible Bluetooth issue"
+            "state" : "translated",
+            "value" : "Mogelijk Bluetooth probleem"
           }
         },
         "pl" : {
@@ -38587,8 +38587,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Possible Bluetooth issue"
+            "state" : "translated",
+            "value" : "Có thể có sự cố Bluetooth"
           }
         },
         "yy-YY" : {
@@ -40725,8 +40725,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading Activation Time..."
+            "state" : "translated",
+            "value" : "Activatietijd lezen..."
           }
         },
         "pl" : {
@@ -40779,8 +40779,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading Activation Time..."
+            "state" : "translated",
+            "value" : "Đang đọc thời gian kích hoạt..."
           }
         },
         "yy-YY" : {
@@ -40862,8 +40862,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading Pod Status..."
+            "state" : "translated",
+            "value" : "Pod status lezen..."
           }
         },
         "pl" : {
@@ -40916,8 +40916,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading Pod Status..."
+            "state" : "translated",
+            "value" : "Đang đọc tình trạng pod..."
           }
         },
         "yy-YY" : {
@@ -40999,8 +40999,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading Pulse Log Plus..."
+            "state" : "translated",
+            "value" : "Lezen Puls Logboek Plus..."
           }
         },
         "pl" : {
@@ -41053,8 +41053,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading Pulse Log Plus..."
+            "state" : "translated",
+            "value" : "Đang đọc nhật ký xung Plus..."
           }
         },
         "yy-YY" : {
@@ -41136,8 +41136,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading Pulse Log..."
+            "state" : "translated",
+            "value" : "Pulslog uitlezen..."
           }
         },
         "pl" : {
@@ -41190,8 +41190,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading Pulse Log..."
+            "state" : "translated",
+            "value" : "Đang đọc nhật ký xung..."
           }
         },
         "yy-YY" : {
@@ -41273,8 +41273,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading Triggered Alerts..."
+            "state" : "translated",
+            "value" : "Lees geactiveerde waarschuwingen..."
           }
         },
         "pl" : {
@@ -41327,8 +41327,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reading Triggered Alerts..."
+            "state" : "translated",
+            "value" : "Đang đọc các cảnh báo đã kích hoạt..."
           }
         },
         "yy-YY" : {
@@ -41698,7 +41698,7 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Ref: "
           }
         },
@@ -41752,7 +41752,7 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Ref: "
           }
         },
@@ -42300,8 +42300,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Remove blue Pod needle cap and check cannula. Then remove paper backing."
+            "state" : "translated",
+            "value" : "Tháo nắp kim màu xanh của Pod và kiểm tra kim tiêm. Sau đó, gỡ lớp giấy bảo vệ."
           }
         },
         "yy-YY" : {
@@ -44218,8 +44218,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scheduled basal"
+            "state" : "translated",
+            "value" : "Basal theo lịch trình"
           }
         },
         "yy-YY" : {
@@ -46362,8 +46362,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Slide Button to insert Cannula"
+            "state" : "translated",
+            "value" : "Schuif om de canule in te brengen"
           }
         },
         "pl" : {
@@ -46416,8 +46416,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Slide Button to insert Cannula"
+            "state" : "translated",
+            "value" : "Trượt nút để chèn kim tiêm"
           }
         },
         "yy-YY" : {
@@ -49718,8 +49718,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The insulin suspension period has ended.\n\nYou can resume delivery from the banner on the home screen or from your pump settings screen. You will be reminded again in 15 minutes."
+            "state" : "translated",
+            "value" : "Thời gian tạm dừng tiêm insulin đã kết thúc.\n\nBạn có thể tiếp tục tiêm từ thanh thông báo trên màn hình chính hoặc từ cài đặt bơm. Bạn sẽ nhận nhắc nhở lần nữa sau 15 phút."
           }
         },
         "yy-YY" : {
@@ -49801,8 +49801,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The reminders above will not sound on your device when it is in Silent or Do Not Disturb mode. There are other critical Pod alerts that will sound on your device even when set to Silent or Do Not Disturb mode.\n\nThe Pod will also use audible beeps for all Pod reminders and alerts except when the Pod is Silenced."
+            "state" : "translated",
+            "value" : "Als je apparaat stil is of in de Niet storen-modus staat, hoor je de bovenstaande herinneringen niet in de app. Er zijn echter andere belangrijke waarschuwingen voor de Pod die nog steeds in de app verschijnen, zelfs als je apparaat stil is of in de Niet storen-modus staat.\n\nDe Pod maakt ook geluid met piepjes voor alle herinneringen en waarschuwingen, behalve als de Pod is uitgeschakeld."
           }
         },
         "pl" : {
@@ -49855,8 +49855,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "The reminders above will not sound on your device when it is in Silent or Do Not Disturb mode. There are other critical Pod alerts that will sound on your device even when set to Silent or Do Not Disturb mode.\n\nThe Pod will also use audible beeps for all Pod reminders and alerts except when the Pod is Silenced."
+            "state" : "translated",
+            "value" : "Các nhắc nhở trên sẽ không phát tiếng trên thiết bị của bạn khi ở chế độ Im lặng hoặc Không làm phiền. Tuy nhiên, còn có các cảnh báo Pod quan trọng sẽ vẫn phát tiếng ngay cả khi thiết bị ở chế độ Im lặng hoặc Không làm phiền.\n\nPod cũng sẽ phát tiếng bíp cho tất cả các nhắc nhở và cảnh báo, trừ khi Pod đang ở chế độ im lặng."
           }
         },
         "yy-YY" : {
@@ -50623,8 +50623,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This PumpManager has not been configured with a maximum basal rate because it was added before manual temp basal was a feature. Please set a new maximum basal rate."
+            "state" : "translated",
+            "value" : "Deze pompmanager is niet geconfigureerd met een maximale basaalstand omdat het is toegevoegd voordat handmatig tijdelijke basaal een functie was. Ga naar therapie instellingen -> afleverlimieten en stel een nieuwe maximale basaalstand in."
           }
         },
         "pl" : {
@@ -50677,8 +50677,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "This PumpManager has not been configured with a maximum basal rate because it was added before manual temp basal was a feature. Please set a new maximum basal rate."
+            "state" : "translated",
+            "value" : "PumpManager này chưa được thiết lập mức basal tối đa vì nó được thêm vào trước khi tính năng basal tạm thời thủ công có sẵn. Vui lòng đặt mức basal tối đa mới."
           }
         },
         "yy-YY" : {
@@ -50814,7 +50814,7 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "threeNotUsed"
           }
         },
@@ -51862,8 +51862,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Try adjusting pod position or toggle Bluetooth off and then on in iPhone Settings."
+            "state" : "translated",
+            "value" : "Probeer de positie van de pod aan te passen of schakel Bluetooth uit en dan aan in iPhone-instellingen."
           }
         },
         "pl" : {
@@ -51916,8 +51916,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Try adjusting pod position or toggle Bluetooth off and then on in iPhone Settings."
+            "state" : "translated",
+            "value" : "Hãy thử điều chỉnh vị trí Pod hoặc tắt rồi bật lại Bluetooth trong Cài đặt iPhone."
           }
         },
         "yy-YY" : {
@@ -52190,8 +52190,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Turn bluetooth on"
+            "state" : "translated",
+            "value" : "Bật Bluetooth"
           }
         },
         "yy-YY" : {
@@ -52327,7 +52327,7 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "twoNotUsed"
           }
         },
@@ -52738,8 +52738,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unable To Reach Pod"
+            "state" : "translated",
+            "value" : "Không thể kết nối với Pod"
           }
         },
         "yy-YY" : {
@@ -53012,8 +53012,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unable to set a temporary basal rate: %1$@\n\n%2$@"
+            "state" : "translated",
+            "value" : "Không thể đặt mức basal tạm thời: %1$@\n\n%2$@"
           }
         },
         "yy-YY" : {
@@ -53232,8 +53232,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unexpected Alert"
+            "state" : "translated",
+            "value" : "Onverwachte waarschuwing"
           }
         },
         "pl" : {
@@ -53286,8 +53286,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unexpected Alert"
+            "state" : "translated",
+            "value" : "Cảnh báo bất ngờ"
           }
         },
         "yy-YY" : {
@@ -53506,8 +53506,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unexpected Pod Alert #%1@!"
+            "state" : "translated",
+            "value" : "Onverwachte Pod waarschuwing #%1@!"
           }
         },
         "pl" : {
@@ -53560,8 +53560,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Unexpected Pod Alert #%1@!"
+            "state" : "translated",
+            "value" : "Cảnh báo Pod bất ngờ #%1@!"
           }
         },
         "yy-YY" : {
@@ -55698,8 +55698,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You will be notified in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have."
+            "state" : "translated",
+            "value" : "iAPS geeft een melding voordat de Pod vervalt.\n\nScroll om in te stellen hoeveel uren, voordat de Pod verloopt, je een kennisgeving wilt hebben."
           }
         },
         "pl" : {
@@ -55752,8 +55752,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You will be notified in advance of Pod expiration.\n\nScroll to set the number of hours advance notice you would like to have."
+            "state" : "translated",
+            "value" : "Bạn sẽ được thông báo trước khi Pod hết hạn.\n\nKéo xuống để đặt số giờ thông báo trước mà bạn muốn nhận."
           }
         },
         "yy-YY" : {
@@ -55835,8 +55835,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You will be notified when the amount of insulin in the Pod reaches a selected level.\n\nScroll to set the number of units (1 to 50) at which you would like to be reminded."
+            "state" : "translated",
+            "value" : "iAPS geeft een melding als de hoeveelheid insuline in de Pod dit niveau bereikt (1-50 E).\n\nScroll om in te stellen bij welk aantal eenheden je wilt worden herinnerd."
           }
         },
         "pl" : {
@@ -55889,8 +55889,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You will be notified when the amount of insulin in the Pod reaches a selected level.\n\nScroll to set the number of units (1 to 50) at which you would like to be reminded."
+            "state" : "translated",
+            "value" : "Bạn sẽ được thông báo khi lượng insulin trong Pod đạt đến mức đã chọn.\n\nKéo xuống để đặt số đơn vị (từ 1 đến 50) mà bạn muốn nhận nhắc nhở."
           }
         },
         "yy-YY" : {
@@ -55972,8 +55972,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You will be notified when the amount of insulin in the Pod reaches this level."
+            "state" : "translated",
+            "value" : "iAPS geeft een melding als de hoeveelheid insuline in de Pod dit niveau bereikt."
           }
         },
         "pl" : {
@@ -56026,8 +56026,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You will be notified when the amount of insulin in the Pod reaches this level."
+            "state" : "translated",
+            "value" : "Bạn sẽ được thông báo khi lượng insulin trong Pod đạt đến mức này."
           }
         },
         "yy-YY" : {
@@ -56383,8 +56383,8 @@
         },
         "nl" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your Pod is ready for use.\n\nThe default reminder was scheduled for this Pod at setup. You can change the reminder to a more convenient time in Pod Notification Settings."
+            "state" : "translated",
+            "value" : "Je Pod is klaar voor gebruik.\n\nDe standaard herinnering is op installatie voor deze Pod ingepland. Je kunt de herinnering veranderen naar een handigere tijd in Pod Meldingsinstellingen."
           }
         },
         "pl" : {
@@ -56437,8 +56437,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your Pod is ready for use.\n\nThe default reminder was scheduled for this Pod at setup. You can change the reminder to a more convenient time in Pod Notification Settings."
+            "state" : "translated",
+            "value" : "Pod của bạn đã sẵn sàng để sử dụng.\n\nLời nhắc mặc định đã được đặt cho Pod này khi thiết lập. Bạn có thể thay đổi lời nhắc sang thời gian thuận tiện hơn trong phần Cài đặt thông báo Pod."
           }
         },
         "yy-YY" : {
@@ -56574,8 +56574,8 @@
         },
         "vi" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Your Pod may still be delivering Insulin.\nRemove it from your body, then tap “Continue.“"
+            "state" : "translated",
+            "value" : "Pod của bạn có thể vẫn đang bơm insulin.\nHãy tháo Pod ra khỏi cơ thể, sau đó nhấn “Tiếp tục“"
           }
         },
         "yy-YY" : {
