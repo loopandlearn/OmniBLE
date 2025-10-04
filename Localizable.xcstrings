@@ -173,6 +173,12 @@
             "state" : "translated",
             "value" : "Подается болюс"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "大剂量推注中"
+          }
         }
       }
     },
@@ -207,6 +213,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Подача болюса при подаче ВБС"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用临时基础率进行大剂量输注"
           }
         }
       }
