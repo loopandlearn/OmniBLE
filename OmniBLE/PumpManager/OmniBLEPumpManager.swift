@@ -18,17 +18,15 @@ var fakeInPlayPod = false
 var fakeIPhoneWithPossibleInPlayIssues = false
 
 // Returns a String of the form "iPhoneZ,Y" or "iPodX,Y"
-extension UIDevice {
-    var modelIdentifier: String {
-        var systemInfo = utsname()
-        uname(&systemInfo)
-        let machineMirror = Mirror(reflecting: systemInfo.machine)
-        let identifier = machineMirror.children.reduce("") { identifier, element in
-            guard let value = element.value as? Int8, value != 0 else { return identifier }
-            return identifier + String(UnicodeScalar(UInt8(value)))
-        }
-        return identifier
+func getIPhoneType() -> String {
+    var systemInfo = utsname()
+    uname(&systemInfo)
+    let machineMirror = Mirror(reflecting: systemInfo.machine)
+    let identifier = machineMirror.children.reduce("") { identifier, element in
+        guard let value = element.value as? Int8, value != 0 else { return identifier }
+        return identifier + String(UnicodeScalar(UInt8(value)))
     }
+    return identifier
 }
 
 public protocol PodStateObserver: AnyObject {
@@ -2550,8 +2548,9 @@ extension OmniBLEPumpManager: PumpManager {
         }
 
         // Are we running on an iPhone 16 (Apple model # "iPhone17,N", sigh)?
-        let deviceModel = UIDevice.current.modelIdentifier
-        if deviceModel.contains("iPhone17") {
+        // iPhone 17's (Apple model # 'iPhone18,N" sigh) appear to work with InPlay Pods!
+        let iPhoneType = getIPhoneType()
+        if iPhoneType.contains("iPhone17") {
             return true
         }
 
