@@ -50,7 +50,7 @@ Once the pod is inserted, the phone auto-lock timing is restored to the value th
 
 #### When Open
 
-When the app is open, it will send a getStatus to the pod no later than 2:40 (mm:ss) after the last pod message was exchanged. This means the pod does not disconnect from BLE and remains available to the phone.
+When the app is open, it will send a getStatus to the pod 2:40 (mm:ss) after the last pod message was exchanged. This means the pod does not disconnect from BLE and remains available to the phone.
 
 This is true as long as the phone and pod are in-range while the app is open with phone unlocked.
 
@@ -60,7 +60,7 @@ This is true as long as the phone and pod are in-range while the app is open wit
 
 A silent tune is played in the background which keeps the app alive even when the phone is locked. This will increase the battery usage on the phone.
 
-While Silent Tune is selected, the app will send a getStatus to the pod no later than 2:40 (mm:ss) after the last pod message was exchanged. This means the pod does not disconnect from BLE and remains available for commands from the app so long as the phone and pod stay within Bluetooth range.
+While Silent Tune is selected, the app will send a getStatus to the pod 2:40 (mm:ss) after the last pod message was exchanged. This means the pod does not disconnect from BLE and remains available for commands from the app so long as the phone and pod stay within Bluetooth range.
 
 > If the pod moves out of Bluetooth range, the pod disconnects. With iPhone 16 it might take several seconds to minutes before the app reconnects to the pod once it is back in range. This can cause disruptions until the reconnect happens.
 
@@ -68,7 +68,7 @@ While Silent Tune is selected, the app will send a getStatus to the pod no later
 
 For those who have a RileyLink (OrangeLink, EmaLink, etc), you can use that instead of the Silent Tune but you must keep the link with the phone.
 
-While RileyLink is selected, the app is triggered by the RileyLink one minute heartbeat. The app will send a getStatus to the pod no later than 2:00 (mm:ss) after the last pod message was exchanged. This means the pod does not disconnect from BLE and remains available for commands from the app so long as the phone and pod stay within Bluetooth range.
+While RileyLink is selected, the app is triggered by the RileyLink one minute heartbeat. The app will send a getStatus to the pod 2:00 (mm:ss) after the last pod message was exchanged. This means the pod does not disconnect from BLE and remains available for commands from the app so long as the phone and pod stay within Bluetooth range.
 
 > If the pod moves out of Bluetooth range, the pod disconnects. With iPhone 16 it might take several seconds to minutes before the app reconnects to the pod once it is back in range. This can cause disruptions until the reconnect happens.
 
