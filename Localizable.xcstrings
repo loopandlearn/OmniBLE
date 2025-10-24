@@ -1209,6 +1209,12 @@
             "state" : "translated",
             "value" : "Недостаточно данных"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有足够数据"
+          }
         }
       }
     },
@@ -1272,6 +1278,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Обнаружена закупорка"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检测到堵塞"
           }
         }
       }
@@ -1355,6 +1367,12 @@
             "state" : "translated",
             "value" : "Сопряжение завершено"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "配对完成"
+          }
         }
       }
     },
@@ -1437,6 +1455,12 @@
             "state" : "translated",
             "value" : "Срок работы Omnipod истек"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pod 已到期"
+          }
         }
       }
     },
@@ -1483,6 +1507,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Напоминание о приостановке подачи инсулина"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pod 暂停提醒"
           }
         }
       }
@@ -1531,6 +1561,12 @@
             "state" : "translated",
             "value" : "Прокачивание инсулина"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "灌注中"
+          }
         }
       }
     },
@@ -1577,6 +1613,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Прокачка инсулина завершена"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "灌注完成"
           }
         }
       }
@@ -1625,6 +1667,12 @@
             "state" : "translated",
             "value" : "Инициализация напоминания"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "提醒功能已启动"
+          }
         }
       }
     },
@@ -1671,6 +1719,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Запланированная база"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "计划基础率"
           }
         }
       }
@@ -1719,6 +1773,12 @@
             "state" : "translated",
             "value" : "Выключение неизбежно"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "即将关闭"
+          }
         }
       }
     },
@@ -1765,6 +1825,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Время приостановки истекло"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂停时间已到期"
           }
         }
       }
@@ -1943,6 +2009,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Подается ВБС"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "临时基础率运行中"
           }
         }
       }
