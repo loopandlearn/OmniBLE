@@ -10252,7 +10252,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schimbați Pod-ul acum. Livrarea insulinei se va opri la 8 ore după expirarea Pod-ului sau când nu mai rămâne deloc insulină."
+            "value" : "Schimbați pompa acum. Livrarea insulinei se va opri la 8 ore după expirarea pompei sau când nu mai rămâne deloc insulină."
           }
         },
         "ru" : {
@@ -10401,7 +10401,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schimbați Pod-ul acum. Livrarea insulinei se va opri în %1$@ sau când nu mai rămâne insulină."
+            "value" : "Schimbați pompa acum. Livrarea insulinei se va opri în %1$@ sau când nu mai rămâne insulină."
           }
         },
         "ru" : {
@@ -10544,7 +10544,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schimbați Pod-ul acum. Administrarea insulinei se va opri într-o oră."
+            "value" : "Schimbați pompa acum. Administrarea insulinei se va opri într-o oră."
           }
         },
         "ru" : {
@@ -10687,7 +10687,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schimbați Pod-ul acum. Pod-ul a fost activ timp de 72 de ore."
+            "value" : "Schimbați pompa acum. Pompa a fost activă timp de 72 de ore."
           }
         },
         "ru" : {
@@ -12850,7 +12850,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Confirmați atașarea Pod-ului"
+            "value" : "Confirmați atașarea pompei"
           }
         },
         "ru" : {
@@ -13127,7 +13127,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mesaju nu a putut fi parsat: %1$@"
+            "value" : "Nu s-a putut analiza mesajul: %1$@"
           }
         },
         "ru" : {
@@ -15034,7 +15034,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Renunțați la Pod"
+            "value" : "Renunțați la pompă"
           }
         },
         "ru" : {
@@ -15600,7 +15600,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Răspuns gol primit de la Pod"
+            "value" : "Răspuns gol primit de la pompă"
           }
         },
         "ru" : {
@@ -19001,8 +19001,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Failed to Suspend Insulin Delivery"
+            "state" : "translated",
+            "value" : "暂停胰岛素推注失败"
           }
         }
       }
@@ -19824,7 +19824,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Umpleți un Pod nou cu insulină U-100  (nu înlăturați capacul albastru al acului de pe Pod)."
+            "value" : "Umpleți o pompă nou cu insulină U-100  (nu înlăturați capacul albastru al acului de pe pompă)."
           }
         },
         "ru" : {
@@ -23722,7 +23722,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Defecțiune Pod internă %1$03d"
+            "value" : "Defecțiune internă a pompei %1$03d"
           }
         },
         "ru" : {
@@ -23865,7 +23865,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cod de eroare intern al podului %1$03d\n%2$@ \n Ref: %3$@ \n"
+            "value" : "Cod de eroare intern al pompei %1$03d\n%2$@ \n Ref: %3$@ \n"
           }
         },
         "ru" : {
@@ -26205,7 +26205,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asigurați-vă că iPhone-ul este în apropierea Pod-ului activ"
+            "value" : "Asigurați-vă că iPhone-ul este în apropierea pompei active"
           }
         },
         "ru" : {
@@ -26354,7 +26354,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asigurați-vă că telefonul și Pod-ul sunt aproape unul de celălalt. Dacă problemele de comunicare persistă, mutați-vă într-o zonă nouă."
+            "value" : "Asigurați-vă că telefonul și pompa sunt aproape unul de celălalt. Dacă problemele de comunicare persistă, mutați-vă într-o zonă nouă."
           }
         },
         "ru" : {
@@ -26497,7 +26497,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asigurați-vă că Pod-ul este umplut și în apropiere."
+            "value" : "Asigurați-vă că pompa este umplută și în apropiere."
           }
         },
         "ru" : {
@@ -26640,7 +26640,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asigurați-vă că Pod-ul dumneavoastră este în apropiere și încercați din nou."
+            "value" : "Asigurați-vă că pompa dumneavoastră este în apropiere și încercați din nou."
           }
         },
         "ru" : {
@@ -27803,7 +27803,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mutați-vă într-o zonă nouă, departe de orice alte Pod-uri și încercați din nou."
+            "value" : "Mutați-vă într-o zonă nouă, departe de orice alte pompe și încercați din nou."
           }
         },
         "ru" : {
@@ -29254,7 +29254,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Niciun Pod"
+            "value" : "Niciuo pompă"
           }
         },
         "ru" : {
@@ -29403,7 +29403,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Niciun Pod asociat"
+            "value" : "Nicio pompă asociată"
           }
         },
         "ru" : {
@@ -29546,7 +29546,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nu s-au găsit Pod-uri"
+            "value" : "Nu s-au găsit pompe"
           }
         },
         "ru" : {
@@ -29844,7 +29844,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nu s-a primit răspuns de la Pod"
+            "value" : "Nu s-a primit răspuns de la pompă"
           }
         },
         "ru" : {
@@ -30143,7 +30143,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nu, continuați cu Pod-ul"
+            "value" : "Nu, continuați cu pompa"
           }
         },
         "ru" : {
@@ -30750,8 +30750,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Not enough data"
+            "state" : "translated",
+            "value" : "没有足够数据"
           }
         }
       }
@@ -32473,7 +32473,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asociază un Pod"
+            "value" : "Asociază o pompă"
           }
         },
         "ru" : {
@@ -32622,7 +32622,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asociază un Pod"
+            "value" : "Asociază o pompă"
           }
         },
         "ru" : {
@@ -32955,8 +32955,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pairing completed"
+            "state" : "translated",
+            "value" : "配对完成"
           }
         }
       }
@@ -34492,7 +34492,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vă rugăm să aduceți doar Pod-ul inițial în rază de acțiune sau dezactivați Pod-ul inițial"
+            "value" : "Vă rugăm să aduceți doar pompa inițială în rază de acțiune sau dezactivați pompa inițială"
           }
         },
         "ru" : {
@@ -34648,7 +34648,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apropiați Pod-ul de RileyLink și încercați din nou"
+            "value" : "Apropiați pompa de RileyLink și încercați din nou"
           }
         },
         "ru" : {
@@ -34791,7 +34791,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vă rugăm să confirmați că Pod-ul este bine fixat de corpul dumneavoastră. \n\nCanula poate fi introdusă doar o singură dată cu fiecare Pod. Atingeți „Confirmați” când Pod-ul este fixat."
+            "value" : "Vă rugăm să confirmați că pompa este bine fixată de corpul dumneavoastră. \n\nCanula poate fi introdusă doar o singură dată cu fiecare pompă. Atingeți „Confirmați” când pompa este fixată."
           }
         },
         "ru" : {
@@ -34934,7 +34934,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vă rugăm să dezactivați podul. Când dezactivarea este completă, puteți asocia un nou pod."
+            "value" : "Vă rugăm să dezactivați pompa. Când dezactivarea este completă, puteți asocia o nouă pompă."
           }
         },
         "ru" : {
@@ -35077,7 +35077,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vă rugăm să dezactivați podul. Când dezactivarea este completă, îl puteți elimina și asociați un nou pod."
+            "value" : "Vă rugăm să dezactivați pompa. Când dezactivarea este completă, îl puteți elimina și asociați o nouă pompă."
           }
         },
         "ru" : {
@@ -35363,7 +35363,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vă rugăm să terminați asocierea Pod-ului."
+            "value" : "Vă rugăm să terminați asocierea pompei."
           }
         },
         "ru" : {
@@ -35512,7 +35512,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asociați un Pod nou"
+            "value" : "Asociați o pompă nouă"
           }
         },
         "ru" : {
@@ -35655,7 +35655,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vă rugăm să repoziționați iPhone-ul mai departe de Pod"
+            "value" : "Vă rugăm să repoziționați iPhone-ul mai departe de pompă"
           }
         },
         "ru" : {
@@ -36084,7 +36084,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod activat"
+            "value" : "Pompă activată"
           }
         },
         "ru" : {
@@ -36376,7 +36376,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod deja asociat"
+            "value" : "Pompă deja asociată"
           }
         },
         "ru" : {
@@ -36532,7 +36532,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod deja amorsat"
+            "value" : "Pompă deja pregătită"
           }
         },
         "ru" : {
@@ -36675,7 +36675,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod-ul a fost dezactivat cu succes."
+            "value" : "Pompa a fost dezactivată cu succes."
           }
         },
         "ru" : {
@@ -37104,7 +37104,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eroare Pod"
+            "value" : "Eroare pompă"
           }
         },
         "ru" : {
@@ -37260,7 +37260,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alarmă expirare Pod"
+            "value" : "Alarmă expirare pompă"
           }
         },
         "ru" : {
@@ -37416,7 +37416,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notificare expirare Pod"
+            "value" : "Notificare expirare pompă"
           }
         },
         "ru" : {
@@ -37559,7 +37559,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Memento pentru expirarea Pod-ului"
+            "value" : "Memento pentru expirarea pompei"
           }
         },
         "ru" : {
@@ -37708,7 +37708,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod-ul a expirat."
+            "value" : "Pompa a expirat."
           }
         },
         "ru" : {
@@ -37851,7 +37851,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod Expirat"
+            "value" : "Pompă expirată"
           }
         },
         "ru" : {
@@ -37994,7 +37994,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod-ul expiră"
+            "value" : "Pompa expiră"
           }
         },
         "ru" : {
@@ -38137,7 +38137,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod-ul expiră în"
+            "value" : "Pompa expiră în"
           }
         },
         "ru" : {
@@ -38280,7 +38280,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod-ul expiră în %1$@."
+            "value" : "Pompa expiră în %1$@."
           }
         },
         "ru" : {
@@ -38566,7 +38566,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Detalii despre eroarea Pod-ului"
+            "value" : "Detalii despre eroarea pompei"
           }
         },
         "ru" : {
@@ -38715,7 +38715,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Defecțiune Pod: %1$@"
+            "value" : "Defecțiune Pompă: %1$@"
           }
         },
         "ru" : {
@@ -38864,7 +38864,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod-ul nu este pregătit pentru inserarea canulei."
+            "value" : "Pompa nu este pregătită pentru introducerea canulei."
           }
         },
         "ru" : {
@@ -39020,7 +39020,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod nu este pregătit pentru amorsare."
+            "value" : "Pompa nu este pregătită pentru amorsare."
           }
         },
         "ru" : {
@@ -39175,7 +39175,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod-ul este suspendat"
+            "value" : "Pompa este suspendată"
           }
         },
         "ru" : {
@@ -39327,7 +39327,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod-ul nu este conectat"
+            "value" : "Pompa nu este conectată"
           }
         },
         "ru" : {
@@ -39470,7 +39470,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ocluzie Pod"
+            "value" : "Blocaj pompă"
           }
         },
         "ru" : {
@@ -39613,7 +39613,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod-ul a fost asociat cu succes. Continuați."
+            "value" : "Pompa a fost asociată cu succes. Continuați."
           }
         },
         "ru" : {
@@ -39756,7 +39756,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Asocierea Pod-ului este nefinalizată."
+            "value" : "Asocierea pompei este nefinalizată."
           }
         },
         "ru" : {
@@ -39899,7 +39899,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod-ul a trimis o confirmare în loc de răspuns"
+            "value" : "Pompa a trimis o confirmare în loc de răspuns"
           }
         },
         "ru" : {
@@ -40042,7 +40042,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Configurare Pod-ului"
+            "value" : "Configurare pompei"
           }
         },
         "ru" : {
@@ -40347,7 +40347,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Intervalul de timp în care se poate seta Pod-ul a expirat"
+            "value" : "Intervalul de timp în care se poate seta pompa a expirat"
           }
         },
         "ru" : {
@@ -40496,7 +40496,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Memento pentru Pod-ul suspendat"
+            "value" : "Memento pentru pompa suspendată"
           }
         },
         "ru" : {
@@ -40537,8 +40537,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Pod suspended reminder"
+            "state" : "translated",
+            "value" : "Pod 暂停提醒"
           }
         }
       }
@@ -41069,7 +41069,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod-ul anterior"
+            "value" : "Pompa anterioară"
           }
         },
         "ru" : {
@@ -41557,8 +41557,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Priming completed"
+            "state" : "translated",
+            "value" : "灌注完成"
           }
         }
       }
@@ -44619,8 +44619,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Reminder initialized"
+            "state" : "translated",
+            "value" : "提醒功能已启动"
           }
         }
       }
@@ -44864,7 +44864,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Înlăturați Pod-ul de pe corp"
+            "value" : "Înlăturați pompa de pe corp"
           }
         },
         "ru" : {
@@ -45144,7 +45144,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Înlocuiți Pod-ul"
+            "value" : "Înlocuiți pompa"
           }
         },
         "ru" : {
@@ -46791,8 +46791,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Scheduled basal"
+            "state" : "translated",
+            "value" : "计划基础率"
           }
         }
       }
@@ -47944,8 +47944,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Shutdown imminent"
+            "state" : "translated",
+            "value" : "即将关闭"
           }
         }
       }
@@ -50283,8 +50283,8 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Suspend time expired"
+            "state" : "translated",
+            "value" : "暂停时间已到期"
           }
         }
       }
@@ -53343,7 +53343,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fereastra din partea superioară a Pod-ului trebuie să fie colorată în roz atunci când canula a fost introdusă corect în piele."
+            "value" : "Fereastra din partea superioară a pompei trebuie să fie colorată în roz atunci când canula a fost introdusă corect în piele."
           }
         },
         "ru" : {
@@ -53486,7 +53486,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A apărut o problemă la comunicarea cu podul. Dacă această problemă persistă, atingeți Renunțați la pod. Apoi puteți activa un nou Pod."
+            "value" : "A apărut o problemă la comunicarea cu podul. Dacă această problemă persistă, atingeți Renunțați la pod. Apoi puteți activa o nouă pompă."
           }
         },
         "ru" : {
@@ -54232,7 +54232,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "E timpul să înlocuiți Pod-ul! Acesta va expira în %1$@"
+            "value" : "E timpul să înlocuiți pompa! Aceasta va expira în %1$@"
           }
         },
         "ru" : {
@@ -54660,7 +54660,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Au fost găsite prea multe Pod-uri"
+            "value" : "Au fost găsite prea multe pompe"
           }
         },
         "ru" : {
@@ -55649,7 +55649,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nu se poate conecta la Pod"
+            "value" : "Nu se poate conecta la pompă"
           }
         },
         "ru" : {
@@ -55792,7 +55792,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nu se poate conecta la Pod"
+            "value" : "Nu se poate conecta la pompă"
           }
         },
         "ru" : {
@@ -56811,7 +56811,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Schimbare neașteptată a podului"
+            "value" : "Schimbare neașteptată a pompei"
           }
         },
         "ru" : {
@@ -56966,7 +56966,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Răspuns neașteptat de la Pod"
+            "value" : "Răspuns neașteptat de la pompă"
           }
         },
         "ru" : {
@@ -59722,7 +59722,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pompa este gata de utilizare.\n\nNotificarea implicită a fost programată pentru această pmpă la configurare. Puteți schimba notificarea la o oră mai convenabilă în Configurări notificări pompă."
+            "value" : "Pompa este gata de utilizare.\n\nNotificarea implicită a fost programată pentru această pompă la configurare. Puteți schimba notificarea la o oră mai convenabilă în Configurări notificări pompă."
           }
         },
         "ru" : {
