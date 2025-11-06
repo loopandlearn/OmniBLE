@@ -1845,7 +1845,7 @@ extension OmniBLEPumpManager: PumpManager {
 
         switch shouldFetchStatus {
         case .none:
-            completion?(lastSync)
+            completion?(self.lastSync)
             return // No active pod
         case true?:
             log.default("Fetching status because pumpData is too old")
@@ -2464,7 +2464,7 @@ extension OmniBLEPumpManager: PumpManager {
     }
 
     func store(doses: [UnfinalizedDose], completion: @escaping (_ error: Error?) -> Void) {
-        let lastSync = lastSync
+        let lastSync = self.lastSync
 
         pumpDelegate.notify { (delegate) in
             guard let delegate = delegate else {
