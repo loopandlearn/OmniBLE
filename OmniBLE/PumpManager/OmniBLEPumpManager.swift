@@ -355,13 +355,6 @@ extension OmniBLEPumpManager {
             return .active(.distantPast)
         }
 
-        switch podCommState(for: state) {
-        case .fault:
-            return .active(.distantPast)
-        default:
-            break
-        }
-
         switch state.suspendEngageState {
         case .engaging:
             return .suspending
