@@ -349,7 +349,9 @@ extension OmniBLEPumpManager {
     }
 
     private func basalDeliveryState(for state: OmniBLEPumpManagerState, at date: Date = Date()) -> PumpManagerStatus.BasalDeliveryState {
-        guard let podState = state.podState else {
+
+        // Treat a non-active (faulted or setup incomplete) pod just like no pod
+        guard let podState = state.podState, podState.isActive else {
             return .active(.distantPast)
         }
 
