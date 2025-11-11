@@ -88,8 +88,8 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
     var finalizedDoses: [UnfinalizedDose]
 
     public var dosesToStore: [UnfinalizedDose] {
-        // Also include unfinalized boluses and temp basals which are mututable until finalized.
-        // Now suspends and resumes will be finalized with a response the confirming delivery state.
+        /// Also include unfinalized bolus and temp basal doses which are mututable until finalized.
+        /// Suspends and resumes are now "finalized" upon getting a response confirming delivery state.
         return finalizedDoses + [unfinalizedBolus, unfinalizedTempBasal].compactMap {$0}
     }
 
@@ -337,9 +337,9 @@ public struct PodState: RawRepresentable, Equatable, CustomDebugStringConvertibl
             unfinalizedTempBasal = nil
         }
 
-        // Resumes and suspends have no associated delivery amounts that need to be set,
-        // but we finalize them here when we have confireded matching deliveryStatus so
-        // the associated resume and suspend events will be immediately created.
+        /// Resumes and suspends have no associated delivery amounts to be finalized,
+        /// but we finalize these "doses" as soon as we have deliveryStatus confirmation
+        /// so the associated resume and suspend events can be created without delay.
 
         if let resume = unfinalizedResume, !deliveryStatus.suspended {
             finalizedDoses.append(resume)
