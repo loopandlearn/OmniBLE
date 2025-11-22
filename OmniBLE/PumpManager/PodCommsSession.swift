@@ -427,7 +427,6 @@ public class PodCommsSession {
             let status = try getStatus()
             if status.podProgressStatus == .basalInitialized {
                 podState.setupProgress = .initialBasalScheduleSet
-                podState.finalizedDoses.append(UnfinalizedDose(resumeStartTime: currentDate, scheduledCertainty: .certain, insulinType: podState.insulinType))
                 return
             }
         }
@@ -436,7 +435,6 @@ public class PodCommsSession {
         // Set basal schedule
         let _ = try setBasalSchedule(schedule: basalSchedule, scheduleOffset: scheduleOffset)
         podState.setupProgress = .initialBasalScheduleSet
-        podState.finalizedDoses.append(UnfinalizedDose(resumeStartTime: currentDate, scheduledCertainty: .certain, insulinType: podState.insulinType))
     }
 
     //
