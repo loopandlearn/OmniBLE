@@ -264,10 +264,15 @@ struct OmniBLESettingsView: View  {
                     Button(action: {
                         sendingTestBeepsCommand = true
                         Task { @MainActor in
+                            defer {
+                                // Executed after playTestBeeps() returns or throws
+                                sendingTestBeepsCommand = false
+                            }
                             do {
                                 try await viewModel.playTestBeeps()
                             }
-                            sendingTestBeepsCommand = false
+                            // No errors are displayed when using the sound icon to play test beeps.
+                            // Pod Diagnostics->Play Test Beeps will play beeps & display any errors.
                         }
                     }) {
                         Image(systemName: "speaker.wave.2.circle")
