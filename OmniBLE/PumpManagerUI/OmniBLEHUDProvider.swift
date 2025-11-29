@@ -30,9 +30,7 @@ internal class OmniBLEHUDProvider: NSObject, HUDProvider {
     private let bluetoothProvider: BluetoothProvider
 
     private let colorPalette: LoopUIColorPalette
-    
-    private var refreshTimer: Timer?
-    
+
     private let allowedInsulinTypes: [InsulinType]
 
     var visible: Bool = false {

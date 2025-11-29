@@ -60,6 +60,28 @@ class OmniBLESettingsViewModel: ObservableObject {
         }
     }
 
+    var faultedAtString: String {
+        if let faultEventTimeSinceActivation = pumpManager.podDetails?.fault?.faultEventTimeSinceActivation,
+           let expiresAt = expiresAt
+        {
+            // Use expiresAt which slides with pod clock skew to compute an adjusted activatedAt
+            let adjustedActivatedAt = expiresAt - Pod.nominalPodLife
+            let faultedAt = adjustedActivatedAt + faultEventTimeSinceActivation
+            return dateFormatter.string(from: faultedAt)
+        }
+        return "—"
+    }
+
+    var deliveryStopsAtString: String {
+        if let expiresAt = expiresAt {
+            // Use expiresAt which slides with pod clock skew to compute an adjusted activatedAt
+            let adjustedActivatedAt = expiresAt - Pod.nominalPodLife
+            let deliveryStopsAt = adjustedActivatedAt + Pod.serviceDuration
+            return dateFormatter.string(from: deliveryStopsAt)
+        }
+        return "—"
+    }
+
     var serviceTimeRemainingString: String? {
         if let serviceTimeRemaining = pumpManager.podServiceTimeRemaining, let serviceTimeRemainingString = timeRemainingFormatter.string(from: serviceTimeRemaining) {
             return serviceTimeRemainingString
@@ -548,25 +570,24 @@ extension OmniBLEPumpManager {
     }
     
     var basalDeliveryRate: Double? {
-        if let tempBasal = state.podState?.unfinalizedTempBasal, !tempBasal.isFinished() {
+        guard let podState = state.podState, !podState.isFaulted && !podState.isSuspended else {
+            return nil // no pod, pod is faulted, or pod is suspended
+        }
+        if let tempBasal = podState.unfinalizedTempBasal, !tempBasal.isFinished() {
+            // return the current unfinalized temp basal rate
             return tempBasal.rate
-        } else {
-            switch state.podState?.suspendState {
-            case .resumed:
-                var calendar = Calendar(identifier: .gregorian)
-                calendar.timeZone = state.timeZone
-                return state.basalSchedule.currentRate(using: calendar, at: dateGenerator())
-            case .suspended, .none:
-                return nil
-            }
         }
+        // return the scheduled basal rate for the current time
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = state.timeZone
+        return state.basalSchedule.currentRate(using: calendar, at: dateGenerator())
     }
-
+    
     fileprivate var podServiceTimeRemaining : TimeInterval? {
-        guard let podTimeRemaining = podTimeRemaining else {
-            return nil;
+        guard let podTimeRemaining = podTimeRemaining, state.podState?.isFaulted == false else {
+            return nil
         }
-        return max(0, Pod.serviceDuration - Pod.nominalPodLife + podTimeRemaining);
+        return max(0, Pod.serviceDuration - Pod.nominalPodLife + podTimeRemaining)
     }
     
     private func podDetails(fromPodState podState: PodState, andDeviceName deviceName: String?) -> PodDetails {
@@ -578,10 +599,9 @@ extension OmniBLEPumpManager {
             deviceName: deviceName,
             totalDelivery: podState.lastInsulinMeasurements?.delivered,
             lastStatus: podState.lastInsulinMeasurements?.validTime,
-            fault: podState.fault?.faultEventCode,
+            fault: podState.fault,
             activatedAt: podState.activatedAt,
             activeTime: podState.activeTime,
-            pdmRef: podState.fault?.pdmRef
         )
     }
 

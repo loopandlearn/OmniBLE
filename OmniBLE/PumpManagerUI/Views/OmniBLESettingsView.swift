@@ -354,45 +354,61 @@ struct OmniBLESettingsView: View  {
 
             Section() {
                 HStack {
-                    FrameworkLocalText("Pod Activated", comment: "Label for pod insertion row")
+                    FrameworkLocalText("Pod Activated", comment: "Label for Pod Activated row")
                     Spacer()
                     Text(self.viewModel.activatedAtString)
                         .foregroundColor(Color.secondary)
                 }
 
                 HStack {
-                    if let expiresAt = viewModel.expiresAt, expiresAt < Date() {
-                        FrameworkLocalText("Pod Expired", comment: "Label for pod expiration row, past tense")
-                    } else {
-                        FrameworkLocalText("Pod Expires", comment: "Label for pod expiration row")
-                    }
+                    FrameworkLocalText("Pod Expiration", comment: "Label for Pod Expiration row")
                     Spacer()
                     Text(self.viewModel.expiresAtString)
                         .foregroundColor(Color.secondary)
                 }
 
+                HStack {
+                    if viewModel.podDetails?.fault != nil {
+                        FrameworkLocalText("Pod Faulted", comment: "Label for Pod Faulted row")
+                        Spacer()
+                        Text(self.viewModel.faultedAtString)
+                            .foregroundColor(Color.secondary)
+                    } else if viewModel.podOk {
+                        FrameworkLocalText("Delivery Stops", comment: "Label for Delivery Stops row")
+                        Spacer()
+                        Text(self.viewModel.deliveryStopsAtString)
+                            .foregroundColor(Color.secondary)
+                    }
+                }
+
+                let localizedPodDetailsStr = LocalizedString("Pod Details", comment: "Text for Pod Details row and page")
                 if let podDetails = self.viewModel.podDetails {
-                    NavigationLink(destination: PodDetailsView(podDetails: podDetails, title: LocalizedString("Pod Details", comment: "title for pod details page"))) {
-                        FrameworkLocalText("Pod Details", comment: "Text for pod details disclosure row")
+                    NavigationLink(destination: PodDetailsView(podDetails: podDetails,
+                                                               title: localizedPodDetailsStr))
+                    {
+                        Text(localizedPodDetailsStr)
                             .foregroundColor(Color.primary)
                     }
                 } else {
                     HStack {
-                        FrameworkLocalText("Pod Details", comment: "Text for pod details disclosure row")
+                        Text(localizedPodDetailsStr)
                         Spacer()
                         Text("—")
                             .foregroundColor(Color.secondary)
                     }
                 }
 
+                let localizedPreviousPodDetailsStr = LocalizedString("Previous Pod Details", comment: "Text for Previous Pod Details row and page")
                 if let previousPodDetails = viewModel.previousPodDetails {
-                    NavigationLink(destination: PodDetailsView(podDetails: previousPodDetails, title: LocalizedString("Previous Pod", comment: "title for previous pod page"))) {
-                        FrameworkLocalText("Previous Pod Details", comment: "Text for previous pod details row")
+                    NavigationLink(destination: PodDetailsView(podDetails: previousPodDetails,
+                                                               title: localizedPreviousPodDetailsStr))
+                    {
+                        Text(localizedPreviousPodDetailsStr)
                             .foregroundColor(Color.primary)
                     }
                 } else {
                     HStack {
-                        FrameworkLocalText("Previous Pod Details", comment: "Text for previous pod details row")
+                        Text(localizedPreviousPodDetailsStr)
                         Spacer()
                         Text("—")
                             .foregroundColor(Color.secondary)
@@ -421,7 +437,8 @@ struct OmniBLESettingsView: View  {
                                     onSaveScheduledExpirationReminder: self.viewModel.saveScheduledExpirationReminder,
                                     onSaveLowReservoirReminder: self.viewModel.saveLowReservoirReminder))
                 {
-                    FrameworkLocalText("Notification Settings", comment: "Text for pod details disclosure row").foregroundColor(Color.primary)
+                    FrameworkLocalText("Notification Settings", comment: "Text for Notification Settings disclosure row")
+                                            .foregroundColor(Color.primary)
                 }
                 NavigationLink(destination: BeepPreferenceSelectionView(initialValue: viewModel.beepPreference, onSave: viewModel.setConfirmationBeeps)) {
                     HStack {
@@ -443,7 +460,8 @@ struct OmniBLESettingsView: View  {
                 }
                 NavigationLink(destination: InsulinTypeSetting(initialValue: viewModel.insulinType, supportedInsulinTypes: supportedInsulinTypes, allowUnsetInsulinType: false, didChange: viewModel.didChangeInsulinType)) {
                     HStack {
-                        FrameworkLocalText("Insulin Type", comment: "Text for insulin type navigation link").foregroundColor(Color.primary)
+                        FrameworkLocalText("Insulin Type", comment: "Text for insulin type navigation link")
+                                                    .foregroundColor(Color.primary)
                         if let currentTitle = viewModel.insulinType?.brandName {
                             Spacer()
                             Text(currentTitle)
@@ -484,13 +502,14 @@ struct OmniBLESettingsView: View  {
             }
 
             Section() {
+                let localizedPodDiagnosticsStr = LocalizedString("Pod Diagnostics", comment: "Title for the Pod Diagnostic row and page")
                 NavigationLink(destination: PodDiagnosticsView(
-                    title: LocalizedString("Pod Diagnostics", comment: "Title for the pod diagnostic view"),
+                    title: localizedPodDiagnosticsStr,
                     diagnosticCommands: viewModel.diagnosticCommands,
                     podOk: viewModel.podOk,
                     noPod: viewModel.noPod))
                 {
-                    FrameworkLocalText("Pod Diagnostics", comment: "Text for pod diagnostics row")
+                    Text(localizedPodDiagnosticsStr)
                         .foregroundColor(Color.primary)
                 }
             }

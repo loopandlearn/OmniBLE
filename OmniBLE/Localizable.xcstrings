@@ -14630,6 +14630,9 @@
         }
       }
     },
+    "Delivery Stops" : {
+      "comment" : "Label for Delivery Stops row"
+    },
     "Device Name" : {
       "comment" : "description label for device name pod details row",
       "localizations" : {
@@ -30863,7 +30866,7 @@
       }
     },
     "Notification Settings" : {
-      "comment" : "Text for pod details disclosure row\nnavigation title for notification settings",
+      "comment" : "Text for Notification Settings disclosure row\nnavigation title for notification settings",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -35958,7 +35961,7 @@
       }
     },
     "Pod Activated" : {
-      "comment" : "Label for pod insertion row\ndescription label for activated at time pod details row",
+      "comment" : "Label for Pod Activated row\ndescription label for activated at time pod details row",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -36692,7 +36695,7 @@
       }
     },
     "Pod Details" : {
-      "comment" : "Text for pod details disclosure row\ntitle for pod details page",
+      "comment" : "Text for Pod Details row and page",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -36835,7 +36838,7 @@
       }
     },
     "Pod Diagnostics" : {
-      "comment" : "Text for pod diagnostics row\nTitle for the pod diagnostic view",
+      "comment" : "Title for the Pod Diagnostic row and page",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -37119,6 +37122,9 @@
           }
         }
       }
+    },
+    "Pod Expiration" : {
+      "comment" : "Label for Pod Expiration row"
     },
     "Pod expiration advisory alarm" : {
       "comment" : "Description for expiration advisory alarm",
@@ -37725,7 +37731,7 @@
       }
     },
     "Pod Expired" : {
-      "comment" : "Alert content title for podExpireImminent pod alert\nAlert content title for podExpiring pod alert\nError message for reservoir view when pod expired\nLabel for pod expiration row, past tense\nStatus highlight message for podExpired alarm.\nThe title for Pod Expired alarm notification",
+      "comment" : "Alert content title for podExpireImminent pod alert\nAlert content title for podExpiring pod alert\nError message for reservoir view when pod expired\nStatus highlight message for podExpired alarm.\nThe title for Pod Expired alarm notification",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -37869,6 +37875,7 @@
     },
     "Pod Expires" : {
       "comment" : "Label for pod expiration row",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -38730,6 +38737,9 @@
           }
         }
       }
+    },
+    "Pod Faulted" : {
+      "comment" : "Label for Pod Faulted row"
     },
     "Pod is not in a state ready for cannula insertion." : {
       "comment" : "Error message when cannula insertion fails because the pod is in an unexpected state",
@@ -40934,6 +40944,7 @@
     },
     "Previous Pod" : {
       "comment" : "title for previous pod page",
+      "extractionState" : "stale",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
@@ -41076,7 +41087,7 @@
       }
     },
     "Previous Pod Details" : {
-      "comment" : "Text for previous pod details row",
+      "comment" : "Text for Previous Pod Details row and page",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
