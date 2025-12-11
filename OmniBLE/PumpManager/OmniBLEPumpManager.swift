@@ -754,6 +754,8 @@ extension OmniBLEPumpManager {
 
     public func forgetPod(completion: @escaping () -> Void) {
 
+        self.podComms.handleDiscardedPodDosing(podTime: podTime, reservoirLevel: reservoirLevel?.rawValue)
+
         self.podComms.forgetPod()
 
         self.resetPerPodPumpManagerState()
