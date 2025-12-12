@@ -270,9 +270,9 @@ enum PodKeepAlive: Int, CaseIterable, Codable {
         case .disabled:
             return LocalizedString("Pod keep alive disabled. Pod disconnects 3 minutes after last message exchange (nominal behavior).", comment: "Description for PodKeepAlive.disabled")
         case .whenOpen:
-            return LocalizedString("Pod keep alive enabled when app is in the foreground with phone unlocked. Additional pod status request issued after 165 seconds.", comment: "Description for PodKeepAlive.whenOpen")
+            return LocalizedString("Pod keep alive enabled when app is in the foreground with phone unlocked. Additional pod status request issued after 2 minutes, 40 seconds.", comment: "Description for PodKeepAlive.whenOpen")
         case .silentTune:
-            return LocalizedString("Pod keep alive enabled. Additional pod status request issued after 165 seconds.\n\nAttempt to keep pod connected even when phone is locked by using a silent tune playing in the background. The silent tune may be interrupted by other apps. If silent tune is interrupted, pod keep alive stops working. The silent tune consumes extra iPhone battery.", comment: "Description for PodKeepAlive.silentTune")
+            return LocalizedString("Pod keep alive enabled. Additional pod status request issued after 2 minutes, 40 seconds.\n\nAttempt to keep pod connected even when phone is locked by using a silent tune playing in the background. The silent tune may be interrupted by other apps. If silent tune is interrupted, pod keep alive stops working. The silent tune consumes extra iPhone battery.", comment: "Description for PodKeepAlive.silentTune")
         case .rileyLink:
             return LocalizedString("Pod keep alive enabled. Additional pod status request issued after 2 minutes.\n\nRequires a RileyLink-compatible device within Bluetooth range. Allows pod keep alive messages when app is in background. This method uses less iPhone battery and slightly more DASH battery than the Silent Tune method. The RileyLink-compatible device must be selected and be connected.", comment: "Description for PodKeepAlive.rileyLink")
         }
