@@ -2571,7 +2571,7 @@ extension OmniBLEPumpManager: AlertSoundVendor {
 extension OmniBLEPumpManager {
     public func acknowledgeAlert(alertIdentifier: Alert.AlertIdentifier, completion: @escaping (Error?) -> Void) {
         guard self.hasActivePod, !state.activeAlerts.isEmpty else {
-            log.default("@@@ Skipping acknowledge alert %{public}@ with no active pod or alerts", alertIdentifier)
+            log.default("Skipping acknowledge alert %{public}@ with no active pod or alerts", alertIdentifier)
             completion(nil)
             return
         }
@@ -2632,7 +2632,7 @@ extension OmniBLEPumpManager {
         }
 
         if !found {
-            log.error("@@@ acknowledge alert %{public}@ not found!", alertIdentifier)
+            log.error("acknowledge alert %{public}@ not found!", alertIdentifier)
             completion(nil)
         }
     }
