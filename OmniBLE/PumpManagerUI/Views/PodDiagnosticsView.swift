@@ -97,6 +97,6 @@ struct PodDiagnosticsView: View  {
             }
         }
         .insetGroupedListStyle()
-        .navigationBarTitle(title)
+        .navigationTitle(title)
     }
 }

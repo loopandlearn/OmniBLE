@@ -84,7 +84,8 @@ struct SetupCompleteView: View {
             .zIndex(1)
         }
         .animation(.default)
-        .navigationBarTitle(LocalizedString("Setup Complete", comment: "Title of SetupCompleteView"), displayMode: .automatic)
+        .navigationTitle(LocalizedString("Setup Complete", comment: "Title of SetupCompleteView"))
+        .navigationBarTitleDisplayMode(.automatic)
     }
     
     private func scheduledReminderDateString(_ scheduledDate: Date?) -> String {

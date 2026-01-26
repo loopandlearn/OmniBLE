@@ -507,7 +507,7 @@ struct OmniBLESettingsView: View  {
         .alert(isPresented: $viewModel.alertIsPresented, content: { alert(for: viewModel.activeAlert!) })
         .insetGroupedListStyle()
         .navigationBarItems(trailing: doneButton)
-        .navigationBarTitle(self.viewModel.viewTitle)
+        .navigationTitle(self.viewModel.viewTitle)
     }
 
     var syncPumpTimeActionSheet: ActionSheet {

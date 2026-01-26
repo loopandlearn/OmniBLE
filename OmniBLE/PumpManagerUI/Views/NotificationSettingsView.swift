@@ -59,7 +59,7 @@ struct NotificationSettingsView: View {
                 footer: LocalizedString("The reminders above will not sound on your device when it is in Silent or Do Not Disturb mode. There are other critical Pod alerts that will sound on your device even when set to Silent or Do Not Disturb mode.\n\nThe Pod will also use audible beeps for all Pod reminders and alerts except when the Pod is Silenced.", comment: "Description text for critical alerts")
             )
         }
-        .navigationBarTitle(LocalizedString("Notification Settings", comment: "navigation title for notification settings"))
+        .navigationTitle(LocalizedString("Notification Settings", comment: "navigation title for notification settings"))
     }
     
     @State private var scheduleReminderDateEditViewIsShown: Bool = false
