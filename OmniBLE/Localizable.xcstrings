@@ -5296,7 +5296,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A reminder is configured during Pod setup to notify you in advance of Pod expiration. Set the number of hours advance notice you would like to configure by default when pairing a new Pod."
+            "value" : "Während der Einrichtung des Pods wird eine Erinnerung konfiguriert, die vor Ablauf des Pods benachrichtigt. Lege fest, wie viele Stunden im Voraus du standardmäßig benachrichtigt werden möchtest, wenn du einen neuen Pod koppelst."
           }
         },
         "es" : {
@@ -15120,6 +15120,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fine"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ferdig"
           }
         },
         "nb-NO" : {
@@ -31744,7 +31750,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "好的"
+            "value" : "OK"
           }
         }
       }
@@ -40067,7 +40073,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pod setup is not complete"
+            "value" : "Pod-Einrichtung ist nicht abgeschlossen"
           }
         },
         "es" : {
