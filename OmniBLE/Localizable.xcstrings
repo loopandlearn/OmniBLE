@@ -227,7 +227,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\n\n⚠️ Eroare critică a podului %1$03d (0x %2$02X )"
+            "value" : "\n\n⚠️ Eroare critică a pompei %1$03d (0x %2$02X )"
           }
         },
         "ru" : {
@@ -3397,6 +3397,12 @@
             "value" : "%@U"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@U"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3680,7 +3686,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%1$@ nu a putut comunica cu pompa de pe corpul dumneavoastră din %2$@. \n \nNu înlăturați pompal fără a derula pentru a citi întregul ecran. \n \nComunicarea a fost întreruptă într-un moment critic. Informațiile despre insulina activă / rata bazală temporară ale pompei sunt incerte. \n \nPuteți dezactiva și activa Bluetooth-ul telefonului sau puteți închide și reporni aplicația. (Așteptați până la 30 de secunde pentru recuperare.) \n \nDacă decideți să renunțați deoarece comunicarea nu poate fi restabilită, atingeți butonul Înlăturați pompa, urmați pașii și porniți o pompă nouă. \nMonitorizați-vă cu atenție glicemia pentru  următoarele 6 ore, deoarece este posibil să existe sau nu insulină care acționează activ în corpul dumneavoastră și pe care %3$@ nu o poate afișa."
+            "value" : "%1$@ nu a putut comunica cu pompa de pe corpul dumneavoastră din %2$@. \n \nNu înlăturați pompa fără a derula pentru a citi întregul ecran. \n \nComunicarea a fost întreruptă într-un moment critic. Informațiile despre insulina activă / rata bazală temporară ale pompei sunt incerte. \n \nPuteți dezactiva și activa Bluetooth-ul telefonului sau puteți închide și reporni aplicația. (Așteptați până la 30 de secunde pentru recuperare.) \n \nDacă decideți să renunțați deoarece comunicarea nu poate fi restabilită, atingeți butonul Înlăturați pompa, urmați pașii și porniți o pompă nouă. \nMonitorizați-vă cu atenție glicemia pentru  următoarele 6 ore, deoarece este posibil să existe sau nu insulină care acționează activ în corpul dumneavoastră și pe care %3$@ nu o poate afișa."
           }
         },
         "ru" : {
@@ -4241,6 +4247,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ unidades restantes em %2$@"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ unități rămase la %2$@"
           }
         },
         "ru" : {
@@ -6111,7 +6123,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Toate alertele pompei sunt fără semnale sonore, iar notificările de confirmare sunt suprimate. Pompa va emite semnale sonore doar în cazul erorilor grave de pompă și atunci când se redau semnale sonore de test. \n \n ⚠️Atenție - Dacă telefonul dvs. este în afara razei de acțiune a pompei în timp ce această funcție este activată, nu veți primi nicio notificare în aplicație; iar pompa nu va emite semnale sonore pentru a vă alerta."
+            "value" : "Toate alertele pompei sunt fără semnale sonore, iar notificările de confirmare sunt suprimate. Pompa va emite semnale sonore doar în cazul erorilor grave de pompă și atunci când se redau semnale sonore de test. \n \n ⚠️Atenție - Dacă telefonul dumneavoastră este în afara razei de acțiune a pompei în timp ce această funcție este activată, nu veți primi nicio notificare în aplicație; iar pompa nu va emite semnale sonore pentru a vă alerta."
           }
         },
         "ru" : {
@@ -6254,7 +6266,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sigur doriți să anulați configurarea Pod-ului?"
+            "value" : "Sigur vreți să anulați configurarea pompei?"
           }
         },
         "ru" : {
@@ -6682,7 +6694,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Atașați Pod-ul"
+            "value" : "Atașați pompa"
           }
         },
         "ru" : {
@@ -7124,7 +7136,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alarmă Auto-off"
+            "value" : "Alarmă cu oprire automată"
           }
         },
         "ru" : {
@@ -8714,6 +8726,12 @@
           }
         },
         "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bolus"
+          }
+        },
+        "ro" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bolus"
@@ -10982,7 +11000,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Verificați Pod-ul, puneți-l pe piele, după care confirmați că este lipit."
+            "value" : "Verificați pompa, lipiți-o pe piele, după care confirmați că este atașată."
           }
         },
         "ru" : {
@@ -12001,7 +12019,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mementouri de confimare"
+            "value" : "Mementouri de confirmare"
           }
         },
         "ru" : {
@@ -12506,7 +12524,7 @@
         },
         "fi" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Configuration"
           }
         },
@@ -12518,7 +12536,7 @@
         },
         "he" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Configuration"
           }
         },
@@ -12548,7 +12566,7 @@
         },
         "pl" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Configuration"
           }
         },
@@ -12562,6 +12580,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ajustes"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurare"
           }
         },
         "ru" : {
@@ -12982,6 +13006,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Continuar"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuați"
           }
         },
         "ru" : {
@@ -14000,7 +14030,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dezactivează Pod"
+            "value" : "Dezactivează pompă"
           }
         },
         "ru" : {
@@ -15177,6 +15207,12 @@
             "value" : "OK"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Realizat"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15306,6 +15342,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reservatório vazio"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rezervor gol"
           }
         },
         "ru" : {
@@ -18820,7 +18862,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nu s-a reușit setarei timpului de pe pompă"
+            "value" : "Nu s-a reușit setarea timpului de pe pompă"
           }
         },
         "ru" : {
@@ -19535,7 +19577,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nu s-a reușit actualizarea preferinței în ceea ce privește modul de pompă silențios."
+            "value" : "Nu s-a reușit actualizarea preferinței în ceea ce privește modul de pompă silențioasă."
           }
         },
         "ru" : {
@@ -20113,7 +20155,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Finalizați deactivarea"
+            "value" : "Finalizați dezactivarea"
           }
         },
         "ru" : {
@@ -22748,6 +22790,12 @@
             "value" : "Insulin Delivery"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Administrarea insulinei"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22894,7 +22942,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Administrarea de insulină s-a oprit. Schimbați Pod-ul acum."
+            "value" : "Administrarea de insulină s-a oprit. Schimbați pompa acum."
           }
         },
         "ru" : {
@@ -23171,6 +23219,12 @@
             "value" : "Insulin Remaining"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insulină rămasă"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23302,6 +23356,12 @@
             "value" : "Insulin Suspended"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Administrarea insulinei suspendată"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23431,6 +23491,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tipo de Insulina"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tip de insulină"
           }
         },
         "ru" : {
@@ -28384,6 +28450,12 @@
             "value" : "No"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -30281,6 +30353,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No, Keep Pump As Is"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nu, păstrați pompa așa cum este"
           }
         },
         "ru" : {
@@ -35804,7 +35882,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vă rugăm să repoziționați iPhone-ul mai aproape de Pod"
+            "value" : "Vă rugăm să repoziționați iPhone-ul mai aproape de pompă"
           }
         },
         "ru" : {
@@ -45010,6 +45088,12 @@
             "value" : "Remove Pump"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elimină pompa"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -45431,6 +45515,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Resume delivery"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reluați administrarea de insulină"
           }
         },
         "ru" : {
@@ -46464,6 +46554,12 @@
             "value" : "Salvar"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salvează"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -46891,6 +46987,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Scheduled Basal"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazală programată"
           }
         },
         "ru" : {
@@ -47764,6 +47866,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Setup Complete"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configurare finalizată"
           }
         },
         "ru" : {
@@ -48795,7 +48903,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Redus la tăcere"
+            "value" : "Silențios"
           }
         },
         "ru" : {
@@ -51746,6 +51854,12 @@
             "value" : "Temp Basal"
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bazală temporară"
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -53212,6 +53326,12 @@
             "value" : "The time on your pump is different from the current time. Your pump’s time controls your scheduled therapy settings. Scroll down to Pump Time row to review the time difference and configure your pump."
           }
         },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ora din pompă este diferită de ora curentă. Ora din pompa dumneavoastră controlează setările de terapie programate. Derulați în jos la rândul Ora din pompă pentru a revizui diferența de oră și a configura pompa dumneavoastră."
+          }
+        },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
@@ -53495,7 +53615,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A apărut o problemă la comunicarea cu podul. Dacă această problemă persistă, atingeți Renunțați la pod. Apoi puteți activa o nouă pompă."
+            "value" : "A apărut o problemă la comunicarea cu pompa. Dacă această problemă persistă, atingeți Renunțați la pompă. Apoi puteți activa o nouă pompă."
           }
         },
         "ru" : {
@@ -55241,7 +55361,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Porniți bluetooth"
+            "value" : "Porniți Bluetooth"
           }
         },
         "ru" : {
@@ -55516,6 +55636,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "U/hr"
+          }
+        },
+        "ro" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "U/oră"
           }
         },
         "ru" : {
@@ -57553,7 +57679,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Defecțiune Pod neidentificată %1$03d"
+            "value" : "Defecțiune pompă neidentificată %1$03d"
           }
         },
         "ru" : {
@@ -58727,7 +58853,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Da, dezactivați Pod-ul"
+            "value" : "Da, dezactivați pompa"
           }
         },
         "ru" : {
@@ -59877,7 +60003,7 @@
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Este posibil ca Podul dvs. să administreze în continuare insulină.\nScoateți-l din corpul dumneavoastră, apoi atingeți \"Continuați\"."
+            "value" : "Este posibil ca pompa dumneavoastră să administreze în continuare insulină.\nScoateți-o de pe corpul dumneavoastră, apoi atingeți \"Continuați\"."
           }
         },
         "ru" : {
