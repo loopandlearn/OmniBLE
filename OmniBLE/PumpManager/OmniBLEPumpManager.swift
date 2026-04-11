@@ -14,8 +14,6 @@ import os.log
 import CoreBluetooth
 import UIKit
 
-var fakeInPlayPod = false
-var fakeIPhoneWithPossibleInPlayIssues = false
 
 // Returns a String of the form "iPhoneZ,Y" or "iPodX,Y"
 func getIPhoneType() -> String {
@@ -2537,31 +2535,30 @@ extension OmniBLEPumpManager: PumpManager {
         }
     }
 
-    // Running on an iPhone that might have BLE connect issues with newer InPlay BLE pods (or faking it)?
-    // In initial iPhone 17 testing, it appears that these issues are limited to just all iPhone 16's.
+    // Running on any iPhone 16 or an iPhone 17e which are known
+    // to have BLE reconnect issues with newer InPlay BLE DASH pods?
     var iPhoneWithPossibleInPlayIssues: Bool {
-        if fakeIPhoneWithPossibleInPlayIssues {
-            return true
-        }
 
         // Are we running on an iPhone 16 (Apple model # "iPhone17,N", sigh)?
-        // iPhone 17's (Apple model # 'iPhone18,N" sigh) appear to work with InPlay Pods!
         let iPhoneType = getIPhoneType()
         if iPhoneType.contains("iPhone17") {
-            return true
+            return true // all iPhone16's currently have possible InPlay issues
+        }
+
+        // Are we running on an iPhone 17e (Apple model # "iPhone18,3", sigh)?
+        // Other iPhone 17 models ("iPhone18,N for N != 3) have been OK so far.
+        if iPhoneType == "iPhone18,3" {
+            return true // the iPhone 17e currenlty has possible InPlay issues
         }
 
         return false
     }
 
-    // Using InPlay BLE pod (or if faking it)?
+    // Using InPlay BLE pod?
     var usingInPlayPod: Bool? {
 
         if let deviceBLEName = self.podComms.manager?.peripheral.name {
-            if deviceBLEName == "InPlay BLE" || fakeInPlayPod {
-                return true
-            }
-            return false
+            return deviceBLEName == "InPlay BLE"
         }
         return nil // don't know -- maybe not paired yet
     }

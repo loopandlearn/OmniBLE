@@ -50,7 +50,7 @@ struct PodKeepAliveView: View {
     private var refreshTypeSection: some View {
         Section {
             VStack(alignment: .center, spacing: 4) {
-                Text("For use with iPhone 16 and InPlay BLE (Atlas) pods; otherwise leave disabled.", comment: "Hardware which benefits from Pod Keep Alive")
+                Text("For use with iPhone 16 or iPhone 17e when used with InPlay BLE (Atlas) DASH pods; otherwise leave disabled.", comment: "Hardware which benefits from Pod Keep Alive")
                     .font(.body)
                     .fontWeight(.bold)
                     .foregroundColor(.primary)
@@ -86,20 +86,6 @@ struct PodKeepAliveView: View {
                         .font(.headline)
 
                     deviceConnectionStatus(for: storedDevice)
-
-                    #if notneeded
-                    /// RSSI not getting updates for RL's and bg delay not used for pod keep alives
-                    if storedDevice.rssi != 0 {
-                        Text("RSSI: \(storedDevice.rssi) dBm")
-                            .foregroundColor(.secondary)
-                            .font(.footnote)
-                    }
-                    if let offset = BLEManager.shared.expectedSensorFetchOffsetString(for: storedDevice) {
-                        Text("Expected bg delay: \(offset)")
-                            .foregroundColor(.secondary)
-                            .font(.footnote)
-                    }
-                    #endif
 
                     HStack {
                         Spacer()
@@ -209,7 +195,6 @@ class PodKeepAliveViewModel: ObservableObject {
     }
 
     private func handlePodKeepAliveChange(oldValue: PodKeepAlive, newValue: PodKeepAlive) {
-        print("@@@ Pod keep alive changed from \(oldValue.title) to \(newValue.title)")
         let lastUpdateTime = storage.lastUpdateTime.value
         let refreshTimerInterval = storage.refreshTimerInterval.value
         let refreshTimeTarget = lastUpdateTime + refreshTimerInterval
@@ -395,7 +380,6 @@ class BackgroundTask {
     func startBackgroundTask(hasPod: Bool) {
         Storage.shared.inBackground.value = true
         if hasPod && Storage.shared.podKeepAlive.value == .silentTune {
-            print("@@@ Starting silent audio")
             NotificationCenter.default.addObserver(self, selector: #selector(interruptedAudio), name: AVAudioSession.interruptionNotification, object: AVAudioSession.sharedInstance())
             playAudio()
         }
@@ -403,13 +387,11 @@ class BackgroundTask {
 
     func stopBackgroundTask() {
         Storage.shared.inBackground.value = false
-        print("@@@ Stopping silent audio")
         NotificationCenter.default.removeObserver(self, name: AVAudioSession.interruptionNotification, object: nil)
         player.stop()
     }
 
     @objc fileprivate func interruptedAudio(_ notification: Notification) {
-        print("@@@ interruptedAudio: silent audio interrupted")
         if notification.name == AVAudioSession.interruptionNotification, notification.userInfo != nil,
            Storage.shared.podKeepAlive.value == .silentTune
         {
@@ -428,7 +410,6 @@ class BackgroundTask {
         do {
             let bundle = Bundle(for: OmniBLEHUDProvider.self).path(forResource: forResource, ofType: ofType)
             guard let bundle = bundle else {
-                print("@@@ playAudio: failed to find bundle for \(forResource).\(ofType)")
                 return
             }
             let alertSound = URL(fileURLWithPath: bundle)
@@ -440,9 +421,7 @@ class BackgroundTask {
             player.volume = 0.01
             player.prepareToPlay()
             player.play()
-            print("@@@ playAudio: silent audio playing")
         } catch {
-            print("@@@ playAudio: error: \(error)")
         }
     }
 }
@@ -467,7 +446,6 @@ class BLEManager: NSObject, ObservableObject {
             queue: .main
         )
         if let device = Storage.shared.selectedBLEDevice.value {
-            print("@@@ BLEManager: have selected BLE device \(device.name ?? "") \(device.id.uuidString)")
             devices.append(device)
             findAndUpdateDevice(with: device.id.uuidString) { device in
                 device.rssi = 0
@@ -482,7 +460,6 @@ class BLEManager: NSObject, ObservableObject {
 
     func startScanning() {
         guard centralManager.state == .poweredOn else {
-            print("@@@ Not powered on, cannot start scan.")
             return
         }
         centralManager.scanForPeripherals(withServices: nil, options: nil)
@@ -500,7 +477,6 @@ class BLEManager: NSObject, ObservableObject {
     }
 
     func connect(device: BLEDevice) {
-        print("@@@ attempting connect with device \(device.name ?? "") \(device.id.uuidString)")
         disconnect()
 
         if let matchedType = PodKeepAlive.allCases.first(where: { $0.matches(device) }) {
@@ -516,19 +492,10 @@ class BLEManager: NSObject, ObservableObject {
             case .rileyLink:
                 activeDevice = RileyLinkHeartbeatBluetoothDevice(address: device.id.uuidString, name: device.name, bluetoothDeviceDelegate: self)
                 activeDevice?.connect()
-#if notdef
-            case .dexcom:
-                activeDevice = DexcomHeartbeatBluetoothDevice(address: device.id.uuidString, name: device.name, bluetoothDeviceDelegate: self)
-                activeDevice?.connect()
-            case .omnipodDash:
-                activeDevice = OmnipodDashHeartbeatBluetoothTransmitter(address: device.id.uuidString, name: device.name, bluetoothDeviceDelegate: self)
-                activeDevice?.connect()
-#endif
             case .silentTune, .whenOpen, .disabled:
                 return
             }
         } else {
-            print("@@@ No matching PodKeepAliveType found for this device.")
         }
     }
 
@@ -546,16 +513,11 @@ class BLEManager: NSObject, ObservableObject {
 
     private func addOrUpdateDevice(_ device: BLEDevice) {
         if let idx = devices.firstIndex(where: { $0.id == device.id }) {
-            //Lots of non-RL rssi changes and RL rssi values don't seem to get updated...
-            //print("@@@ Updating BLE device: \(device.name ?? "") \(device.id) rssi=\(device.rssi)")
             var updatedDevice = devices[idx]
             updatedDevice.rssi = device.rssi
             updatedDevice.lastSeen = Date()
             devices[idx] = updatedDevice
         } else {
-            //if let deviceName = device.name {
-            //    print("@@@ Adding BLE device: \(deviceName) \(device.id))")
-            //}
             var newDevice = device
             newDevice.lastSeen = Date()
             devices.append(newDevice)
@@ -581,7 +543,7 @@ extension BLEManager: CBCentralManagerDelegate {
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         switch central.state {
         case .poweredOn:
-            print("@@@ Central poweredOn")
+            break
         default:
             print("@@@ Central state = \(central.state.rawValue), not powered on.")
         }
@@ -614,15 +576,12 @@ extension BLEManager: CBCentralManagerDelegate {
             devices[idx] = device
 
             devices = devices
-        } else {
-            print("@@@ Device not found in devices array for update")
         }
     }
 }
 
 extension BLEManager: BluetoothDeviceDelegate {
     func didConnectTo(bluetoothDevice: BluetoothDevice) {
-        print("@@@ Connected to: \(bluetoothDevice.deviceName ?? "Unknown")")
 
         findAndUpdateDevice(with: bluetoothDevice.deviceAddress) { device in
             device.isConnected = true
@@ -631,7 +590,6 @@ extension BLEManager: BluetoothDeviceDelegate {
     }
 
     func didDisconnectFrom(bluetoothDevice: BluetoothDevice) {
-        print("@@@ Disconnect from: \(bluetoothDevice.deviceName ?? "Unknown")")
 
         findAndUpdateDevice(with: bluetoothDevice.deviceAddress) { device in
             device.isConnected = false
@@ -647,7 +605,6 @@ extension BLEManager: BluetoothDeviceDelegate {
         let now = Date()
         let nowTimeStr=timeStr(now)
         guard let expectedInterval = device.expectedHeartbeatInterval() else {
-            print("@@@ HeartBeat triggered at \(nowTimeStr)")
             device.lastHeartbeatTime = now
             // TaskScheduler.shared.checkTasksNow()
             return
@@ -771,8 +728,6 @@ class BluetoothDevice: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate 
     }
 
     func startScanning() -> BluetoothDevice.startScanningResult {
-        print("@@@ Start Scanning")
-
         var returnValue = BluetoothDevice.startScanningResult.unknown
 
         if let peripheral = peripheral {
@@ -828,8 +783,6 @@ class BluetoothDevice: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate 
     }
 
     fileprivate func stopScanAndconnect(to peripheral: CBPeripheral) {
-        print("@@@ Stop Scan And Connect")
-
         centralManager?.stopScan()
         deviceAddress = peripheral.identifier.uuidString
         deviceName = peripheral.name
@@ -867,7 +820,6 @@ class BluetoothDevice: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate 
                 if let peripheral = peripheral {
                     peripheral.delegate = self
                     let peripheralName = peripheral.name ?? "Unknown"
-                    print("@@@ connecting to peripheral '\(peripheralName)' (UUID: \(peripheral.identifier.uuidString)).")
                     central.connect(peripheral, options: nil)
                     return true
                 }
@@ -877,8 +829,6 @@ class BluetoothDevice: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate 
     }
 
     func centralManager(_: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData _: [String: Any], rssi _: NSNumber) {
-        print("@@@ [BLE] didDiscover")
-
         timeStampLastStatusUpdate = Date()
 
         if peripheral.identifier.uuidString == deviceAddress {
@@ -908,8 +858,6 @@ class BluetoothDevice: NSObject, CBCentralManagerDelegate, CBPeripheralDelegate 
     }
 
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        print("@@@ Central Manager Did Update State")
-
         timeStampLastStatusUpdate = Date()
 
         if central.state == .poweredOn {
@@ -1240,7 +1188,6 @@ func podKeepAliveSetup(refresh: @escaping () -> Void) {
     refreshFunc = refresh /// stash the refresh function
 
     let podKeepAlive = Storage.shared.podKeepAlive.value
-    print("@@@ podKeepAliveSetup called with current keep alive type = \(podKeepAlive)")
 
     /// Need to handle starting playing tunes or handle RL setup for cases
     /// such as when first selecting OmniBLE pump type, right after pairing
@@ -1301,7 +1248,6 @@ func gotPodResponse() {
 
     let podKeepAlive = Storage.shared.podKeepAlive.value
     if podKeepAlive == .disabled || podKeepAlive == .rileyLink {
-        print("@@@ refreshTimer disabled with podKeepAlive = \(podKeepAlive.title) at \(timeStr(now))")
         refreshTimer?.invalidate()
         return
     }
