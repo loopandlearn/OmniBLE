@@ -20811,7 +20811,7 @@
         }
       }
     },
-    "For use with iPhone 16 and InPlay BLE (Atlas) pods; otherwise leave disabled." : {
+    "For use with iPhone 16 or iPhone 17e when used with InPlay BLE (Atlas) DASH pods; otherwise leave disabled." : {
       "comment" : "Hardware which benefits from Pod Keep Alive"
     },
     "Greater than %1$@ units remaining at %2$@" : {
