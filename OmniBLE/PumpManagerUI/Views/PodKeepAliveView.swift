@@ -111,7 +111,7 @@ struct PodKeepAliveView: View {
         } else {
             let minutes = Int(seconds / 60)
             let seconds = Int(seconds.truncatingRemainder(dividingBy: 60))
-            return "\(minutes):\(String(format: "%02d", seconds)) minutes"
+            return "\(minutes):\(String(format: "%02lld", seconds)) minutes"
         }
     }
 

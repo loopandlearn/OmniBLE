@@ -128,7 +128,7 @@ struct Message {
 
 extension Message: CustomDebugStringConvertible {
     var debugDescription: String {
-        let sequenceNumStr = String(format: "%02d", sequenceNum)
+        let sequenceNumStr = String(format: "%02lld", sequenceNum)
         return "Message(\(Data(bigEndian: address).hexadecimalString) seq:\(sequenceNumStr) \(messageBlocks))"
     }
 }

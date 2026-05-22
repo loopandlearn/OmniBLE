@@ -30,7 +30,7 @@ extension PodProtocolError: LocalizedError {
             return String(format: LocalizedString("Could not parse message: %1$@", comment: "The format string for PodProtocolError.couldNotParseMessageException (1: message associated with error)"), message)
         case .incorrectPacketException(let payload, let location):
             let payloadStr = payload.hexadecimalString
-            return String(format: LocalizedString("Incorrect Packet Exception: %1$@ (location=%2$d)", comment: "The format string for PodProtocolError.incorrectPacketException (1: payload)(2: location)"), payloadStr, location)
+            return String(format: LocalizedString("Incorrect Packet Exception: %1$@ (location=%2$lld)", comment: "The format string for PodProtocolError.incorrectPacketException (1: payload)(2: location)"), payloadStr, location)
         case .invalidCrc(let payloadCrc, let computedCrc):
             return String(format: LocalizedString("Payload crc32 %1$@ does not match computed crc32 %2$@", comment: "The format string for description of PodProtocolError.invalidCrc (1:payload crc)(2:computed crc)"), payloadCrc.hexadecimalString, computedCrc.hexadecimalString)
         }

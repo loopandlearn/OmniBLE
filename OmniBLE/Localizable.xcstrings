@@ -1847,55 +1847,55 @@
         }
       }
     },
-    "\nPulse Count: %1$d" : {
+    "\nPulse Count: %1$lld" : {
       "comment" : "The format string for Pulse Count (1: pulse count)",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "it" : {
@@ -1925,19 +1925,19 @@
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "ro" : {
@@ -1949,13 +1949,13 @@
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "sv" : {
@@ -1967,13 +1967,13 @@
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         },
         "vi" : {
@@ -1985,7 +1985,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\nPulse Count: %1$d"
+            "value" : "\nPulse Count: %1$lld"
           }
         }
       }
@@ -21440,145 +21440,145 @@
         }
       }
     },
-    "Incorrect Packet Exception: %1$@ (location=%2$d)" : {
+    "Incorrect Packet Exception: %1$@ (location=%2$lld)" : {
       "comment" : "The format string for PodProtocolError.incorrectPacketException (1: payload)(2: location)",
       "localizations" : {
         "ar" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "value" : "Incorrect Packet Exception: %1$@ (location=%2$lld)"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Forkert pakkeundtagelse: %1$@ (placering=%2$d)"
+            "value" : "Forkert pakkeundtagelse: %1$@ (placering=%2$lld)"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "value" : "Incorrect Packet Exception: %1$@ (location=%2$lld)"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Excepción de paquete incorrecta: %1$@ (localizacion=%2$d)"
+            "value" : "Excepción de paquete incorrecta: %1$@ (localizacion=%2$lld)"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "value" : "Incorrect Packet Exception: %1$@ (location=%2$lld)"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Exception de paquet incorrecte : %1$@ (emplacement=%2$d)"
+            "value" : "Exception de paquet incorrecte : %1$@ (emplacement=%2$lld)"
           }
         },
         "he" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "value" : "Incorrect Packet Exception: %1$@ (location=%2$lld)"
           }
         },
         "hu" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "value" : "Incorrect Packet Exception: %1$@ (location=%2$lld)"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Eccezione pacchetto errato: %1$@ (posizione=%2$d)"
+            "value" : "Eccezione pacchetto errato: %1$@ (posizione=%2$lld)"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Feil pakkeunntak: %1$@ (lokasjon=%2$d)"
+            "value" : "Feil pakkeunntak: %1$@ (lokasjon=%2$lld)"
           }
         },
         "nb-NO" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Feil pakkeunntak: %1$@ (lokasjon=%2$d)"
+            "value" : "Feil pakkeunntak: %1$@ (lokasjon=%2$lld)"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Onjuiste pakketuitzondering: %1$@ (locatie=%2$d)"
+            "value" : "Onjuiste pakketuitzondering: %1$@ (locatie=%2$lld)"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wykluczające się dane: %1$@ (lokalizacja= %2$d )"
+            "value" : "Wykluczające się dane: %1$@ (lokalizacja= %2$lld )"
           }
         },
         "pt" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "value" : "Incorrect Packet Exception: %1$@ (location=%2$lld)"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "value" : "Incorrect Packet Exception: %1$@ (location=%2$lld)"
           }
         },
         "ro" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Excepție de pachet incorect: %1$@ (locație= %2$d )"
+            "value" : "Excepție de pachet incorect: %1$@ (locație= %2$lld )"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Неправильное исключение пакета: %1$@ (location=%2$d)"
+            "value" : "Неправильное исключение пакета: %1$@ (location=%2$lld)"
           }
         },
         "sk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "value" : "Incorrect Packet Exception: %1$@ (location=%2$lld)"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "value" : "Incorrect Packet Exception: %1$@ (location=%2$lld)"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hatalı Paket İstisnası: %1$@ (konum= %2$d )"
+            "value" : "Hatalı Paket İstisnası: %1$@ (konum= %2$lld )"
           }
         },
         "uk" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "value" : "Incorrect Packet Exception: %1$@ (location=%2$lld)"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gói tin không đúng: %1$@ (vị trí=%2$d)"
+            "value" : "Gói tin không đúng: %1$@ (vị trí=%2$lld)"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Incorrect Packet Exception: %1$@ (location=%2$d)"
+            "value" : "Incorrect Packet Exception: %1$@ (location=%2$lld)"
           }
         }
       }

@@ -119,7 +119,7 @@ private func podStatusString(status: DetailedStatus) -> String {
 
     result += String(format: LocalizedString("\nBolus Not Delivered: %1$@ U", comment: "The format string for Bolus Not Delivered: (1: bolus not delivered string)"), status.bolusNotDelivered.twoDecimals)
 
-    result += String(format: LocalizedString("\nPulse Count: %1$d", comment: "The format string for Pulse Count (1: pulse count)"), Int(round(status.totalInsulinDelivered / Pod.pulseSize)))
+    result += String(format: LocalizedString("\nPulse Count: %1$lld", comment: "The format string for Pulse Count (1: pulse count)"), Int(round(status.totalInsulinDelivered / Pod.pulseSize)))
 
     result += String(format: LocalizedString("\nReservoir Level: %1$@ U", comment: "The format string for Reservoir Level: (1: reservoir level string)"), status.reservoirLevel == Pod.reservoirLevelAboveThresholdMagicNumber ? "50+" : status.reservoirLevel.twoDecimals)
 
